@@ -1,0 +1,193 @@
+<div class="row" style="margin: 0;padding: 0">
+    <p style="padding: 0;color: #006dcc">
+        <span id="fluxTitle"></span>
+        <span style="color:#114da9;margin-left: 20px">当前门店:<span id="nowStorename"></span></span>
+    </p>
+</div>
+<div class="page-title">
+    <form class="filter-search" >
+        <label>选择日期:</label><input id="filter_date">
+        <i id="filter-merchUser-qrybtn" class="fa fa-search" style="position: static;"></i>
+        <span style="color: black"><span style="color: red">*</span>选择日期查询该日数据</span>
+    </form>
+</div>
+<div class="panel-box">
+    <div class="table-responsive">
+        <table id="table-flux-sheet" class="table table-hover" cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <th></th>
+                <th>消耗标题</th>
+                <th>流量成本</th>
+                <th>导购ID</th>
+              <!--  <th>优惠券ID</th>
+                <th>备注说明</th>-->
+                <th>使用时间</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+<script>
+    {
+        $(document).ready(function () {
+            if (system_merchuser.type == 10) {
+                $("#fluxTitle").html('<a  href="javascript:openModule(\'modules/index/indexClick.html\',400);" style="color: #006dcc">商户首页</a>' +
+                        '&gt;&gt;<a href="javascript:openModule(\'modules/store/storeindex.html\',101);" style="color: #006dcc">门店首页</a>' +
+                        '&gt;&gt;<a href="javascript:openModule(\'modules/cost/flux.html\',902);" style="color: #006dcc">流量赠送</a>')
+            } else {
+                $("#fluxTitle").html('<a href="javascript:openModule(\'modules/store/storeindex.html\',101);" style="color: #006dcc">门店首页</a>' +
+                        '&gt;&gt;<a href="javascript:openModule(\'modules/cost/flux.html\',902);" style="color: #006dcc">流量赠送</a>')
+            }
+            $("#form-merchUser-update").find('.form-group').css("marginRight", "0");
+        });
+        if (system_merchuser && system_merchuser.merchuserid) {
+            var storeid = common.getData('storeid');
+            if (!storeid) {
+                storeid = 0;
+            }
+            //---------设置当前门店------------------
+            $.ajax({
+                cache: false,
+                dataType: "json",
+                type: "POST",
+                data: {
+                    "bean": $.objectToString({storeid: storeid})
+                },
+                url: '/pipes/merchstore/query',
+                error: function () {//请求失败处理函数
+                    alert('请求失败');
+                },
+                success: function (data) {
+                    if (data && data.retcode > 0) {
+                        alert(data.retinfo)
+                    } else {
+                        $("#storeid").find('option').remove();
+                        var content = '';
+                        var rows = data.rows || [];
+                        for (var i = 0; i < rows.length; i++) {
+                            content = content + '<option value="' + rows[i].storeid + '">' + rows[i].storename + '</option>';
+                        }
+                        $('#storeid').html(content);
+                        $("#nowStorename").text(rows[0].storename);
+                    }
+                }
+            });
+            //--------------------------------------------------------
+            //设置初始日期为今天
+            var t = new Date().toJSON();
+            $("#filter_date").val(time(t));
+            //设置日历格式
+            $("#filter_date").datetimepicker({
+                format: "yyyy-mm-dd", //设置时间格式，默认值: 'mm/dd/yyyy'
+                weekStart: 0, //一周从哪一天开始。0（星期日）到6（星期六）,默认值0
+                startDate:"",
+                endDate:new Date(t),
+                daysOfWeekDisabled: "", //禁止选择一星期中的某些天，例子中这样是禁止选择周六和周日
+                autoclose: true, //当选择一个日期之后是否立即关闭此日期时间选择器
+                startView: 2, //点开插件后显示的界面。0、小时1、天2、月3、年4、十年，默认值2
+                minView: 2, //插件可以精确到那个时间，比如1的话就只能选择到天，不能选择小时了
+                maxView: 4, //同理
+                todayBtn: true, //是否在底部显示“今天”按钮
+                todayHighlight: true, //是否高亮当前时间
+                keyboardNavigation: true, //是否允许键盘选择时间
+                language: 'zh-CN', //选择语言，前提是该语言已导入
+                forceParse: true, //当选择器关闭的时候，是否强制解析输入框中的值。也就是说，当用户在输入框中输入了不正确的日期，选择器将会尽量解析输入的值，并将解析后的正确值按照给定的格式format设置到输入框中
+                minuteStep: 5, //分钟的间隔
+                pickerPosition: "bottom-left", //显示的位置，还支持bottom-left
+                viewSelect: 2, //默认和minView相同
+                showMeridian: true, //是否加上网格
+                initialDate: new Date(t),//初始化的时间
+                zIndex: 1080
+            });
+            //设置一天的起始时间
+            function endvalue(value){
+                var  timereplace = value.replace(/-/g, "/");
+                var  time = new Date(timereplace).getTime();
+                var starttime = time/1000;
+                var endtime = starttime+24*60*60-1;
+                return {starttime:starttime,endtime:endtime};
+            }
+            //将时间戳转成日历格式
+            function time(date) {
+                var year = new Date(date).getFullYear();
+                var month = new Date(date).getMonth() + 1;
+                var date1 = new Date(date).getDate();
+                if (month < 10) {
+                    month = "0" + month;
+                }
+                if (date1 < 10) {
+                    date1 = "0" + date1;
+                }
+                var result = year + "-" + month + "-" + date1;
+                return result;
+            }
+            //获取当前门店下得导购员列表
+            $.ajax({
+                url: "/pipes/merchsaler/query",
+                data: {"bean": $.objectToString({storeid: storeid})},
+                type: "POST",
+                dataType: "JSON",
+                success: function (res) {
+                    if (res && res.retcode > 0) {
+                        alert(res.retinfo);
+                    } else {
+                        var arr = res.rows || [];
+                        var saleusearr=arr;
+                        var mtable = $('#table-flux-sheet').dataTable({
+                            ajax: {
+                                url: "/pipes/merchcost/query",
+                                dataSrc:"data",
+                                data: function (f) {
+                                    f.bean = JSON.stringify({
+                                        createtime: endvalue($('#filter_date').val()),
+                                        costtype:210,
+                                        storeid:storeid
+                                    });
+                                    f.sort = 'createtime';
+                                    f.order = 'DESC';
+                                }
+                            },
+                            columnDefs: [
+                                {
+                                    className: 'select-checkbox',
+                                    targets: 0
+                                }
+                            ],
+                            columns: [
+                                {"data": " ", render: $.defrender},
+                                {"data":"costtitle",render:$.defrender},
+                                {"data": "costmoney", render: function(value){
+                                    return value/100+"元";
+                                }},
+                                {"data": "saleuserid", render: function(value){
+                                    if(saleusearr){
+                                        for(var i=0;i<saleusearr.length;i++){
+                                            if(value==saleusearr[i].saleuserid){
+                                                return saleusearr[i].username
+                                            }
+                                        }
+                                    }else{
+                                        return value;
+                                    }
+                                }},
+                            /*    {"data": "quanid", render: $.defrender},
+                                {"data": "remark", render: $.defrender},*/
+                                {"data": "createtime", render: Date.DateFormatter}
+                            ]
+                        });
+                        //---------流量消耗列表-----------------------------------------
+                        $('#filter-merchUser-qrybtn').bind("click", function () {
+                            $('#table-flux-sheet').dataTable().fnPageChange(0);
+                            mtable.api(true).draw(false);
+                        });
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        }
+    }
+</script>

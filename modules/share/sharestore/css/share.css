@@ -1,0 +1,131 @@
+*{
+    margin:0;
+    padding:0;
+}
+li{
+    list-style: none;
+}
+.container,.banner{
+    max-width:1440px;
+    margin:auto;
+}
+div,p,span,h1,h2,h3,h4,h5,h6{
+    font-family: 微软雅黑;
+    font-size: 0.7rem;
+    color: #333;
+    font-weight: bold;
+}
+.banner{
+    width:18.75rem;
+    max-height: 14rem;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    border-top: 1px solid #cac0c0;
+    border-bottom: 1px solid #cac0c0;
+}
+.headfooter{
+    padding: 9px 0;
+}
+.headfooter p{
+    padding:0 0.65rem;
+}
+.headfooter p:first-child{
+    margin-bottom: 0.6rem;
+}
+.couponTitle,.goodsTitle{
+    height:1.95rem;
+    line-height: 1.95rem;
+    padding-left: 13px;
+    font-size: 0.85rem;
+    color: #666;
+    background: #f2f2f2;
+    border-top:solid 1px #c9c9c9;
+}
+.couponList li{
+    min-height:1.625rem;
+    line-height: 1.625rem;
+    color: #ff5650;
+    padding-left: 13px;
+   /* border-bottom: solid 1px #c9c9c9;*/
+    overflow: hidden;
+}
+.couponList li:nth-child(2n) {
+    border-bottom: solid 1px #c9c9c9;
+    border-top: solid 1px #c9c9c9;
+}
+.couponList li:last-child{
+    border-bottom:none;
+}
+.couponList li span:first-child{
+    display: inline-block;
+    color: #ff5650;
+    width:60%;
+}
+.couponList li span:last-child{
+    width:35%;
+    float: right;
+    margin-right: 3%;
+    font-size: 0.7rem;
+    color:#888;
+}
+.goodsList li{
+    height: 5.5rem;
+    border-bottom: solid 1px #c9c9c9;
+}
+.goodsList li img{
+    max-width:100%;
+    max-height:4.5rem;
+    margin: 0.5rem 0 0.5rem 1rem;
+}
+.goodsList li>div{
+    width:50%;
+    height: 5.5rem;
+    display: inline-block;
+    float: left;
+}
+h1,h2,h3,h4{
+    width: 9rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding-top: 0.7rem;
+}
+h2,h3{
+    font-size: 0.6rem;
+}
+h2{
+    color: #888;
+}
+h3{
+    color: #0388dc;
+}
+h4{
+    color: #fb6d07;
+}
+h4 span{
+    color: #666;
+    padding-left: 0.75rem;
+    text-decoration: line-through;
+}
+.footer{
+    position: fixed;
+    height:2rem;
+    width: 100%;
+    background: #fb6d07;
+    bottom: 0;
+}
+.footer a{
+    width: 100%;
+    display: inline-block;
+    height:2rem;
+    line-height:2rem;
+    text-align: center;
+    font-size: 0.8rem;
+    text-decoration:blink;
+    color: #ffffff;
+}
+

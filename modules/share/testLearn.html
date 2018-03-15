@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    var Chinese = {
+        national:["中国","美国","英国"]
+    };
+    var Doctor = {
+        carrer:"医生"
+    };
+    function extendsCopy(p) {
+        var c ={};
+        for(var i in p){
+            if(typeof p[i] === "object"){
+                c[i] = (p[i])
+            }else{
+                c[i] = p[i];
+            }
+        }
+        c.uber = p;
+        return c
+    }
+    var Doctor = extendsCopy(Chinese);
+    Doctor.national.push("小日本");
+    document.write(Doctor.national);
+    document.write(Chinese.national);
+    document.write(Doctor.carrer);
+</script>

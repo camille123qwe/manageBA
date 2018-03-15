@@ -1,0 +1,168 @@
+<div id="dialog-user-login" class="modal fade" tabindex="-1" data-width="500" data-backdrop="static" data-keyboard="false" style="display: none;"> 
+    <div class="modal-header">  
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>  
+        <h4 id="dtitle-user-login" class="modal-title">用户登录</h4>  
+    </div>  
+    <div class="modal-body">  
+        <form id="form-user-login" class="m-t" role="form" >  
+            <div class="form-group"><input name="account" type="text" class="form-control" placeholder="用户名" required=""></div>  
+            <div class="form-group"><input id="form-user-login-pwd" name="password" type="password" class="form-control" placeholder="密 码" required=""></div>
+            <div class="form-group" id="merchRadio">
+
+            </div>
+            <br>
+            <button id="formbtn-user-login" type="button" class="btn btn-theme btn-lg btn-block ">登 录</button><br>
+        </form>
+    </div>  
+    <div id="tips-user-login" class="module-alert-tips"></div><br>  
+</div>
+<div id="dialog-user-changepwd" class="modal fade" tabindex="-1" data-width="500" style="display: none;"> 
+    <div class="modal-header"> 
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> 
+        <h4 id="dtitle-user-changepwd" class="modal-title">密码修改</h4> 
+    </div> 
+    <div class="modal-body"> 
+        <form id="form-user-changepwd" class="m-t" role="form"> 
+            <div class="form-group"><input name="oldpwd" type="password" class="form-control" placeholder="旧密码" required=""></div> 
+            <div class="form-group"><input name="newpwd" type="password" class="form-control" placeholder="新密码" required=""></div> 
+            <div class="form-group"><input name="newpwd2" type="password" class="form-control" placeholder="确认密码" required=""></div><br> 
+            <button id="formbtn-user-changepwd" type="button" class="btn btn-theme btn-lg btn-block ">密码修改</button><br> 
+        </form> 
+    </div> 
+    <div id="tips-user-changepwd" class="module-alert-tips"></div><br>  
+</div>
+<script>
+    //---------------------------------- 用户登录框 绑定事件 -------------------------------------
+    $('#dialog-user-login').on('show.bs.modal', function () { //
+        $("#form-user-login").form('reset');
+        if (window.localStorage && window.localStorage['glogin_account']) {
+            $("#form-user-login").form('load', {account: window.localStorage['glogin_account']});
+        }
+        $("#tips-user-login").html('');
+    });
+
+    $('#form-user-login-pwd').bind('keypress', function (event) {
+        if (event.keyCode == 13) $('#formbtn-user-login').click();
+    });
+    //
+    $('#formbtn-user-login').bind("click", function (e) {
+        var form = $("#form-user-login");
+        var json = form.serializeJson();
+        json.password = $.md5(json.password);
+        var merch36id = "";
+        var data = "";
+        if(json.merch36id){
+            merch36id = json.merch36id;
+            delete json.merch36id;
+             data = {
+                "bean":$.objectToString(json),
+                "merch36id":'"'+merch36id+'"'
+            }
+        }else{
+             data = { "bean": $.objectToString(json)}
+        }
+        $.ajax({
+            cache: false,
+            dataType: "json",
+            type: "POST",
+            data: data,
+            url: '/pipes/merchuser/login',
+            error: function () {//请求失败处理函数
+                alert('请求失败');
+            },
+            success: function (data) {
+                if (!data.success) {
+                    if (data.retcode === 1001) {
+                        $("#tips-user-login").html('用户或密码错误!');
+                    } else if (data.retcode === 1002) {
+                        $("#tips-user-login").html('用户已被禁用!');
+                    } else {
+                        $("#tips-user-login").html(data.retinfo);
+                    }
+                    return;
+                } else {
+                    if(data.result.length>0){
+                        var arr = data.result;
+                        var _html="";
+                        $("#merchRadio").html('<p><span style="color: red">*</span>请选择一个门店后再点击登陆(不同门店的密码可能不同哦)</p>');
+                        for(var i=0;i<arr.length;i++){
+                            if(!arr[i].merchInfo){
+                                $("#merchRadio").append("<p style='color: red;'>提示:您当前账号上有信息缺失,请使用手机店呼商家版APP登陆并完善信息</p>")
+                                continue;
+                            }
+                            _html+='<div class="col-lg-6 col-md-6 col-sm-6">' +
+                                    '<label class="center-block" style="text-align: center"><input type="radio" value="'+arr[i].merchInfo.merch36id+'" class="form-control" name="merch36id">' +
+                                    arr[i].merchInfo.merchname+'</label></div>';
+                        }
+                        $("#merchRadio").append(_html);
+                    }else{
+                        window.location.reload();
+                    }
+                    if (window.localStorage) {
+                        window.localStorage['glogin_account'] = json['account'];
+                    }
+                }
+                //window.location.reload();
+            }
+        });
+    });
+    //---------------------------------- 密码修改框 绑定事件 -------------------------------------
+    $('#dialog-user-changepwd').on('show.bs.modal', function () { //
+        $("#form-user-changepwd").form('reset');
+        $("#tips-user-changepwd").html('');
+    });
+    //
+    $('#formbtn-user-changepwd').bind("click", function (e) {
+        var form = $("#form-user-changepwd");
+        var json = form.serializeJson();
+        if (json.newpwd !== json.newpwd2) {
+            alert("两次新密码输入不一致");
+            return;
+        }
+        $.ajax({
+            cache: false,
+            dataType: "json",
+            type: "POST",
+            data: {
+                "oldpwd": $.md5(json.oldpwd),
+                "newpwd": $.md5(json.newpwd)
+            },
+            url: '/pipes/merchuser/changepwd',
+            error: function () {//请求失败处理函数
+                alert('请求失败');
+            },
+            success: function (data) {
+                if (!data.success) {
+                    if (data.retcode === 1010021) {
+                        $("#tips-user-changepwd").html('新密码未加密!');
+                    } else if (data.retcode === 1010020) {
+                        $("#tips-user-changepwd").html('旧密码错误!');
+                    } else {
+                        $("#tips-user-changepwd").html('密码修改失败!');
+                    }
+                    return;
+                }
+                $("#dialog-user-changepwd").modal('hide');
+            }
+        });
+    });
+    $("#topbar").on('click',"#user-logout-btn",function () {
+        $.ajax({
+            url:"/pipes/merchuser/logout",
+            data:{},
+            type:"POST",
+            dataType:"JSON",
+            success:function(res){
+                $("#dialog-user-login").modal('show')
+            },
+            error:function (err) {
+                console.log(err);
+            }
+        })
+    });
+    //--------------------------------------------------------------------------------------------
+
+    if (!window['system_merchuser'] || !system_merchuser.merchuserid) {
+        $('#dialog-user-login').modal('show');
+    }
+</script>

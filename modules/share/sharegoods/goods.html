@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width,user-scalable=0,initial-scale=1.0">
+    <meta name="description" content="价格实惠，还获得了神秘礼品，赚到了，分享给你们">
+    <link type="text/css" href="goods.css?t=123455566" rel="stylesheet">
+    <script type="text/javascript" src="js/jquery-1.11.1.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script type="text/javascript" src="//res.cdn.openinstall.io/openinstall.js"></script>
+    <script src="../install.js"></script>
+    <script>
+        (function(){
+            var src = window.location.href;
+            var storeidstr = src.substr(src.indexOf('?StoreId='),14);
+            var store36id = storeidstr.split("=")[1];
+            var goods36str = src.substr(src.indexOf('?GoodsId='),15);
+            var goods36id = goods36str.split("=")[1];
+            var installdata = {"pageName":"ShopParticularsPage","data":{"store36id":store36id,"store36id":goods36id}};//也可以是js Object
+            console.log(installdata);
+            install(installdata);
+        })();
+    </script>
+    <script src="../sha1.js"></script>
+    <script type="text/javascript" src="js/jquery.qrcode.js"></script>
+    <script type="text/javascript" src="js/qrcode.js"></script>
+    <script type="text/javascript" src="js/utf.js"></script>
+    <script src="goods.js?t=1313246446"></script>
+    <title>商品详情</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="banner">
+                <img src="" style="max-width: 100%;max-height: 100%;vertical-align: middle" alt="">
+            </div>
+            <div class="headfooter">
+                <h1></h1>
+                <div style="height:1rem">
+                    <h2 style="float: right;padding-right: 1rem;" id="marketprice"><span>--</span></h2>
+                    <h2 style="float: right;padding-right: 1rem;" id="sellprice">店呼预约价<span style="color:red">--</span></h2>
+                </div>
+            </div>
+        </div>
+        <div class="shopTitle">
+            促销店铺
+        </div>
+        <div class="shopDetail">
+            <p>门店名称:<span id="shopName"></span></p>
+            <p>门店地址:<span id="shopaddr"></span></p>
+        </div>
+        <div class="discount">
+            <div class="discountTitle">
+                促销活动
+            </div>
+            <div class="discountList">
+                <ul>
+                    <!--    <li>
+                    <div>
+                        <p>满100元送100M流量满100元送100M流量满100元送100M流量满100元送100M流量满100元送100M流量</p>
+                        <span>截止2017-04-30</span>
+                    </div>
+                    <div>
+                        <button data-value="1" class="quanbutton">获取优惠1</button>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <p>满300元送100M流量</p>
+                        <span>截止2017-04-30</span>
+                    </div>
+                    <div>
+                        <button data-value="2" class="quanbutton">获取优惠2</button>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <p>满500元送100M流量</p>
+                        <span>截止2017-04-30</span>
+                    </div>
+                    <div>
+                        <button data-value="3" class="quanbutton">获取优惠3</button>
+                    </div>
+                </li>-->
+                </ul>
+            </div>
+        </div>
+        <div class="goods">
+            <div id="goodsdescdiv">
+                <div class="goodsTitle">
+                    商品描述
+                </div>
+                <div class="goodsdesc">
+                    <div>
+                        <p></p>
+                    </div>
+                </div>
+            </div>
+            <div class="goodsTitle">
+                商品详情
+            </div>
+            <div class="goodsDetail">
+                <div>
+                    <p></p>
+                </div>
+            </div>
+        </div>
+        <div style="background: white;height: 3.2rem;width: 100%;"></div>
+     <!--   <div class="footer">
+            <a href="javascript:void(0)" id="openApp" class="openApp">点击领取福利</a>
+        </div>-->
+        <div class="footer">
+            <div style="width: 40%;float: left;">
+                <a href="javascript:void(0)" id="openApp" class="openApp" style="background: orangered">打开APP</a>
+            </div>
+            <div style="width: 60%;float: left;">
+                <a href="javascript:void(0)" id="submit" >新用户领取福利</a>
+            </div>
+        </div>
+
+    </div>
+    <div class="mc_container">
+        <div id="mc">
+            <span class="close">×</span>
+            <div class="code" id="qrcode">
+            </div>
+            <p>导购扫描二维码后获取此优惠</p>
+            <h1>八马茶业</h1>
+            <h2>本店消费满500送100M流量</h2>
+        </div>
+    </div>
+</body>
+</html>
+

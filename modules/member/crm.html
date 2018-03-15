@@ -1,0 +1,195 @@
+<div class="page-title">
+    <h4>
+        <span>客户关系管理</span>
+    </h4>
+    <form id="excel_post" method="post" action="pipes/excel/import" enctype="multipart/form-data">
+        <a href="http://merch.diancall.com/modules/excelTemplate/merchCustomerTemplate.xls" class="couponfile">excel模板下载</a>
+        <a href="javascript:void(0)" class="couponfile" style="position: relative">点击上传Excel文件(excel导入新增客户关系)
+            <input type="file" id="filepath" name="file" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                style="display: block;position: absolute;top: 0;right: 0;opacity: 0;">
+        </a>
+        <a href="javascript:void(0)" id="excelSubmit" class="couponfile showFileName" style="display: none">提交Excel表格</a>
+        <a href="javascript:void(0)" class="crm-create couponfile">新增客户关系</a>
+        <a href="javascript:void(0)" class="crm-update couponfile">修改客户关系</a>
+    </form>
+</div>
+<div class="panel-box">
+    <div class="table-responsive">
+        <table id="table-crm-sheet" class="table table-hover" cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <th></th>
+                <th>来源</th>
+                <th>客户ID</th>
+                <th>联系电话</th>
+                <th>联系地址</th>
+                <th>客户名称</th>
+                <th>联系人名称</th>
+                <th>联系人电话</th>
+                <th>是否分派</th>
+                <th>创建时间</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+<div id="dialog-crm-modal" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false" style="display: none;">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">新增客户关系</h4>
+    </div>
+    <div class="modal-body">
+        <form id="form-crm-update" class="m-t form-horizontal" role="form">
+            <div class="form-group">
+                <label class="col-lg-3 control-label"><span style="color: red;">*&nbsp;</span>客户名称</label>
+                <div class="col-lg-9">
+                    <input type="text" class="form-control" name="customername">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label"><span style="color: red;">*&nbsp;</span>电话</label>
+                <div class="col-lg-9">
+                    <input type="number" class="form-control" max="11" name="mobile">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label"><span style="color: red;">*&nbsp;</span>联系地址</label>
+                <div class="col-lg-9">
+                    <input type="text" class="form-control" name="address">
+                </div>
+            </div>
+            <button type="button" class="btn btn-theme btn-lg btn-block " id="formbtn-crm-submit">提交</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    {
+        $("#filepath").on("change",function(){
+            var filePath=$(this).val();
+            var arr=filePath.split('\\');
+            var fileName=arr[arr.length-1];
+            if(/*fileName.indexOf("promotioncardTemplate.")>=0*/true){
+                $(".showFileName").html("提交"+fileName);
+                $(".showFileName").show();
+            }else{
+                $(".showFileName").hide();
+                alert("请按提示上传文件");
+                console.log(fileName);
+            }
+        });
+        $("#excelSubmit").click(function(){
+            var fileupload = document.getElementById("filepath");
+            if(fileupload.files.length === 0) {
+                alert("未选中上传文件");
+                return false;
+            }
+            var excel = fileupload.files[0];
+            var fm = new FormData();
+            fm.append('file', excel);
+            $.ajax({
+                url:"/pipes/merchcrm/excel/import",
+                data: fm,
+                contentType: false, //禁止设置请求类型
+                processData: false,
+                type:"POST",
+                success:function(res){
+                    var res = JSON.parse(res);
+                    if(res.retcode===0){
+                        $("#filepath").val("");
+                        $(".showFileName").hide();
+                        mtable.api(true).draw(false);
+                        $('#table-crm-sheet').dataTable().fnPageChange(0);
+                    }else{
+                        alert(res.retinfo);
+                    }
+                },
+                error:function(err){
+                    console.log(err);
+                }
+            });
+        });
+        //新增客户关系
+        $(".crm-create").click(function(){
+            $("#form-crm-update").form('reset');
+            $("#dialog-crm-modal").modal('show');
+        });
+        $(".crm-update").click(function(){
+            var data = mtable.api(true).draw(false);
+            if(!data.createtime){
+                alert("请选择你要修改的客户");
+                return;
+            }
+            $("#form-crm-update").form('reset');
+            $("#form-crm-update").form('load',data);
+            $("#dialog-crm-modal").modal('show');
+        });
+        //点击一键开卡的提交按钮
+        $("#formbtn-crm-submit").click(function(){
+            var json = $("#form-crm-update").serializeJson();
+            var data = "";
+            var cols = [];
+            if(json.createtime){
+                for(var i in json){
+                    cols.push(i);
+                }
+                data = {
+                    "bean":$.objectToString(json),
+                    "cols":$.objectToString(cols)
+                }
+            }else{
+                data  = {"bean":$.objectToString(json)}
+            }
+            $.ajax({
+                url:"/pipes/merchcrm/update",
+                data:data,
+                dataType:"JSON",
+                type:"POST",
+                error:function(err){
+                    console.log(err)
+                },
+                success:function(res){
+                    if(res.retcode===0){
+                        alert("操作成功");
+                        $("#dialog-crm-modal").modal('hide');
+                        mtable.api(true).draw(false);
+                    }
+                }
+            });
+        });
+            var mtable = $('#table-crm-sheet').dataTable({
+                ajax: {
+                    url: "/pipes/merchcrm/query",
+                    dataSrc:"data",
+                    data: function (f) {
+                        f.bean = JSON.stringify({
+
+                        });
+                        f.sort = 'createtime';
+                        f.order = 'DESC';
+                    }
+                },
+                "aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                columns: [
+                     {"data":"",render:$.defrender},
+                    {"data":"custuserid",render:$.defrender},
+                    {"data":"mobile",render:$.defrender},
+                    {"data":"address",render:$.defrender},
+                    {"data":"customername",render:$.defrender},
+                    {"data":"linkname",render:$.defrender},
+                    {"data":"linkjob",render:$.defrender},
+                    {"data":"distributetime",render:Date.DateFormatter},
+                    {"data":"bind",render:function(value,type,full){
+                        if(value == 10){
+                            return "未分派";
+                        }else{
+                            return "已分派"
+                        }
+                    }},
+                    {"data": "createtime", render: Date.DateFormatter}
+                ]
+            });
+    }
+
+</script>

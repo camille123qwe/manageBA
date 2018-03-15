@@ -1,0 +1,284 @@
+<div class="row" id="storeindex-title">
+        <p style="padding: 15px;color: #006dcc"><a  href="javascript:openModule('modules/index/indexClick.html',400);" style="color: #006dcc">商户首页</a>&gt;&gt;<a href="#" style="color: #006dcc">门店首页</a></p>
+    </div>
+<div class="row">
+        <div class="col-lg-6" >
+            <h5>基本信息</h5>
+                <div class="panel-box" style="padding: 5px;min-height: 276px;" id="storebasic"></div>
+        </div>
+        <div class="col-lg-6" >
+            <h5>门店图片</h5>
+            <div class="panel-box" id="storeimg" style="min-height: 276px">
+                <div class="row">
+                    <a href="javascript:openModule('/modules/store/editStore.html',103)" style="float: right;margin-right: 20px;color: #006dcc">编辑</a>
+                </div>
+                <div class="row" id="imgbox">
+                <div class="col-lg-6">
+                    <img class="img-responsive storeImg" src="" style="max-width: 100%;height: 180px;border: solid 1px darkgrey;" alt="门店图片">
+                </div>
+                <div class="col-lg-6">
+                    <img class="img-responsive storeImg" src="" style="max-width: 100%;height: 180px;border: solid 1px darkgrey;" alt="门店图片">
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<h5>&nbsp;</h5>
+<div class="row">
+        <div class="col-lg-4 manager" data-value="member/memberCharge">
+             <div class="panel-box" style="padding: 30px">
+                 <div class="row">
+                     <div class="col-lg-4">
+                             <img src="boot/img/member.png" style="margin-left: 8px">
+                             <h5 style="margin-top: 15px">会员管理</h5>
+                     </div>
+                     <div class="col-lg-8">
+                         <p style="padding-left: 12px">管理门店所有会员信息</p>
+                         <p style="padding-left: 12px">关注门店或消费过均视为本店会员</p>
+                     </div>
+                 </div>
+             </div>
+         </div>
+        <div class="col-lg-4 manager" data-value="merch/merchsms">
+            <div class="panel-box" style="padding: 30px">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <img src="boot/img/message.png" style="margin-left: 8px">
+                        <h5 style="margin-top: 15px">营销短信</h5>
+                    </div>
+                    <div class="col-lg-8">
+                        <p style="padding-left: 12px">给客户更多的信息</p>
+                        <p style="padding-left: 12px">实时推送门店最新商品优惠</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 manager" data-value="goods/goods">
+            <div class="panel-box" style="padding: 30px">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <img src="boot/img/goods.png" style="margin-left: 8px">
+                        <h5 style="margin-top: 15px">商品管理</h5>
+                    </div>
+                    <div class="col-lg-8">
+                        <p style="padding-left: 12px">添加商品分类</p>
+                        <p style="padding-left: 12px">商品上下架随心所欲</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="row">
+        <div class="col-lg-4 manager" data-value="coupons/coupons">
+            <div class="panel-box" style="padding: 30px">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <img src="boot/img/huafei.png" style="margin-left: 8px">
+                        <h5 style="margin-top: 15px">优惠管理</h5>
+                    </div>
+                    <div class="col-lg-8">
+                        <p style="padding-left: 12px">满额才奖励</p>
+                        <p style="padding-left: 12px">增减优惠劵实时管理</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 manager" data-value="cost/cost">
+            <div class="panel-box" style="padding: 30px">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <img src="boot/img/flowkbs.png" style="margin-left: 8px">
+                        <h5 style="margin-top: 15px">消耗明细</h5>
+                    </div>
+                    <div class="col-lg-8">
+                        <p style="padding-left: 12px">从消耗看收入</p>
+                        <p style="padding-left: 12px">查询当日或往日的流量、语音、营销短信及代金券的赠送详情</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div id="dialog-editTime-update" class="modal fade" tabindex="-1" data-width="600" data-backdrop="static" data-keyboard="false" style="display: none;">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="recordclose">×</button>
+            <h4 id="dtitle-merchUser-update" class="modal-title">编辑营业时间</h4>
+        </div>
+        <div class="modal-body">
+            <form id="form-edit-update" class="m-t form-horizontal" role="form">
+                <div class="form-group">
+                    <div class="col-lg-5">
+                        <label class="col-lg-6 control-label"><span style="color: red;">*&nbsp;</span>开店时间</label>
+                        <div class="col-lg-6">
+                            <input name=opentime class="form-control" id="opentime">
+                        </div>
+                    </div>
+                    <div class="col-lg-2">---------------</div>
+                    <div class="col-lg-5">
+                        <label class="col-lg-6 control-label"><span style="color: red;">*&nbsp;</span>打烊时间</label>
+                        <div class="col-lg-6">
+                            <input name=closetime id="closetime" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <button id="formbtn-edit-update" type="button" class="btn btn-theme btn-block ">提 交</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    {
+        $(document).ready(function(){
+            if(system_merchuser.type==10){
+                $("#storeindex-title").html('<p style="padding: 15px;color: #006dcc">'+
+                        '<a  href="javascript:openModule(\'modules/index/indexClick.html\',400);" style="color: #006dcc">商户首页</a>'+
+                '&gt;&gt;<a href="javascript:openModule(\'modules/store/storeindex.html\',101);" style="color: #006dcc">门店首页</a></p>')
+            }else{
+                $("#storeindex-title").html('<p style="padding: 15px;color: #006dcc">'+
+                        '<a href="javascript:openModule(\'modules/store/storeindex.html\',101);" style="color: #006dcc">门店首页</a></p>')
+            }
+            $(".pull-left").show();
+            $("#menu").show();
+            $("body").removeClass("widescreen");
+        });
+        //设置门店信息及门店图片
+        if (system_merchuser && system_merchuser.merchuserid) {
+            var storeid = common.getData("storeid")||0;
+            if (storeid=="undefined") {
+                storeid =0;
+            }
+            var storename="";
+            var data = {storeid: storeid};
+            $(".manager").click(function () {
+                var value = $(this).data('value');
+                var url = "modules/" + value + ".html";
+                openModule(url, 902);
+            });
+            //设置我的门店
+            $.ajax({
+                url: " /pipes/merchstore/query",
+                type: "POST",
+                data: {"bean": $.objectToString(data)},
+                dataType: "JSON",
+                success: function (res) {
+                    if (res && res.retcode > 0) {
+                        // alert(res.retinfo)
+                    } else {
+                        $("#storebasic").html("");
+                        var _html = "";
+                        var arr = res.rows || [];
+                        if (arr.length == 0) {
+                            _html = "当前账户下没有门店";
+                        } else {
+                            for (var i = 0; i < arr.length; i++) {
+                                var editTime = ""
+                                if(arr[i].opentime&&arr[i].closetime){
+                                    editTime = arr[i].opentime+"-"+arr[i].closetime
+                                }else{
+                                    editTime = "暂未设置";
+                                }
+                                _html += '<div class="row"><div class="col-lg-6" id="storeface">' +
+                                        '<img class="img-responsive" src="/dir/storeface_300/' + arr[i].storeface + '" style="max-width: 100%;height: 171px;border: solid 1px darkgrey;" alt="门店图片">' +
+                                        '<p>开通时间:<span>' + time(arr[i].createtime) + '</span></p>' +
+                                        '<p>营业时间:<span>'+editTime+'</span>' +
+                                        '<span id="editTime" style="padding-left: 10px;cursor: pointer;text-decoration: underline;color: blue">编辑</span>' +
+                                        '</p></div>' +
+                                        '<div class="col-lg-4"><p class="storeName" style="font-size: 16px;color: dimgrey;font-weight: bold;"><span id="storename">' + arr[i].storename + '</span>' +
+                                        '<small>(' + status(arr[i].status) + ')</small></p>' +
+                                        '<p><span style="display: inline-block;width: 100px">总会员数:</span><span style="display: inline-block;width: 50px;text-align: center"> ' + arr[i].custusercount + ' </span>人</p><p><span style="display: inline-block;width: 100px">已发送营销短信:</span><span style="display: inline-block;width: 50px;text-align: center"> ' + arr[i].msmscount + ' </span>条</p>' +
+                                        '<p><span style="display: inline-block;width: 100px">已添加商品数量:</span><span style="display: inline-block;width: 50px;text-align: center"> ' + arr[i].goodscount + ' </span>件</p><p><span style="display: inline-block;width: 100px">已添加优惠券:</span><span style="display: inline-block;width: 50px;text-align: center"> ' + arr[i].quancount + ' </span>张</p></div></div>' +
+                                        '<p style="display: inline-block">地址:<span>' + arr[i].storeaddr + '</span></p>';
+                                storename = arr[i].storename;
+                                localStorage.setItem('storename',storename);
+                            }
+                        }
+                        $("#storebasic").html(_html);
+                        var storeimgs = arr[0].storeimgs;
+                        if (!storeimgs) {
+                            return
+                        } else if (typeof(storeimgs) == "string") {
+                            var arr1 = storeimgs.split(";");
+                            var imghtml = "";
+                            if (arr1.length == 1) {
+                                imghtml = ' <div class="col-lg-6">' +
+                                        '<img class="img-responsive storeImg" src="/dir/storeimg_720/' + arr1[0] + '" style="max-width: 100%;height: 171px;border: solid 1px darkgrey;" alt="门店图片">' +
+                                        '</div><div class="col-lg-6">' +
+                                        '<img class="img-responsive storeImg" src="" style="max-width: 100%;height: 171px;border: solid 1px darkgrey;" alt="门店图片暂未上传">' +
+                                        '</div>';
+                            } else {
+                                for (var i = 0; i < 2; i++) {
+                                    imghtml += ' <div class="col-lg-6">' +
+                                            '<img class="img-responsive storeImg" src="/dir/storeimg_720/' + arr1[i] + '" style="max-width: 100%;height: 171px;border: solid 1px darkgrey;" alt="门店图片">' +
+                                            '</div>';
+                                }
+                            }
+                            $("#imgbox").html(imghtml);
+                        }
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+            //点击编辑时间
+            $("#storebasic").on("click","#editTime",function(){
+                $("#dialog-editTime-update").modal('show');
+            });
+            //状态设置
+            function status(value) {
+                if (value === 10) return "<font color=green>正常</font>";
+                if (value === 20) return "<font color=#FF00FF>待审批</font>";
+                if (value === 40) return "冻结";
+                if (value === 50) return "隐藏";
+                if (value === 60) return "关闭";
+                if (value === 70) return "<font color=red>过期</font>";
+                if (value === 80) return "<font color=red>删除</font>";
+                return "<font color=red>未知</font>";
+            }
+            //设置日历格式
+           $("#opentime").datetimepicker({
+                format:"hh:ii",
+                startView: 1, //点开插件后显示的界面。0、小时1、天2、月3、年4、十年，默认值2
+                minView: 0, //插件可以精确到那个时间，比如1的话就只能选择到天，不能选择小时了
+                maxView: 0, //同理
+                pickerPosition: "bottom-left", //显示的位置，还支持bottom-left
+                minuteStep:5, //分钟的间隔
+               autoclose: true,
+                zIndex: 1080
+            });
+            $("#closetime").datetimepicker({
+                format:"hh:ii",
+                startView: 1, //点开插件后显示的界面。0、小时1、天2、月3、年4、十年，默认值2
+                minView: 0, //插件可以精确到那个时间，比如1的话就只能选择到天，不能选择小时了
+                maxView: 0, //同理
+                pickerPosition: "bottom-left", //显示的位置，还支持bottom-left
+                minuteStep:5, //分钟的间隔
+                autoclose: true,
+                zIndex: 1080
+            });
+            $(".table-condensed").find('thead').find('.switch').css("opacity",'0');
+            $("#formbtn-edit-update").click(function(){
+               var form = $("#form-edit-update").serializeJson();
+                form.storeid = storeid;
+                $.ajax({
+                    cache: false,
+                    dataType: "json",
+                    type: "POST",
+                    url: '/pipes/merchstore/updateopentime',
+                    data: {"bean":$.objectToString(form)},
+                    error: function () {//请求失败处理函数
+                        alert('请求失败');
+                    },
+                    success: function (data) {
+                        if (data && data.retcode && data.retcode > 0) {
+                            alert(data.retinfo);
+                        } else {
+                            alert("保存成功");
+                            $("#dialog-editTime-update").modal('hide');
+                            openModule("modules/store/storeindex.html",101);
+                        }
+                    }
+                });
+            });
+        }
+    }
+    </script>

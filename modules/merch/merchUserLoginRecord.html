@@ -1,0 +1,103 @@
+<div class="page-title">
+   <!-- <a id="button-merchUser-create" href="javascript:void(0);"><i class="fa fa-plus"></i>新增商户店长</a>
+    <a id="button-merchUser-update" href="javascript:void(0);"><i class="fa fa-pencil-square-o"></i>修改商户店长</a>-->
+    <h4>
+        商户店长登录日志表
+    </h4>
+</div>
+<div class="panel-box">
+    <div class="page-title">
+        <form class="filter-search" >
+            <div style="display: inline-block;margin: 0 50px 0 0;">
+                <label >选择商户：</label>
+                <select id="filter_merch" name="merchname" style="width:200px;">
+                    <option value="0">全部商户</option>
+                </select>
+            </div>
+            <i id="filter-merchUser-qrybtn" class="fa fa-search" style="position: static;"></i>
+        </form>
+    </div>
+    <div class="table-responsive">
+        <table id="table-merchUser-sheet" class="table table-hover" cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <th></th>
+                <th>商户店长ID</th>
+                <th>登录网络类型</th>
+                <th>APP版本信息</th>
+                <th>APP操作系统信息</th>
+                <th>登录时客户端信息</th>
+                <th>登录时的IP</th>
+                <th>登录记录ID</th>
+                <th>创建时间</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+<script>
+    {
+        if (system_merchuser && system_merchuser.merchuserid) {
+            //----------------------------------------------------
+            var mtable = $('#table-merchUser-sheet').dataTable({
+                ajax: {
+                    url: "/pipes/merchuser/js/myinfo",
+                    dataSrc:"data",
+                    data: function (f) {
+                        f.bean = JSON.stringify({
+                            merchname: $('#filter_merch').val().trim()
+                        });
+                        f.sort = 'createtime';
+                        f.order = 'DESC';
+                    }
+                },
+                columnDefs: [{
+                    className: 'select-checkbox',
+                    targets: 0
+                }],
+                columns: [
+                    {"data": " ", render: $.defrender},
+                    {"data":"merchuserid",render:$.defrender},
+                    {"data":"netmode",render:$.defrender},
+                    {"data": "appversion", render: $.defrender},
+                    {"data": "appos", render: $.defrender},
+                    {"data": "loginagent", render:$.defrender},
+                    {"data": "loginaddr", render: $.defrender},
+                    {"data": "merchuserloginid", render: $.defrender},
+                    {"data": "createtime", render: Date.DateFormatter}
+                ]
+            });
+            $('#filter-merchUser-qrybtn').bind("click", function () {
+                $('#table-merchUser-sheet').dataTable().fnPageChange(0);
+                mtable.api(true).draw(false);
+            });
+        }
+        //-----门店选项--------------
+        $(function () {
+            $.ajax({
+                cache: false,
+                dataType: "json",
+                type: "POST",
+                data:{
+                    "bean":"{storeid:0}"
+                },
+                url: '/pipes/merchstore/query',
+                error: function () {//请求失败处理函数
+                    alert('请求失败');
+                },
+                success: function (data) {
+                    $('#filter_merch').find('option').remove();
+                    var content = '';
+                    var headcontent='<option value="0">不限制门店</option>';
+                    for (var i = 0; i < data.rows.length; i++) {
+                        content = content + '<option value="' + data.rows[i].storeid + '">' + data.rows[i].storename + '</option>';
+                    }
+                    $('#filter_merch').append(headcontent);
+                    $('#filter_merch').append(content);
+                }
+            });
+
+        });
+    }
+</script>

@@ -1,0 +1,554 @@
+<div class="row" style="margin: 0;padding: 0">
+    <p style="padding: 0;color: #006dcc">
+        <span id="smstitle">
+        </span>
+        <span style="color:#114da9;margin-left: 20px">当前门店:<span id="nowStorename"></span></span>
+    </p>
+</div>
+<div class="table-responsive" >
+        <table cellspacing="0" width="100%" class="table" style="overflow: hidden">
+            <tr data-width="100%" style="margin: 0;padding: 0">
+                <td width=40%">
+                    <div class="panel-box">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                模板分类
+                                <select class="form-control" id="smsgroup">
+                                    <option>模板分类</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-6">
+                                模板短信主题
+                                <select class="form-control" id="smstemplate">
+                                    <option value="0">模板分类</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6"></div>
+                            <div class="col-lg-6">
+                                <div class="page-title" style="margin-top: 10px">
+                                    <a id="button-smslook" href="javascript:void(0);"><i class="fa fa-plus"></i>查看模板</a>
+                                    <a id="button-smsapply" href="javascript:void(0);"><i class="fa fa-pencil-square-o"></i>应用模板</a>
+                                </div>
+                            </div>
+                        </div>
+                        <form id="form-smstask-create">
+                            <input name="smstype" value="20" type="hidden">
+                            <input name="createtime" id="createtime" type="hidden">
+                            <input name="merchid" type="hidden">
+                            <table id="table-goodsgroup-sheet" class="table table-hover"  cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>创建营销短信</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <label class="col-lg-3 control-label">当前门店</label>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-lg-12">
+                                                    <select class="form-control" name="storeid" id="storeid_select">
+                                                        <option></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <label class="col-lg-3 control-label">短信主题</label>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-lg-12">
+                                                    <textarea class="form-control" id="title" name="title"></textarea>
+                                                </div>
+                                            </div>
+                                        </td>
+                                     </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <label class="col-lg-3 control-label">短信内容</label>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-lg-12">
+                                                    <textarea class="form-control" id="content" name="content" style="height: 150px" placeholder="短信内容60字符为一条，超过一条后按67字符一条计算"></textarea>
+                                                    <p id="tips"></p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <label class="col-lg-3 control-label">发送群体</label>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-lg-12" id="marks">
+                                                    <div class="checkbox-inline col-lg-2">
+                                                        <label>
+                                                            <input type="checkbox">请打勾
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </form>
+                        <div style="width: 100%">
+                            <button id="button-smstask-create" type="button" class="btn btn-theme btn-lg" style="margin-left: 35%;width: 30%">提 交</button><br>
+                        </div>
+                    </div>
+                </td>
+                <td width="60%">
+                    <div class="panel-box">
+                        <table id="table-sms-sheet" class="table table-hover"  cellspacing="0" width="100%">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>短信ID</th>
+                                <th>
+                                    营销短信
+                                    <div style="display: inline-block;margin: 0 20px;">
+                                        <select id="filter_status" name="status" style="width:150px;font-weight: lighter">
+                                            <option value="0">全部状态</option>
+                                            <option value="10">未发送</option>
+                                            <option value="20">发送中</option>
+                                            <option value="30">发送完毕</option>
+                                        </select>
+                                    </div>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+<div id="dialog-template" class="modal fade" tabindex="-1" data-width="600" data-height="350" data-backdrop="static" data-keyboard="false" style="display: none;">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="recordclose">×</button>
+        <h4 id="dtitle-merchUser-update" class="modal-title">短信模板</h4>
+    </div>
+    <div class="modal-body">
+        <form id="form-sms-template" role="form">
+            <div class="form-group">
+                <label class="col-lg-3 control-label">短信主题</label>
+                <div class="col-lg-12">
+                    <textarea class="form-control" id="templatetitle"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">短信内容</label>
+                <div class="col-lg-12">
+                    <textarea class="form-control" id="templatecontent" rows="7" style="margin-bottom: 10px"></textarea>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary btn-block" id="tempalte-btn">应用模板</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    {
+        $(document).ready(function(){
+            if(system_merchuser.type==10){
+                $("#smstitle").html('<a  href="javascript:openModule(\'modules/index/indexClick.html\',400);" style="color: #006dcc">商户首页</a>'+
+                        '&gt;&gt;<a href="javascript:openModule(\'modules/store/storeindex.html\',101);" style="color: #006dcc">门店首页</a>'+
+                        '&gt;&gt;<a href="javascript:openModule(\'modules/merch/merchsms.html\',501);" style="color: #006dcc">营销短信</a>')
+            }else{
+                $("#smstitle").html('<a href="javascript:openModule(\'modules/store/storeindex.html\',101);" style="color: #006dcc">门店首页</a>'+
+                        '&gt;&gt;<a href="javascript:openModule(\'modules/merch/merchsms.html\',501);" style="color: #006dcc">营销短信</a>')
+            }
+            $(".pull-left").show();
+            $("#menu").show();
+            $("body").removeClass("widescreen");
+        });
+        if (system_merchuser && system_merchuser.merchuserid) {
+            //设置当前门店
+            var storeid = common.getData('storeid');
+            if(!storeid){
+                storeid =0;
+            }
+            var storename=common.getData('storename');
+            $("#nowStorename").text(storename);
+            var merchsign="";
+            var len ="";
+            $.get('/pipes/merchfinance/wrapper',function(data){
+                var data = JSON.parse(data);
+                if(data!=null){
+                    merchsign=data.merch.merchsign;
+                }
+                if(merchsign){
+                    len = 62-Number(merchsign.length);
+                }else{
+                    len=64;
+                    merchsign="";
+                }
+                $("#content").attr('placeholder','当前短信内容'+len+'字符为一条，超过一条后按67字符一条计算')
+            });
+            $.ajax({
+                cache: false,
+                dataType: "json",
+                type: "POST",
+                data:{
+                    "bean":$.objectToString({storeid:storeid})
+                },
+                url: '/pipes/merchstore/query',
+                error: function () {//请求失败处理函数
+                    alert('请求失败');
+                },
+                success: function (data) {
+                    if(data&&data.retcode>0){
+                        alert(data.retinfo);
+                    }else{
+                        $("#storeid_select").find('option').remove();
+                        var content = '';
+                        for (var i = 0; i < data.rows.length; i++) {
+                            content = content + '<option value="' + data.rows[i].storeid + '">' + data.rows[i].storename + '</option>';
+                        }
+                        $('#storeid_select').html(content);
+                      /*  $('#nowStorename').text(data.rows[0].storename);*/
+                    }
+                }
+            });
+            //获取用户标签
+            $.ajax({
+                url: "/pipes/merchmark/query",
+                data:{"bean":$.objectToString({storeid:storeid})},
+                dataType:"JSON",
+                type:"POST",
+                success:function(res){
+                    if(res&&res.retcode>0){
+                        alert(res.retinfo);
+                    }else{
+                        $("#marks").html("");
+                        var arr = res.rows||[];
+                        var _html ="";
+                        for(var i=0;i<arr.length;i++){
+                            _html+='<div class="checkbox-inline col-lg-4" style="margin-left: 0">' +
+                                    '<label><input type="checkbox" name="markids" class="markbox" value="'+arr[i].markid+'">' +
+                                    '<span>' +arr[i].markname+'</span></label>' +
+                                    '</div>';
+                        }
+                        $("#marks").html(_html);
+                    }
+                },
+                error:function(err){
+                    console.log(err);
+                }
+            });
+            //获取短信模板分类列表
+            $.get("/pipes/merchsms/querysmsgroup",function(data){
+               var res = JSON.parse(data);
+                res = res.rows||[];
+                var _html="";
+                if(res.length!=0){
+                    for(var i=0;i<res.length;i++){
+                    _html+='<option value="'+res[i].marketsmsgroupid+'">'+res[i].marketsmsgroupname+'</option>'
+                    }
+                }
+                if(_html!=""){
+                    $("#smsgroup").html('<option value="0">全部分类</option>');
+                    $("#smsgroup").append(_html);
+                }
+            });
+            $.get("/pipes/merchsms/querysmstemplate",function(data){
+                var res = JSON.parse(data);
+                res = res.rows||[];
+                var _html="";
+                if(res.length!=0){
+                    for(var i=0;i<res.length;i++){
+                        res[i].marketsmstemplatetitle = res[i].marketsmstemplatetitle||"暂无主题";
+                        _html+='<option value="'+res[i].marketsmstemplateid+'">'+res[i].marketsmstemplatetitle+'</option>'
+                    }
+                }
+                if(_html!=""){
+                    $("#smstemplate").html(_html);
+                }
+            });
+            //------------------营销短信任务列表----------------------------------
+            smsfull = function(value,type,full){
+                    function status(status){
+                        if(status==10) return "未发送";
+                        if(status==20) return "发送中";
+                        if(status==30) return "发送完毕"
+                    }
+                    if(full.marknames==undefined){
+                        full.marknames = '用户标签未知'
+                    }
+                    full.createtime = Date.DateFormatter(full.createtime);
+                    return '<h4 style="margin: 0;padding: 5px">主题:&nbsp;'+value+'<span style="float: right;font-weight: lighter">短信状态:'+status(full.status)+'</span></h4>'+
+                            '<h4  style="margin: 0;padding: 5px">内容:</h4>'+
+                            '<p style="text-indent: 2em;word-wrap:break-word;word-break:break-all;">'+full.content+'</p>'+
+                            '<p style="padding: 5px"><span>对象:&nbsp;</span>'+full.smscount+'人&nbsp;'+'('+full.marknames+')' +
+                            '<span style="display: inline-block;float: right">'+full.createtime+'</span></p>';
+                };
+            var mtable = $('#table-sms-sheet').dataTable({
+                    ajax: {
+                        url: "/pipes/merchsms/querysmstask",
+                        dataSrc:"data",
+                        data: function (f) {
+                            f.bean = JSON.stringify({
+                                status: $('#filter_status').val().trim(),
+                                storeid:storeid
+                            });
+                            f.sort = 'createtime';
+                            f.order = 'DESC';
+                        }
+                    },
+                    "aLengthMenu": [[4, 25, 50, -1], ["4条", "25条", "50条", "All"]],
+                    columnDefs: [
+                        {
+                            "targets":0,
+                            "visible":false
+                        },
+                        {
+                            "targets":[1],
+                            "visible":false
+                        }
+                    ],
+                    columns: [
+                        {"data": " ", render: $.defrender},
+                        {"data": "smstaskid", render: $.defrender},
+                        {"data": "title", render: smsfull}
+                    ]
+                });
+            $('#filter_status').on("change", function (){
+                    $('#table-sms-sheet').dataTable().fnPageChange(0);
+                    mtable.api(true).draw(false);
+                });
+            //---------新增营销短信-------------------------------
+            $("#button-smstask-create").click(function(){
+                $(this).attr("disabled",true);
+                merchsmsValidator();
+                var form = $("#form-smstask-create");
+                $('#form-smstask-create').bootstrapValidator('validate');
+                var json = form.serializeJson();
+                var arr= $("#marks").find(".markbox");
+                var marksname=[];
+                for(var i=0;i<arr.length;i++){
+                   if(arr.eq(i).is(":checked")){
+                       marksname.push(arr.eq(i).next().text());
+                   }
+                }
+                json.marknames = marksname;
+                if(typeof (json.markids)=="string"){
+                    json.markids = [json.markids];
+                }else if(typeof (json.markids)=="object"){
+                    var marids = json.markids.join(";");
+                    json.markids = marids;
+                }else{
+                    $("#button-smstask-create").removeAttr("disabled");
+                    alert("请选择发送对象,如无信息请前往会员管理添加标签");
+                    return;
+                }
+                if(len<=62){
+                    json.content = json.content+'退订回复TD'+'【'+merchsign+'】';
+                }
+                if(len==64){
+                    json.content = json.content+'退订回复TD';
+                }
+
+                json.merchid=system_merchuser.merchid;
+                //-----去json数据中的空格-----------------
+                var json1= {};
+                $.each(json,function(key,value){
+                    value = (value + "").replace(/\s/g,'');
+                    json1[key] = value;
+                });
+                json = json1;
+                if(json.createtime==""){
+                    var data = {
+                        "bean":$.objectToString(json)
+                    };
+                }else{
+                    var cols = [];
+                    for(var key in json){
+                        if(key=='createtime'){
+                            continue;
+                        }
+                        cols.push(key);
+                        data = {
+                            "bean":$.objectToString(json),
+                            "cols":$.objectToString(cols)
+                        }
+                    }
+                }
+                if($('#form-smstask-create').data('bootstrapValidator').isValid()){
+                    $.ajax({
+                    url:"/pipes/merchsms/createsmstask",
+                    data:data,
+                    dataType:"JSON",
+                    type:"POST",
+                    success:function(res){
+                        $("#button-smstask-create").removeAttr("disabled");
+                        if(res.retcode==30030012){
+                            alert("请为您的账户进行充值后再进行短信操作");
+                        } else if(res.retcode==0){
+                            alert("发送成功");
+                            $("#tips").html("");
+                            $("#form-smstask-create").form('reset');
+                            $("#createtime").val("");
+                            mtable.api(true).draw(false);
+                            $('#form-smstask-create').data('bootstrapValidator').destroy();
+                            $('#form-smstask-create').data('bootstrapValidator', null);
+                        }else{
+                            $("#button-smstask-create").removeAttr("disabled");
+                            alert(res.retinfo);
+                        }
+                    },
+                    error:function(err){
+                        $("#button-smstask-create").removeAttr("disabled");
+                        console.log(err);
+                        alert("请求失败");
+                    }
+                });
+                }else{
+                    $("#button-smstask-create").removeAttr("disabled");
+                }
+            });
+            //--------输入短信时判断字数并给出相应的提示
+            $("#content").keyup(function(){
+                var bytesCount = $("#content").val().length;
+                var words = "";
+                if(bytesCount<=len){
+                    $("#tips").html("");
+                }else if(bytesCount>len&&bytesCount<=(len+67)){
+                    words = bytesCount-len;
+                    $("#tips").html("<span style='color: red'>*提示:</span>当前短信字数过多,将收取2条短信费用,或酌情删去"+words+"个字");
+                }else{
+                    var a=(bytesCount-len)%67;
+                    var b="";
+                    if(a==0){
+                        b=(bytesCount-len)/67+1;
+                    }else{
+                        b=parseInt((bytesCount-len)/67)+1+1;
+                    }
+                    $("#tips").html("<span style='color: red'>*提示:</span>当前短信字数过多,将收取"+b+"条短信费用");
+                }
+            });
+            //---------------表单验证----------------------------------------------
+            function merchsmsValidator(){
+                $("#form-smstask-create").bootstrapValidator({
+                    message: 'This value is not valid',
+                    feedbackIcons: {/*输入框不同状态，显示图片的样式*/
+                        valid: 'glyphicon glyphicon-ok',
+                        invalid: 'glyphicon glyphicon-remove',
+                        validating: 'glyphicon glyphicon-refresh'
+                    },
+                    fields:{
+                        title:{
+                            message: 'The billno is not valid',
+                            validators: {
+                                notEmpty: {/*非空提示*/
+                                    message: '短信标题不能为空'
+                                },
+                                regexp: { /* 只需加此键值对 */
+                                    regexp: /^[^“”‘’'"]+$/,
+                                    message: '短信标题不能包含引号'
+                                }
+                            }
+                        },
+                        content:{
+                            message: 'The password is not valid',
+                            validators: {
+                                notEmpty: {
+                                    message: '短信内容不能为空'
+                                },
+                                regexp: {
+                                    regexp:/^[^“”‘’'"]+$/,
+                                    message: '短信内容不能包含引号'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            //当模板分类发生改变时 重新获取短信模板列表
+            $("#smsgroup").change(function(){
+                var data ="";
+                if($(this).val()==0){
+                    data = {};
+                }else{
+                    var smsgroupid = $(this).val();
+                    data = {marketsmsgroupid:smsgroupid}
+                }
+                $.ajax({
+                    url:"/pipes/merchsms/querysmstemplate",
+                    data:{"bean":$.objectToString(data)},
+                    dataType:"JSON",
+                    type:"POST",
+                    success:function(res){
+                        //var res = JSON.parse(data);
+                        res = res.rows||[];
+                        var _html="";
+                        if(res.length!=0){
+                            for(var i=0;i<res.length;i++){
+                                res[i].marketsmstemplatetitle = res[i].marketsmstemplatetitle||"暂无主题";
+                                _html+='<option value="'+res[i].marketsmstemplateid+'">'+res[i].marketsmstemplatetitle+'</option>'
+                            }
+                        }
+                        if(_html!=""){
+                            $("#smstemplate").html(_html);
+                        }else{
+                            $("#smstemplate").html('<option value="0">该分类下暂无模板</option>');
+                        }
+                    },
+                    error:function(err){
+                        console.log(err);
+                    }
+                })
+            });
+            //点击查看短信模板
+            $("#button-smslook").click(function(){
+                var data = "";
+                if($("#smstemplate").val()==0){
+                    alert("暂无模板可查看");
+                    return;
+                }else{
+                    var smstemplateid = $("#smstemplate").val();
+                    $.get("/pipes/merchsms/findsmstemplate/?templateid="+smstemplateid,function(res){
+                        res = JSON.parse(res);
+                        $("#dialog-template").modal('show');
+                        $("#templatetitle").val(res.marketsmstemplatetitle);
+                        $("#templatecontent").val(res.content);
+                    });
+                }
+            });
+            //查看后点击应用模板
+            $("#tempalte-btn").click(function(){
+               var content = $("#templatecontent").val();
+                var title = $("#templatetitle").val();
+                $("#content").val(content);
+                $("#title").val(title);
+                $("#dialog-template").modal('hide');
+            });
+            //直接点击应用模板
+            $("#button-smsapply").click(function(){
+                var data = "";
+                if($("#smstemplate").val()==0){
+                    alert("暂无模板可应用");
+                    return;
+                }else{
+                    var smstemplateid = $("#smstemplate").val();
+                    $.get("/pipes/merchsms/findsmstemplate/?templateid="+smstemplateid,function(res){
+                        res = JSON.parse(res);
+                        $("#title").val(res.marketsmstemplatetitle);
+                        $("#content").val(res.content);
+                    });
+                }
+            })
+        }
+    }
+</script>

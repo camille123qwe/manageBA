@@ -1,0 +1,594 @@
+<div class="page-title">
+    <a id="button-storeinfo-create" href="javascript:void(0);"><i class="fa fa-plus"></i>新增门店</a>
+    <a id="button-storeinfo-update" href="javascript:void(0);"><i class="fa fa-pencil-square-o"></i>修改门店</a>
+</div>
+<div class="panel-box">
+    <div class="page-title">
+        <form class="filter-search" >
+            <div style="display: inline-block;margin: 0 50px 0 0;">
+                <label >选择商户：</label>
+                <select id="filter_storeid" name="merchid" style="width:150px;">
+                    <option value="0">全部商户</option>
+                </select>
+            </div>
+           <!-- <div style="display: inline-block;margin: 0 50px 0 0;">
+                <label >状态</label>
+                <select name="status" id="filter_storeinfo_status" >
+                    <option value="10">正常</option>
+                    <option value="0">待审批</option>
+                    <option value="40">冻结</option>
+                    <option value="50">隐藏</option>
+                    <option value="60">关闭</option>
+                    <option value="70">过期</option>
+                    <option value="80">删除</option>
+                </select>
+            </div>-->
+            <i id="filter-storeinfo-qrybtn" class="fa fa-search" style="position: static;"></i>
+        </form>
+    </div>
+    <div class="table-responsive">
+        <table id="table-storeinfo-sheet" class="table table-hover" cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <th></th>
+                <th>门店首图</th>
+                <th>店名</th>
+                <th>门店负责人</th>
+                <th>所在城市</th>
+                <th>门店地址</th>
+                <th>经纬度</th>
+                <th>状 态</th>
+                <th>备注说明</th>
+                <th>创建时间</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+<div id="dialog-storeinfo-update" class="modal fade" tabindex="-1" data-width="850" data-height="550" data-backdrop="static" data-keyboard="false" style="display: none;">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="storeinfoClose">×</button>
+        <h4 id="dtitle-storeinfo-update" class="modal-title">新增门店</h4>
+    </div>
+    <div class="modal-body">
+        <ul class="nav nav-tabs" style="margin-bottom: 10px">
+            <li class="active"><a href="#homegoods" data-toggle="tab">基本信息</a></li>
+            <li><a href="#detailgoods" data-toggle="tab">门店图片</a></li>
+        </ul>
+        <form id="form-storeinfo-update" class="m-t form-horizontal" role="form">
+            <div class="tab-content">
+                <div class="tab-pane fade in active" id="homegoods">
+                    <input name="merchid" type="hidden">
+                    <input name="storeid" id="storeid" type="hidden">
+                    <input name="createtime" type="hidden">
+                    <input name="storeface" id="storeface" type="hidden">
+                    <div class="table-responsive">
+                        <table  cellspacing="0" width="100%" style="overflow: hidden">
+                            <tr>
+                                <td width="50%">
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label"><span style="color: red;">*&nbsp;</span>门店名称</label>
+                                        <div class="col-lg-8">
+                                            <input class="form-control" name="storename" placeholder="例:肯德基南山店,不要超过十个字">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label"><span style="color: red;">*&nbsp;</span>门店负责人</label>
+                                        <div class="col-lg-8">
+                                            <input class="form-control" name="storeman">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label"><span style="color: red;">*&nbsp;</span>状态</label>
+                                        <div class="col-lg-8">
+                                            <select id="selectStatus" name="status" class="form-control">
+                                                <option value="20">待审批</option>
+                                                <option value="10">正常</option>
+                                                <option value="40">冻结</option>
+                                                <option value="50">隐藏</option>
+                                                <option value="60">关闭</option>
+                                                <option value="70">过期</option>
+                                                <option value="80">删除</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label">门店热线</label>
+                                        <div class="col-lg-8">
+                                            <input class="form-control" name="storetel">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label">门店地址</label>
+                                        <div class="col-lg-8">
+                                            <input class="form-control" name="storeaddr" id="mapquery" placeholder="在地图中输入地址进行定位">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label"><span style="color: red;">*&nbsp;</span>城市</label>
+                                        <div class="col-lg-8"><input name="city" class="form-control" id="city" readonly></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label"><span style="color: red;">*&nbsp;</span>经纬度</label>
+                                        <div class="col-lg-8"><input name="gnote" type="tel" class="form-control" id="gnote" readonly></div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group" id="faceimg">
+                                        <img id="indeximg" src="" style="width:300px;height:180px;margin-left:30px;border: 1px solid #ddd"/>
+                                    </div>
+                                    <div class="form-group">
+                                    <div class="btn btn-success fileinput-button"
+                                        id="storefacebtn" style="margin:10px 0 10px 80px">
+                                        <i class="fa fa-fw fa-upload"></i>
+                                        <span>上传图片<br/>(比例:300*180/900*540)</span>
+                                        <input type="file" name="file" class="green_upload_btn">
+                                    </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <p><span style="color: red">*&nbsp;</span>注意:门店首图图片大小要在900*540之上</p>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;<span>图片比例为5:3,便于app展示美观</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label">备注说明</label>
+                                        <div class="col-lg-8">
+                                            <textarea style="width:439px;" class="form-control" name="remark" id="storeinforemark"></textarea>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td></td>
+                            </tr>
+                        </table>
+            </div>
+                    <br>
+                    <button id="formbtn-storeinfo-update" type="button" class="btn btn-theme btn-lg btn-block " style="position: absolute;
+            bottom:30px;width: 80%;left: 10%;">提 交</button><br>
+                </div>
+                <div class="tab-pane fade" id="detailgoods">
+                    <div class="form-group">
+                        <div class="col-lg-12" >
+                            <input type="file" name="file" id="fileUpload" multiple="multiple" style="margin-left: 12px;margin-top: 10px;">
+                            <input type="button" id="deletespan1" style="float: right;position: relative;bottom: 30px;display: none" value="删除选中图片">
+                            <div id="imgbox" style="width: 720px;height: 336px;overflow:auto; border: solid 1px lightgray;margin: auto;margin-top: 15px">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="mc" class="modal fade" tabindex="-1" data-width="650" data-backdrop="static" data-keyboard="false" style="height: 608px" >
+    <div class="modal-header" style="height: 10px; border: none;">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    </div>
+    <div class="form-group" style="padding: 10px;margin-bottom: 20px">
+        <div class="col-lg-6" style="margin-bottom: 10px">
+            <input class="form-control" type="text" id="mapaddr" placeholder="不必输入省市,以区或街道开始输入">
+        </div>
+        <div class="col-lg-6" style="margin-bottom: 10px">
+            <input class="form-control" type="text" id="mapgnote" placeholder="地图拖拽准确定位经纬度">
+        </div>
+    </div>
+    <div class="form-group" id="container" style="
+                                 margin:auto;
+                                 width: 600px;
+                                 border: solid gray 1px;
+                                    height: 350px;
+                                      overflow:hidden;">
+
+    </div>
+    <div class="form-group" style="padding: 20px">
+        <p style="margin-bottom: 5px"><span style="color: red;">*&nbsp;</span>注意:门店地址不要超过十六个字,否则APP上显示不完全</p><br>
+        <p><span style="color: red;">*&nbsp;</span>注意:在地图上准确定位店址,精准的经纬度将为您带来更多的客户</p>
+    </div>
+    <button id="mapsave" type="button" class="btn btn-theme btn-lg btn-block " style="position: absolute;
+            bottom:30px;width: 80%;left: 10%;">保存</button><br>
+</div>
+<script>
+    (function(){
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "http://api.map.baidu.com/api?v=2.0&ak=xHnkO8DAAhLrU1cuTKMafLAapIMEm0ju&callback=init";
+        document.body.appendChild(script);
+        $('.anchorBL').remove();
+    })();
+    function init(){
+        /*  $.getScript("http://api.map.baidu.com/api/library/DrawingManager/1.4/src/DrawingManager_min.js",function(){*/
+        var map = new BMap.Map("container");
+        map.centerAndZoom("深圳", 15);
+        map.enableScrollWheelZoom();    //启用滚轮放大缩小，默认禁用
+        map.enableContinuousZoom();    //启用地图惯性拖拽，默认禁用
+
+        map.addControl(new BMap.NavigationControl());  //添加默认缩放平移控件
+        //map.addControl(new BMap.OverviewMapControl()); //添加默认缩略地图控件
+        //map.addControl(new BMap.OverviewMapControl({ isOpen: true, anchor: BMAP_ANCHOR_BOTTOM_RIGHT }));   //右下角，打开
+        //map.addControl( new BMap.NavigationControl({anchor:BMAP_ANCHOR_TOP_LEFT,type:BMAP_NAVIGATION_CONTROL_LARGE})); //添加默认缩略地图控件
+        map.enableDragging();//启用地图拖拽事件，默认启用(可不写)
+        map.enableScrollWheelZoom();//启用地图滚轮放大缩小
+        map.enableDoubleClickZoom();//启用鼠标双击放大，默认启用(可不写)
+        map.enableKeyboard();//启用键盘上下左右键移动地图
+        map.addEventListener("click",function(e){
+            /* alert(e.point.lng + "," + e.point.lat);*/
+            var marker = new BMap.Marker(new BMap.Point(e.point.lng, e.point.lat));  // 创建标注，为要查询的地方对应的经纬度
+            map.clearOverlays();
+            map.addOverlay(marker);
+            document.getElementById("gnote").value = e.point.lng + "," + e.point.lat;
+            map.centerAndZoom(e.point, map.getZoom());
+            //------------------------------
+            var point = e.point;
+            var gc = new BMap.Geocoder();
+             //根据经纬度获取地址
+             gc.getLocation(point, function(rs){
+             var addComp = rs.addressComponents;
+             document.getElementById("city").value= addComp.city;
+             });
+            document.getElementById("mapgnote").value = point.lng + "," + point.lat;
+            //百度地图JS API 坐标转地址，没有加载地图时获取不到rs,总是null
+            function getLocation(myGeo,pt,rs) {
+                // 根据坐标得到地址描述
+                myGeo.getLocation(pt, function (rs) {
+                    debugger;
+                    if (rs) {
+                        var addComp = rs.addressComponents;
+                        window.clearInterval(interval);
+                        alert(addComp);
+                    }
+                    return rs;
+                });
+            }
+
+        });
+        var localSearch = new BMap.LocalSearch(map);
+        localSearch.enableAutoViewport(); //允许自动调节窗体大小
+        $("#mapaddr").change(function(){
+            searchByStationName();
+        });
+        function searchByStationName() {
+            map.clearOverlays();//清空原来的标注
+            var keyword = document.getElementById("mapaddr").value;
+            localSearch.setSearchCompleteCallback(function (searchResult) {
+                var poi = searchResult.getPoi(0);
+                document.getElementById("mapgnote").value = poi.point.lng + "," + poi.point.lat;
+                map.centerAndZoom(poi.point, 15);
+                var marker = new BMap.Marker(new BMap.Point(poi.point.lng, poi.point.lat));  // 创建标注，为要查询的地方对应的经纬度
+                map.addOverlay(marker);
+                var content = document.getElementById("mapaddr").value + "<br/><br/>经度：" + poi.point.lng + "<br/>纬度：" + poi.point.lat;
+              /*  var storeinfoWindow = new BMap.storeInfoWindow("<p style='font-size:14px;'>" + content + "</p>");
+                marker.addEventListener("click", function () { this.openstoreInfoWindow(storeinfoWindow); });*/
+
+                var point = new BMap.Point(poi.point.lng, poi.point.lat);
+                var gc = new BMap.Geocoder();
+                gc.getLocation(point, function(rs) {
+                    var addComp = rs.addressComponents;
+                    document.getElementById("city").value= addComp.city;
+                });
+            });
+            localSearch.search(keyword);
+        }
+    }
+</script>
+<script>
+    {
+        latitude = function(value,type,full){
+            return value +","+full.latitude;
+        };
+        storeface = function(value){
+            return '<img src="/dir/storeface_300/'+value+'" style="width: 80px;height: 48px;" alt="门店首图暂未上传">'
+        };
+        if (system_merchuser && system_merchuser.merchuserid) {
+            seen = function(value){
+                if(value==2) {return "所有人可见"}
+                if(value==4){return "仅会员可见"}
+            };
+            type = function(value){
+                if(value==2) {return "商户"}
+                if(value==4){return "个人"}
+            };
+            var mtable = $('#table-storeinfo-sheet').dataTable({
+                ajax: {
+                    url: "/pipes/merchstore/query",//请求后台数据接口
+                    data: function (f) {
+                        f.bean = JSON.stringify({
+                            storeid: $('#filter_storeid').val().trim()
+                          /*  status: [Number($('#filter_storeinfo_status').val().trim())]*/
+                        });
+                        f.sort = 'createtime';
+                        f.order = 'DESC';
+                    }
+                },
+                columnDefs: [{
+                    className: 'select-checkbox',
+                    targets: 0
+                }],
+                columns: [
+                    {"data": "", render: $.defrender},//data对应的是key
+                    {"data": "storeface", render: storeface},
+                    {"data": "storename", render: $.defrender},
+                    {"data": "storeman", render:$.defrender},
+                    {"data": "city", render:$.defrender},
+                    {"data": "storeaddr", render: $.defrender},
+                    {"data": "longitude", render: latitude},
+                    {"data": "status", render: defStatusRender},
+                    {"data": "remark", render: $.defrender},
+                    {"data": "createtime", render: Date.DateFormatter}
+                ]
+            });
+
+            $('#filter-storeinfo-qrybtn').bind("click", function () {
+                mtable.api(true).draw(false);
+                $('#table-storeinfo-sheet').dataTable().fnPageChange(0);
+            });
+            //---------------------------点击关闭按钮摧毁验证-----------------------------
+            $("#storeinfoClose").on("click",function(){
+                $("#form-storeinfo-update").data('bootstrapValidator').destroy();
+                $('#form-storeinfo-update').data('bootstrapValidator', null);
+            });
+            $("#mapquery").focus(function(){
+                $("#mc").modal('show');
+            });
+            $("#mapsave").click(function(){
+                $("#mapquery").val($("#mapaddr").val());
+                $("#gnote").val($("#mapgnote").val());
+                $("#mc").modal('hide');
+            });
+            //--------------------------- 初始化新增&修改商户信息 -----------------------------
+            $('#button-storeinfo-create').bind("click", function () {
+                $('#dtitle-storeinfo-update').html("新增门店");
+                $("#form-storeinfo-update").form('reset');
+                $("#selectStatus").attr("disabled",true);
+                $("#indeximg").attr("src","");
+                $("#imgbox").html("");
+                $("[href='#homegoods']").tab('show');
+                $("#storeid").val("");
+             /*   $("#mapaddr").val("");
+                $("#mapgnote").val("");*/
+                storeinfovalidator();
+                $("#deletespan1").hide();
+                $('#dialog-storeinfo-update').modal('show');
+            });
+            $('#button-storeinfo-update').bind("click", function () {
+                var data = mtable.api(true).row({selected: true}).data();
+                $("#selectStatus").removeAttr("disabled");
+                if (!data || !data.merchid){
+                    alert("请选择一条记录！");
+                    return;
+                }
+                $("#form-storeinfo-update").form('reset');
+                $("#form-storeinfo-update").form('load', data);
+                $("#deletespan1").hide();
+                var markcontent=$("#storeinforemark").val();
+                markcontent=markcontent.replace(/<br>/g,"\n");
+                $("#storeinforemark").val(markcontent);
+                $('#dtitle-storeinfo-update').html("修改门店");
+                $("#gnote").val(data.longitude+","+data.latitude);
+                $("#indeximg").attr("src","/dir/storeface_900/"+data.storeface);
+                $("#city").val(data.city);
+                $("[href='#homegoods']").tab('show');
+                $('#dialog-storeinfo-update').modal('show');
+                storeinfovalidator();
+                $("#imgbox").html("");
+                if(!data.storeimgs){
+                    return
+                }else if(typeof(data.storeimgs)=="string") {
+                    var arr = data.storeimgs.split(";");
+                    var imghtml = "";
+                    if(arr.length==1){
+                        imghtml = '<div style="position: relative;width: 50%;height:50%;display: inline-block"><img class="detailimg1" style="width: 100%;height: 100%" src="/dir/storeimg_720/' + arr[0] + '">' +
+                                '<div class="fa  fa-check-circle-o checkcircle1" style="position: absolute;top: 0;right: 0;color: orange;font-size: 16px;display: none"></div></div>';
+                    }else{
+                        for (var i = 0; i < arr.length; i++) {
+                            imghtml += '<div style="position: relative;width: 50%;height:50%;display: inline-block"><img class="detailimg1" style="width: 100%;height: 100%" src="/dir/storeimg_720/' + arr[i] + '">' +
+                                    '<div class="fa  fa-check-circle-o checkcircle1" style="position: absolute;top: 0;right: 0;color: orange;font-size: 16px;display: none"></div></div>';
+                        }
+                    }
+                    $("#imgbox").html(imghtml);
+                }
+            });
+            //---------------提交商户信息-----------------------------------
+            $('#formbtn-storeinfo-update').bind("click", function (e) {
+                $("#selectStatus").removeAttr("disabled");
+                var form = $("#form-storeinfo-update");
+                var json = form.serializeJson();
+                //处理备注换行
+                var content=json.remark;
+                content=content.replace(/<br>/g,' ');
+                content=content.replace(/\n/g,'<br>');
+                json.remark=content;
+                //处理经纬度
+                var arr=json.gnote.split(",");
+                json.longitude=arr[0];
+                json.latitude=arr[1];
+                delete json.gnote;
+                //处理门店banner图片
+                var arrimg = $(".detailimg1");
+                var storeimgs = "";
+                for(var i=0;i<arrimg.length;i++){
+                    var imgarr = arrimg[i].src.split("/");
+                    if(i==arrimg.length-1){
+                        storeimgs +=imgarr[imgarr.length-1]
+                    }else{
+                        storeimgs +=imgarr[imgarr.length-1]+";";
+                    }
+                }
+                json.storeimgs = storeimgs;
+                //-----去json数据中的空格-----------------
+                var json1= {};
+                $.each(json,function(key,value){
+                    value = (value + "").replace(/\s/g,'');
+                    json1[key] = value;
+                });
+                json = json1;
+                //---------------------------------
+                //判断是新增还是修改
+                if(json.storeid){
+                    var cols=[];
+                    for(var key in json){
+                        if(key=="merchid"){
+                            continue
+                        }
+                        cols.push(key);
+                    }
+                    data =  {
+                        "bean": $.objectToString(json),
+                        "cols":  $.objectToString(cols)
+                    };
+                }else{
+                    data =  {
+                        "bean": $.objectToString(json)
+                    };
+                }
+                $('#form-storeinfo-update').bootstrapValidator('validate');
+                if( $('#form-storeinfo-update').data('bootstrapValidator').isValid()){
+                    $.ajax({
+                        cache: false,
+                        dataType: "json",
+                        type: "POST",
+                        url: '/pipes/merchstore/update',
+                        data:data,
+                        error: function () {//请求失败处理函数
+                            alert('请求失败');
+                        },
+                        success: function (data) {
+                            if (data && data.retcode && data.retcode > 0)
+                            {
+                                alert(data.retinfo);
+                            } else
+                            {
+                                $("#dialog-storeinfo-update").modal('hide');
+                                //$("#form-storeinfo-update").data('bootstrapValidator').destroy();
+                                $('#form-storeinfo-update').data('bootstrapValidator', null);
+                                mtable.api(true).draw(false);
+                            }
+                        }
+                    });
+                }else{
+                    alert("验证失败,请按要求填写");
+                    return;
+                }
+            });
+            //----------------商户信息校验-------------------------------
+            function storeinfovalidator() {
+                $('#form-storeinfo-update').bootstrapValidator({
+                    message: 'This value is not valid',
+                    feedbackIcons: {/*输入框不同状态，显示图片的样式*/
+                        valid: 'glyphicon glyphicon-ok',
+                        invalid: 'glyphicon glyphicon-remove',
+                        validating: 'glyphicon glyphicon-refresh'
+                    },
+                    fields: {/*验证*/
+                        storename: {/*键名和input name值对应*/
+                            message: 'The corpname is not valid',
+                            validators: {
+                                notEmpty: {/*非空提示*/
+                                    message: '门店名称不能为空'
+                                },
+                                regexp: { /* 只需加此键值对 */
+                                    regexp: /^([A-Za-z0-9\u4e00-\u9fa5]{1,10})$/,
+                                    message: '门店名称不能包含符号且长度不超过十个字'
+                                }
+                            }
+                        },
+                        storeman: {
+                            message:'',
+                            validators: {
+                                notEmpty: {/*非空提示*/
+                                    message: '门店负责人不能为空'
+                                }
+                            }
+                        },
+                        storeaddr: {
+                            message:"",
+                            validators: {
+                                notEmpty: {
+                                    message: '门店地址不能为空'
+                                }
+                            }
+                        },
+                        gnote: {
+                            message:"",
+                            validators: {
+                                notEmpty:{
+                                    message:'经纬度不能为空'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            //-------------上传门店图片到服务器-----------------------
+            //门店首图
+            $('#storefacebtn').fileupload({
+                type: 'POST',
+                url: '/pipes/upload/storeface',
+                done: function (e, data) {//设置文件上传完毕事件的回调函数
+                    var json = JSON.parse(data.result);
+                    var imghtml= '<img id="indeximg" src="/dir/storeface_300/'+json.fileid+'" style="width:360px;height:168px;border: 1px solid #ddd"/>'
+                    $("#faceimg").html(imghtml);
+                    $("#storeface").val(json.fileid)
+                }
+            });
+            //门店banner图片
+            $('#fileUpload').fileupload({
+                type: 'POST',
+                url: '/pipes/upload/storeimg',
+                done: function (e, data) {//设置文件上传完毕事件的回调函数
+                    var json = JSON.parse(data.result);
+                      var imghtml='<div style="position: relative;width: 50%;height:50%;display: inline-block"><img class="detailimg1" style="width: 100%;height: 100%" src="/dir/storeimg_720/'+json.fileid+'">' +
+                     '<div class="fa  fa-check-circle-o checkcircle1" style="position: absolute;top: 0;right: 0;color: orange;font-size: 16px;display: none"></div></div>';
+
+                     //var storeimg ='<input type="hidden" name="storeimg" value="'+json.fileid+'">'
+                    $("#imgbox").append(imghtml)
+                    //$("#storeface").after(storeimg);
+                }
+            });
+            //新增门店图片删除
+            $("#imgbox").on('click',".detailimg1",function(){
+                $("#deletespan1").show();
+                $("#imgbox").css("clear","both");
+                $(this).parent().find(".checkcircle1").toggle();
+            });
+            $("#deletespan1").unbind("click").click(function(){
+                var arr=$(".checkcircle1");
+                for(var i=0;i<arr.length;i++){
+                    if(!(arr.eq(i).css("display")=="none")){
+                        arr.eq(i).parent().remove();
+                    }
+                }
+            });
+        }
+        $(function () {
+            $.ajax({
+                cache: false,
+                dataType: "json",
+                type: "POST",
+                data:{
+                    "bean":"{storeid : 0}"
+                },
+                url: '/pipes/merchstore/query',
+                error: function () {//请求失败处理函数
+                    alert('请求失败');
+                },
+                success: function (data) {
+                    $('#filter_storeid').find('option').remove();
+                    var content = '';
+                    var headcontent='<option value="0">全部门店</option>';
+                    for (var i = 0; i < data.rows.length; i++) {
+                        content = content + '<option value="' + data.rows[i].storeid + '">' + data.rows[i].storename + '</option>';
+                    }
+
+                    $("#filter_storeid").append(headcontent);
+                    $("#filter_storeid").append(content);
+                }
+            });
+
+        });
+    }
+
+</script>

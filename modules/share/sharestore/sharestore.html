@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width,user-scalable=0,initial-scale=1.0">
+    <meta name="description" content="强力推荐！客服全程服务到位，还赠送了流量和话费">
+    <link type="text/css" href="css/share.css?t=128948434" rel="stylesheet">
+    <script type="text/javascript" src="js/jquery-1.11.1.js" ></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+  <!--  <script src="../sha1.js"></script>
+    <script src="js/wx.js"></script>-->
+    <script type="text/javascript" src="//res.cdn.openinstall.io/openinstall.js"></script>
+    <script src="../install.js"></script>
+    <script>
+        (function(){
+            var src = window.location.href;
+            var storeidstr = src.substr(src.indexOf('?StoreId='), 14);
+            var store36id = storeidstr.split("=")[1];
+            //var storeid = parseInt(store36id, 36);
+            var installdata = {"pageName":"ShopDetailsPage","data":{"store36id":store36id}};//也可以是js Object
+            console.log(installdata);
+            install(installdata);
+        })();
+    </script>
+    <script src="js/share.js?t=1281548922"></script>
+    <title></title>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="banner">
+            <img src="" alt="" style="max-width: 100%;max-height: 100%;vertical-align: middle">
+        </div>
+        <div class="headfooter">
+            <p>地址 : <span id="addr"></span></p>
+            <p>热线 : <span id="tel"></span></p>
+        </div>
+    </div>
+    <div class="coupon">
+        <div class="couponTitle">
+            门店优惠
+        </div>
+        <div class="couponList">
+            <ul>
+                <li>
+                   <!-- <span>前100名消费满5000送1G流量1000分钟通话时间</span><span>截止2017-04-30</span>-->
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="goods">
+        <div class="goodsTitle">
+            爆款商品
+        </div>
+        <div class="goodsList">
+            <ul>
+                <li>
+                   <!-- <div>
+                        <img src="" alt="商品图片加载失败">
+                    </div>
+                    <div>
+                        <h1>铁观音茶业 浓香型赛珍珠礼盒</h1>
+                        <h2>十三代传承的浓香型好茶</h2>
+                        <h3>优惠:买三送一</h3>
+                        <h4>￥540.0<span>￥1500.0</span></h4>
+                     </div>-->
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div style="background: white;height: 3.2rem;width: 100%;"></div>
+  <!--  <div class="footer">
+        <a href="javascript:void(0)" id="openApp" class="openApp">点击领取福利</a>
+    </div>-->
+    <div class="footer">
+        <div style="width: 40%;float: left;">
+            <a href="javascript:void(0)" id="openApp" class="openApp" style="background: orangered">去抢购</a>
+        </div>
+        <div style="width: 60%;float: left;">
+            <a href="javascript:void(0)" id="submit" >新用户领取福利</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

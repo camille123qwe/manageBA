@@ -1,0 +1,232 @@
+<div class="page-title">
+    <a id="button-role-create" href="javascript:void(0);"><i class="fa fa-plus"></i>新增角色</a>
+    <a id="button-role-update" href="javascript:void(0);"><i class="fa fa-pencil-square-o"></i>修改角色</a>
+    <a id="button-auth-update" href="javascript:void(0);"><i class="fa fa-pencil-square-o"></i>修改权限</a>
+</div>
+<div class="panel-box">    
+    <div class="table-responsive">
+        <table id="table-role-sheet" class="table table-hover" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>角色ID</th>
+                    <th>角色名称</th>
+                    <th>创建时间</th>
+                    <th>创建人</th>
+                    <th>描述</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+<div id="dialog-role-update" class="modal fade" tabindex="-1" data-width="500" style="display: none;"> 
+    <div class="modal-header"> 
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> 
+        <h4 id="dtitle-role-update" class="modal-title">修改角色</h4> 
+    </div>
+    <div class="modal-body"> 
+        <form id="form-role-update" class="m-t form-horizontal" role="form"> 
+            <input  name="roleid" type="hidden">
+            <div class="form-group">
+                <label class="col-lg-2 control-label">角色名称</label>
+                <div class="col-lg-10"><input  name="rolename" placeholder="" class="form-control" required=""></div>
+            </div>           
+            <div class="form-group">
+                <label class="col-lg-2 control-label">备注说明</label>
+                <div class="col-lg-10"><textarea name="description" placeholder="" style="height: 8rem;" class="form-control"></textarea></div>
+            </div>
+            <br>
+            <button id="formbtn-role-update" type="button" class="btn btn-theme btn-lg btn-block ">提 交</button><br> 
+        </form> 
+    </div> 
+    <div id="tips-role-update" class="module-alert-tips"></div><br>  
+</div>
+
+<div id="dialog-auth-update" class="modal fade" tabindex="-1" data-width="600" style="display: none;"> 
+    <div class="modal-header"> 
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> 
+        <h4 id="dtitle-auth-update" class="modal-title">修改权限</h4> 
+    </div>
+    <div class="modal-body"> 
+        <form id="form-auth-update" class="m-t form-horizontal" role="form"> 
+            <input name="roleid" type="hidden">
+            <div class="table-responsive">
+                <table id="table-auth-sheet" class="table table-hover" style="width: 100%;"></table>
+            </div>
+            <button id="formbtn-auth-update" type="button" class="btn btn-theme btn-lg btn-block ">提 交</button><br> 
+        </form> 
+    </div> 
+    <div id="tips-auth-update" class="module-alert-tips"></div><br>  
+</div>
+<script>
+    {
+        //----------------------------------------------------
+        var mtable = $('#table-role-sheet').dataTable({
+            ajax: "/pipes/role/query",
+            columnDefs: [{
+                    className: 'select-checkbox',
+                    targets: 0
+                }],
+            columns: [
+                {"data": "", render: $.defrender},
+                {"data": "roleid"},
+                {"data": "rolename", render: $.defrender},
+                {"data": "createtime", render: Date.DateFormatter},
+                {"data": "creator", render: $.defrender},
+                {"data": "description", render: $.defrender}
+            ]
+        });
+        //--------------------------- 初始化按钮 -----------------------------
+        $('#button-role-create').bind("click", function () {
+            $('#form-gfield-password').show();
+            $('#dtitle-role-update').html("新增角色");
+            $("#tips-role-update").html('');
+
+            $("#form-role-update").form('reset');
+            $('#dialog-role-update').modal('show');
+        });
+        $('#button-role-update').bind("click", function () {
+            var data = mtable.api(true).row({selected: true}).data();
+            if (!data || !data.roleid) {
+                alert("请选择一条记录！");
+                return;
+            }
+            $('#dtitle-role-update').html("修改角色");
+            $("#tips-role-update").html('');
+            $("#form-role-update").form('reset');
+            $("#form-role-update").form('load', data);
+            $('#dialog-role-update').modal('show');
+        });
+
+        //------------------------ 新增&修改角色 -----------------------------                
+        $('#formbtn-role-update').bind("click", function (e) {
+            var form = $("#form-role-update");
+            if (!form.form('validate')) return;
+            var json = form.serializeJson();
+            $.ajax({
+                cache: false,
+                dataType: "json",
+                type: "POST",
+                url: json.roleid ? '/pipes/role/update' : '/pipes/role/create',
+                data: {
+                    "bean": $.objectToString(json),
+                },
+                error: function () {//请求失败处理函数
+                    alert('请求失败');
+                },
+                success: function (data) {
+                    $("#dialog-role-update").modal('hide');
+                    mtable.api(true).draw(false);
+                }
+            });
+        });
+
+        var atable = null;
+        var optionobj = {};
+
+        //------------------------ 修改权限 -----------------------------  
+        $('#formbtn-auth-update').bind("click", function (e) {
+            var editobj = $('#form-auth-update').serializeJson();
+            var roleid = editobj.roleid;
+            delete editobj.roleid;
+
+            var delseqids = [];
+            for (var p in optionobj) {
+                var seqid = optionobj[p];
+                if (seqid < 0) continue;
+                if (!editobj[p]) delseqids.push(seqid);
+            }
+            $.unique(delseqids);
+
+            var newoptions = [];
+            for (var p in editobj) {
+                if (optionobj[p]) continue;
+                newoptions.push({roleid: roleid, optionid: parseInt(p)});
+            }
+            $.ajax({
+                dataType: "json",
+                type: "POST",
+                url: '/pipes/role/updoption',
+                data: {
+                    "delseqids": "[" + delseqids.join(",") + "]",
+                    "bean": $.objectToString(newoptions)
+                },
+                error: function () {//请求失败处理函数
+                    alert('请求失败');
+                },
+                success: function (data) {
+                    $("#dialog-auth-update").modal('hide');
+                    mtable.api(true).draw(false);
+                }
+            });
+        });
+        //------------------------ 显示权限列表 -----------------------------    
+        $('#button-auth-update').bind("click", function () {
+            var rolerow = mtable.api(true).row({selected: true}).data();
+            if (!rolerow || !rolerow.roleid) {
+                alert("请选择一条记录！");
+                return;
+            }
+            $("#form-auth-update").form('load', rolerow); // 给roleid赋值
+            $.ajax({
+                dataType: "json",
+                url: '/pipes/role/qryoption',
+                data: {
+                    "bean": "{'roleid':" + rolerow.roleid + "}"
+                },
+                error: function () {//请求失败处理函数
+                    alert('获取权限信息失败');
+                },
+                success: function (olddata) {
+                    for (var p in optionobj) {
+                        delete optionobj[p];
+                    }
+                    for (var i = 0; i < olddata.length; i++) {
+                        var moduleid = Math.floor(olddata[i].optionid / 10000);
+                        optionobj["" + moduleid] = -1;
+                        optionobj["" + olddata[i].optionid] = olddata[i].seqid;
+                    }
+                    var columns = [];
+                    var dataset = [];
+                    columns.push({title: '模块名称'});
+                    for (var i = 0; i < system_actiones.length; i++) {
+                        columns.push({title: system_actiones[i].actionname});
+                    }
+                    for (var i = 0; i < system_rmodules.length; i++) {
+                        var module = system_rmodules[i];
+                        var suboptions = [];
+                        suboptions.push("<a style='color:#999;font-weight:bold;' href='javascript:selectRoleModuleCheckbox(" + module.moduleid + ")'>" + module.modulename + "</a>");
+                        for (var j = 0; j < system_actiones.length; j++) {
+                            var optionid = module.moduleid * 10000 + system_actiones[j].actionid;
+                            var cked = !!(optionobj["" + optionid]);
+                            suboptions.push('<input type="checkbox" name="' + optionid + '" value="' + optionid + '" ' + (cked ? ' checked="checked"' : '') + '>');
+                        }
+                        dataset.push(suboptions);
+                    }
+                    $('#dtitle-auth-update').html("修改【" + rolerow.rolename + "】权限");
+                    $('#dialog-auth-update').modal('show');
+
+                    if (atable) atable.api(true).destroy(false);
+                    atable = $('#table-auth-sheet').dataTable({
+                        serverSide: false,
+                        select: false,
+                        paging: false,
+                        info: false,
+                        data: dataset,
+                        columns: columns
+                    });
+                    window.selectRoleModuleCheckbox = function (moduleid) {
+                        var f = 0;
+                        $.each(atable.find("input[type=checkbox]"), function (index, el) {
+                            if (el.value.indexOf("" + moduleid) === 0) {
+                                if (f < 1) f = el.checked ? 2 : 1;
+                                el.checked = !(f - 1);
+                            }
+                        });
+                    };
+                }
+            });
+        });
+    }
+</script>

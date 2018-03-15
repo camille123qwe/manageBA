@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width,user-scalable=0,initial-scale=1.0">
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <title></title>
+    <style>
+        *{
+            margin:0;
+            padding: 0;
+        }
+        html,body{
+            width: 100%;
+            height:100%;
+        }
+        #header{
+            width:100%;
+            height: 18.7rem;
+            background: url("bg_imge@2x.png") no-repeat;
+            background-size: contain;
+            position: relative;
+        }
+        #message{
+            width:17.5rem;
+            height: 7rem;
+            background: #fdf7e9;
+            border-radius: 0.4rem;
+            margin:auto;
+            position: absolute;
+            bottom: 1rem;
+            left:0.62rem;
+        }
+        .p1{
+            font-size: 1rem;
+            color: #f17a00;
+            margin:auto;
+            text-align: center;
+            padding:0.6rem 0;
+        }
+        .p2{
+            font-size: 0.75rem;
+            color: #6e6963;
+            width:13.75rem;
+            margin:auto;
+            text-align: center;
+        }
+        #submit{
+            width:15rem;
+            margin:auto;
+            height: 2.5rem;
+            background: #f17a00;
+            border-radius: 0.4rem;
+            color: #ffffff;
+            text-align: center;
+            line-height: 2.5rem;
+            font-size: 0.8rem;
+            font-weight: bold;
+            font-family: 微软雅黑;
+            margin-top: 5.5rem;
+            margin-bottom: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="header">
+            <div id="message">
+                <div class="p1">
+                    <p>您的好友<span id="name">雪纳瑞</span></p>
+                    <span>给您赠送了<span id="gift">100M</span>流量</span>
+                </div>
+                <p class="p2">
+                    已经充入到您账号为：<span id="mobile">18819018576</span><br>的店呼账号内
+                </p>
+            </div>
+        </div>
+        <div id="submit">
+            快打开店呼领取吧
+        </div>
+    </div>
+</body>
+</html>
+<script src="../shareLogin/jquery-1.11.1.js"></script>
+<script>
+    (function (doc, win) {
+        var sUserAgent = navigator.userAgent.toLowerCase();
+        var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
+        var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
+        var bIsMidp = sUserAgent.match(/midp/i) == "midp";
+        var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4";
+        var bIsUc = sUserAgent.match(/ucweb/i) == "ucweb";
+        var bIsAndroid = sUserAgent.match(/android/i) == "android";
+        var bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
+        var bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
+        //判断是移动端还是PC端
+        if (bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM) {
+            var docEl = doc.documentElement,
+                    resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                    recalc = function () {
+                        var clientWidth = docEl.clientWidth;
+                        if (!clientWidth) return;
+                        docEl.style.fontSize = 20 * (clientWidth / 375) + 'px';
+                    };
+        } else {
+            $("#header").width(750);
+            $("#header").css('margin','auto');
+            $("body").css('background','#fdf7e9');
+            $(".container").width(750);
+            $(".container").css('margin','auto');
+            $(".container").css('background','#ffffff').css("paddingBottom",'0.5rem');
+            $("#submit").css("marginTop","1.5rem").css("marginBottom","1.5rem");
+            var docEl = doc.documentElement,
+                    resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                    recalc = function () {
+                        var clientWidth = 750;
+                        if (!clientWidth) return;
+                        docEl.style.fontSize = 20 * (clientWidth / 375) + 'px';
+                    };
+        }
+        if (!doc.addEventListener) return;
+        win.addEventListener(resizeEvt, recalc, false);
+        doc.addEventListener('DOMContentLoaded', recalc, false);
+    })(document, window);
+    var src = window.location.href;
+    //var src = window.location.href+"?mobile=18819481254?custusername=吴彦祖?end+?commonkbs=100M";
+    var mobile = src.substr(src.indexOf("?mobile="),19).split("=")[1];
+    mobile = mobile.substr(0,3)+"****"+mobile.substr(7,4);
+    var custusername = src.substr(src.indexOf("?custusername="),src.indexOf("?end")).split("=")[1].split("?")[0];
+    var commonkbs = src.substr(src.indexOf("?commonkbs")).split("=")[1].split("&")[0];
+    $("#mobile").text(mobile);
+    custusername = decodeURI(custusername);
+    if(custusername=="null"||custusername=="设置昵称"){
+        $("#name").text("");
+    }else{
+        $("#name").text(custusername);
+    }
+    $("#gift").text(commonkbs);
+    $("#submit").click(function(){
+        location.href = "http://merch.diancall.com/modules/share/shareLogin/shareLogin.html"
+    });
+
+    //-------------------weixinjiekup--------------------
+    var src = window.location.href;
+    function randomString() {
+        var $chars = 'ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123456789';
+        var maxPos = $chars.length;
+        var pwd = '';
+        for (i = 0; i < 32; i++) {
+            pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+        }
+        return pwd;
+    }
+    var timestampNum = randomString();
+    src = src.split("#")[0];
+    var getsrc = encodeURIComponent(src);
+    $.get('http://merch.diancall.com/pipes/wechat/getaccesstoken?url='+getsrc+'&noncestr='+timestampNum,function(res){
+        res = JSON.parse(res);
+        //console.log(res);
+        var timestamp = res.timestamp;
+        var signature = res.signature;
+        wx.config({
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: 'wx58861130a10e525b', // 必填，公众号的唯一标识
+            timestamp: timestamp, // 必填，生成签名的时间戳
+            nonceStr: timestampNum, // 必填，生成签名的随机串
+            signature: signature,// 必填，签名，见附录1
+            jsApiList: ['checkJsApi', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareAppMessage', 'onMenuShareQQ'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        });
+        wx.checkJsApi({
+            jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'onMenuShareQZone'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+            success: function (res) {
+                // 以键值对的形式返回，可用的api值true，不可用为false
+
+                // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+            }
+        });
+        wx.ready(function () {
+            var imgUrl = 'http://merch.diancall.com/modules/share/sharegive/logo.png';
+            var lineLink = src;   //网站网址，必须是绝对路径
+            var descContent = '更多惊喜等你来拿'; //分享给朋友或朋友圈时的文字简介
+            var shareTitle = '您的好友为您的账户充值了'+commonkbs+'流量，快下载店呼领取吧';  //分享title
+            var appid = 'wx291eff92df433407'; //apiID，可留空
+            //分享给朋友
+            wx.onMenuShareAppMessage({
+                title: shareTitle, // 分享标题
+                desc: descContent, // 分享描述
+                link: lineLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                imgUrl: imgUrl, // 分享图标
+                type: '', // 分享类型,music、video或link，不填默认为link
+                dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+            //分享到朋友圈
+            wx.onMenuShareTimeline({
+                title: shareTitle, // 分享标题
+                link: lineLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                imgUrl: imgUrl, // 分享图标
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+            //分享到qq
+            wx.onMenuShareQQ({
+                title: shareTitle, // 分享标题
+                link: lineLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                imgUrl: imgUrl, // 分享图标
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+            //分享到qq空间
+            wx.onMenuShareQZone({
+                title: shareTitle, // 分享标题
+                link: lineLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                imgUrl: imgUrl, // 分享图标
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+        });
+    })
+
+</script>

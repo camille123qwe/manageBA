@@ -1,0 +1,1156 @@
+<div class="row" style="margin: 0;padding: 0">
+    <span style="padding: 0;color: #006dcc" id="goods-title">
+        <a  href="javascript:openModule('modules/index/indexClick.html',400);" style="color: #006dcc">商户首页</a>
+        &gt;&gt;<a href="javascript:openModule('modules/store/storeindex.html',101);" style="color: #006dcc">门店首页</a>
+        &gt;&gt;<a href="javascript:openModule('modules/goods/goods.html',301);" style="color: #006dcc">商品管理</a>
+    </span>
+    <span style="color:#114da9;margin-left: 20px">当前门店:<span id="nowStorename"></span></span>
+</div>
+<div class="page-title" style="margin-top:10px;">
+    <input id="hiddengroup" type="hidden">
+    <ul class="filter_ul" style="margin: 0;padding: 0">
+        <table width="100%">
+            <tr>
+                <td width="15%">
+                    <li>
+                        <a id="button-goodsgroup-create" href="javascript:void(0);">
+                            <i class="fa fa-plus"></i>新增商品分类</a>
+                    </li>
+                </td>
+                <td width="85%">
+                    <li><a id="button-goods-create" href="javascript:void(0);"><i class="fa fa-plus"></i>新增商品</a></li>
+                    <li><a id="button-goods-update" href="javascript:void(0);"><i class="fa fa-pencil-square-o"></i>修改商品</a></li>
+                    <li><a id="button-goods-detail" href="javascript:void(0);"><i class="fa fa-eye"></i>查看商品详情</a></li>
+                    <li><a id="button-goods-copy" href="javascript:void(0);"><i class="fa  fa-files-o"></i>复制商品(按住ctrl键可选择多个)</a></li>
+                </td>
+            </tr>
+        </table>
+    </ul>
+</div>
+<div class="table-responsive" >
+    <table cellspacing="0" width="100%" class="table" style="overflow: hidden">
+        <tr data-width="100%" style="margin: 0;padding: 0">
+            <td width="15%">
+                <div class="panel-box">
+                <table id="table-goodsgroup-sheet" class="table table-hover"  cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>
+                            <button id="button-group" style="background: none;border: none;">
+                                商品分类</button>
+                            <button id="button-goodsgroup-update" style="background: none;border: none;margin-left: 5px;color: #2a7dd0;font-weight: lighter">
+                                修改分类</button>
+                        </th>
+                        <th>门店ID</th>
+                        <th>添加时间</th>
+                        <th>分类ID</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr role="row"><td class=" select-checkbox"></td><td>全部分类</td></tr>
+                    </tbody>
+                </table>
+                    <p style="padding-top: 10px"><span style="color: red">&nbsp;*&nbsp;</span>注意:商品分类不能超过9条</p>
+                    <p><span style="color: red"> * </span>点击商品分类下任意一行可根据该行分类对商品进行筛选</p>
+                    <p><span style="color: red"> * </span>点击商品分类展示全部商品</p>
+                </div>
+            </td>
+            <td width="85%">
+                <div class="panel-box">
+                <table id="table-goods-sheet" class="table table-hover"  cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>商品列表
+                            <input id="filter_goodsname" style="width:150px;margin-left: 20px;font-weight: lighter"  type="text" placeholder="商品名称" >
+                            <button type="button" id="filter-user-qrybtn" style='padding:2px 10px;'  class="btn btn-primary" >&nbsp;&nbsp;&nbsp;查询&nbsp;&nbsp;&nbsp;</button>
+                            <span style="margin-left: 20px;color: red">* 注意：爆款商品只能设置5个哦！</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<!--商品分类modal-->
+<div id="dialog-group-update" class="modal fade" tabindex="-1"  data-width="500" data-height="300" data-backdrop="static" data-keyboard="false">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 id="dtitle-groupment-update" class="modal-title">添加分类</h4>
+    </div>
+    <div class="modal-body">
+        <form id="form-groupment-update" class="m-t form-horizontal" role="form" onsubmit="return false">
+            <input name="merchid" id="merchid" type="hidden">
+            <input name="groupid" id = "groupid" type="hidden">
+            <input name="storeid" id="storeid" type="hidden">
+            <input name="createtime" type="hidden" id="createtime">
+            <div class="form-group">
+                <label class="col-lg-3 control-label"><span style="color: red;">*&nbsp;</span>状态</label>
+                <div class="col-lg-9">
+                    <select name="status" class="form-control">
+                        <option value="10">正常</option>
+                       <option value="20">待审批</option>
+                        <option value="80">删除</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label"><span style="color: red;">*&nbsp;</span>所属行业类目</label>
+                <div class="col-lg-9">
+                    <select name="categoryid" id="category" class="form-control">
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label"><span style="color: red;">*&nbsp;</span>分类名称</label>
+                <div class="col-lg-9"><input name="groupname" class="form-control" id="goodsgroup"></div>
+            </div>
+            <br>
+            <button id="goodsGroup-create" type="button" class="btn btn-theme btn-lg btn-block ">提 交</button><br>
+        </form>
+    </div>
+</div>
+<!--商品modal-->
+<div id="dialog-goods-update" class="modal fade" tabindex="-1"  data-backdrop="static" data-keyboard="false" data-width="900" style="display: none;">
+    <div class="modal-header"> 
+        <button type="button" class="close closegoods" id="close_goods" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 id="dtitle-goods-update" class="modal-title">修改商品</h4> 
+    </div>
+    <div class="modal-body"> 
+        <ul id="myTab" class="nav nav-tabs">
+            <li class="active"><a href="#home" data-toggle="tab">基本信息</a></li>
+            <li><a href="#detail" data-toggle="tab">商品图片</a></li>
+            <li><a href="#detailtext" data-toggle="tab">商品详情</a></li>
+        </ul>
+        <form id="form-goods-update" class="m-t form-horizontal" enctype="multipart/form-data" role="form"> 
+            <div id="myTabContent" class="tab-content">
+                <div class="tab-pane fade in active" id="home">
+                    <input name="goodsid" id="goodsid" type="hidden">
+                    <input name="goodsradio" id="goodsradio" type="hidden">
+                    <input name="goodsface" id="goodsface" type="hidden">
+                    <input name="merchid" id="goodsmerchid" type="hidden">
+                    <input name="storeid" type="hidden">
+                    <input name="createtime" type="hidden">
+                    <table>
+                            <tr>
+                                <td style="width:435px;">
+                                    <div class="form-group" id="admingood">
+                                        <label class="col-lg-4 control-label" >商品名称</label>
+                                        <div class="col-lg-8" ><input  name="goodsname"  placeholder="商品名称" class="form-control"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label">商品描述</label>
+                                        <div class="col-lg-8" ><input  name="goodsdesc" placeholder="描述商品的别名、特点等" class="form-control"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label" >商品分类</label>
+                                        <div class="col-lg-8">
+                                            <select name="groupid" id="groupid_select" class="form-control">
+                                                <option>商品分类</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label" >状 态</label>
+                                        <div class="col-lg-8" >
+                                            <select id="field-hotment-status" name="status" class="form-control">
+                                                <option value="10" style="color:green;">正常</option>
+                                                <option value="20" style="color:#FF00FF;">待审批</option>
+                                                <option value="80" style="color:red;">删除</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label" >商品单位</label>
+                                        <div class="col-lg-8" ><input  name="unit" placeholder="例如：1盒、1袋或2瓶、3件等" class="form-control"></div>
+                                    </div>
+                                </td>
+                                <td style="width:440px;padding-left:170px;">
+                                    <form>
+                                    <div class="fileupload">
+                                        <img id="img-goods-img" src="" style="border: 1px solid #ddd;width: 200px;height: 150px"/>
+                                    </div>
+                                    <div class="btn btn-success fileinput-button" style="margin-left: 20px;margin-top: 20px">
+                                        <i class="fa fa-fw fa-upload"></i>
+                                        <span>商品首图<br/><span id="change_radio">(比例:4:3)</span></span>
+                                        <input id="fileupload-goods-btn" type="file" name="file">
+                                    </div>
+                                    </form>
+                                </td>
+                            </tr> </table>
+                    <div class="form-group" style="display:none;">
+                        <label class="col-sm-2 control-label" >起始出售时间</label>
+                        <div class="col-sm-4" ><input  name="startselltime" id="startselltime" placeholder="起始出售时间" class="form-control"></div>
+                        <label class="col-sm-2 control-label" >结束出售时间</label>
+                        <div class="col-sm-4" ><input  name="endselltime" id="endselltime" placeholder="结束出售时间" class="form-control"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" >商品价格(元)</label>
+                        <div class="col-sm-4" ><input id="sellprice" name="sellprice" type="number" placeholder="为0表示无需支付金额" class="form-control" min="0" step="0.01" data-bv-regexp-message="价格不能为负数"></div>
+                        <label class="col-sm-2 control-label" >市场价格(元)</label>
+                        <div class="col-sm-4" ><input id="marketprice" name="marketprice" type="number" placeholder="为0表示无市场价格" class="form-control" min="0" step="0.01" data-dismiss="价格不能为负数"></div>
+                    </div>                    
+                    <div class="form-group" style="display:none;">
+                        <label class="col-sm-2 control-label" >促销开始时间</label>
+                        <div class="col-sm-4" ><input  name="hotstarttime" id="hotstarttime" placeholder="促销开始时间" class="form-control"></div>
+                        <label class="col-sm-2 control-label" >促销结束时间</label>
+                        <div class="col-sm-4" ><input  name="hotendtime" id="hotendtime" placeholder="促销结束时间" class="form-control"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" >备注说明</label>
+                        <div class="col-sm-4" ><textarea  name="remark" id="remark" class="form-control"></textarea></div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="detail">
+                    <div class="form-group">
+                        <div class="col-lg-12" >
+                            <form>
+                            <input type="file" name="file" id="fileUpload" multiple="multiple" style="margin-left: 12px;margin-top: 10px;float: left">
+                            <input type="button" id="deletespan1" style="float: right;position: relative;bottom: 30px;background: none;border: none;color: orange;font-size: 20px;
+                            display: none" value="删除选中图片"><div id="imgbox" style="width: 842px;height: 424px;overflow:auto; border: solid 1px lightgray;margin: auto;margin-top: 15px">
+
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="detailtext">
+                    <div class="form-group">
+                        <div class="col-lg-12" >
+                                <!--<div style="margin-top: 20px;margin-left: 42px"><span style="color: red;">*&nbsp;</span>商品详情描述</div>
+                                <textarea name="detail" id="goodstext" style="width: 90%;height: 320px;margin: auto;margin-top: 20px;margin-left: 5%;font-size: 16px;padding: 12px">
+
+                                </textarea>-->
+                            <!--富文本编辑-->
+                            <div>
+                                <script id="editor" type="text/plain" style="width:850px;height:400px;"></script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-5 col-lg-offset-3">
+                    <button id="formbtn-goods-update" type="button" class="btn btn-theme btn-lg btn-block " style="width: 45%;margin-left:27.5%;">提 交</button><br>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="dialog-goods-detail" class="modal fade" tabindex="-1"  data-backdrop="static" data-keyboard="false" data-width="900" style="display: none;">
+    <div class="modal-header">
+        <button type="button" class="close closegoods" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">商品详情</h4>
+    </div>
+    <div class="modal-body">
+                    <div class="form-group">
+                        <div class="col-lg-12" >
+                            <div style="margin-top: 20px;margin-left: 42px"><span style="color: red;">*&nbsp;</span>商品详情描述</div>
+                            <div name="detail" id="goodstext" style="width: 90%;min-height: 320px;margin: 20px 0 50px 5%;font-size: 16px;padding: 12px;border: solid 1px #8c8c8c;">
+
+                            </div>
+                        </div>
+                    </div>
+
+        </form>
+    </div>
+</div>
+
+<!--复制商品到门店modal-->
+<div id="dialog-copy-goods" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false" data-width="800" style="height: 650px">
+    <div class="modal-header">
+        <button type="button" class="close closegoods" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title" style="text-align: center">复制到其他店铺</h4>
+    </div>
+    <div id="treeMenu" class="modal-body">
+        <div class="form-group" style="color: grey" id="goodname_div">
+            <p>已选择商品</p>
+            <p id="goodsname_para">
+            </p>
+        </div>
+        <div class="form-group">
+            <label for="checkall"><input type="checkbox" id="checkall">选择全部门店</label>
+        </div>
+        <div style="width: 100%;min-height: 360px;border: solid 1px gray">
+        <ul id="storeTree" class="ztree" style="min-width: 350px;float: left;margin: 0;background: rgba(116, 155, 233, 0.3)">
+
+        </ul>
+            <p id="checklength"></p>
+        </div>
+        <button id="copyto_store" type="button" class="btn btn-theme btn-block" style="margin-top: 20px">提交</button>
+    </div>
+</div>
+<script>
+    {
+        var ue= "";
+        var testurl = "/pipes/img/goods_300/";
+        $(document).ready(function(){
+            if(system_merchuser.type==10){
+                $("#goods-title").html('<a  href="javascript:openModule(\'modules/index/indexClick.html\',400);" style="color: #006dcc">商户首页</a>'+
+                        '&gt;&gt;<a href="javascript:openModule(\'modules/store/storeindex.html\',101);" style="color: #006dcc">门店首页</a>' +
+                        '&gt;&gt;<a href="javascript:openModule(\'modules/goods/goods.html\',301);" style="color: #006dcc">商品管理</a>')
+            }else{
+                $("#goods-title").html('<p style="padding:0;color: #006dcc">'+
+                        '<a href="javascript:openModule(\'modules/store/storeindex.html\',101);" style="color: #006dcc">门店首页</a>' +
+                        '&gt;&gt;<a href="javascript:openModule(\'modules/goods/goods.html\',301);" style="color: #006dcc">商品管理</a></p>')
+            }
+            $(".pull-left").show();
+            $("#menu").show();
+            $("body").removeClass("widescreen");
+            var storename=common.getData('storename');
+            $("#nowStorename").text(storename);
+            $.ajax({
+                url:"/pipes/merchgoods/querycategory",
+                type:"POST",
+                dataType:"JSON",
+                data:{"bean":"{}"},
+                error:function(){
+                    console.log(error);
+                },
+                success:function (res) {
+                    var arr = res.rows||[];
+                    var _html="";
+                    var appendhtml = "";
+                    for(var i=0;i<arr.length;i++){
+                        if(arr[i].categoryid=="c.109"){
+                            appendhtml ='<option value="'+arr[i].categoryid+'">'+arr[i].categoryname+'</option>';
+                            continue
+                        }
+                        _html+='<option value="'+arr[i].categoryid+'">'+arr[i].categoryname+'</option>'
+                    }
+                    $("#category").html(_html);
+                    $("#category").append(appendhtml);
+                }
+            })
+        });
+            //获取当前用户所属门店列表信息（设置商户id,商品图片尺寸）
+        $.ajax({
+                url:"/pipes/merchstore/query",
+                data:{"bean":"{storeid:0}"},
+                type:"POST",
+                dataType:"JSON",
+                success:function(res){
+                    if(res&&res.retcode>0){
+                        alert(res.retinfo);
+                        return;
+                    }else{
+                        var merchid = system_merchuser.merchid;
+                        $("#merchid").val(merchid);
+                        $("#goodsmerchid").val(merchid);
+                        var rows=res.rows||[];
+                        var data = rows[0];
+                        //------------上传商品首图------------------------------
+                        $('#fileupload-goods-btn').fileupload({
+                            type: 'POST',
+                            formData:{goodsid:"goodsid"},
+                            //url: '/pipes/upload/goods'+43,
+                            url:'/pipes/upload/goods',
+                            done: function (e, data) {//设置文件上传完毕事件的回调函数
+                                var json = JSON.parse(data.result);
+                                    $("#img-goods-img").attr("src",testurl+json.fileid);
+                                    $("#goodsface").val(json.fileid)
+                            }
+                        });
+                        //-----------上传商品详情图片----------------------
+                        //商品详情图片
+                        $('#fileUpload').fileupload({
+                            type: 'POST',
+                            formData:{},
+                            url:'/pipes/upload/goods',
+                          // url: '/pipes/upload/goods'+43,
+                            done: function (e, data) {//设置文件上传完毕事件的回调函数
+                                var json = JSON.parse(data.result);
+                                var imghtml='<div style="position: relative;max-width: 280px;max-height:210px;display: inline-block"><img class="detailimg1" style="width: 100%;height: 100%" src='+testurl+json.fileid+'>' +
+                                            '<div class="fa  fa-check-circle-o checkcircle1" style="position: absolute;top: 0;right: 0;color: orange;font-size: 32px;display: none"></div></div>';
+                                $("#imgbox").append(imghtml);
+                                imgboxScroll();
+                            }
+                        });
+                    }
+                },
+                error:function(err){
+                    console.log(err)
+                }
+            });
+            //获取商品分类列表
+        $.ajax({
+                url:"/pipes/merchgoods/querygroup",
+                data:{"bean":$.objectToString({storeid:storeid})},
+                type:"POST",
+                dataType:"JSON",
+                success:function(res){
+                    if(res&&res.retcode>0){
+                        alert(res.retinfo);
+                        return;
+                    }else{
+                        var _html="";
+                        groupname(res);
+                        if(res.length==0){
+                            _html="<option value=''>请添加商品分类</option>"
+                        }else{
+                            for(var i=0;i<res.length;i++){
+                                _html+= "<option value='"+res[i].groupid+"'>"+res[i].groupname+"</option>"
+                            }
+                        }
+                        $("#groupid_select").html(_html);
+                    }
+                },
+                error:function(err){
+                    console.log(err)
+                }
+            });
+        if (system_merchuser && system_merchuser.merchuserid) {
+            var groupres ="";
+            function groupname(res) {
+                groupres = res;
+            }
+            groupid = function(value){
+              var arr = groupres;
+                for(var i=0;i<arr.length;i++){
+                    if(arr[i].groupid==value){
+                        return arr[i].groupname;
+                    }
+                }
+            };
+            goodsAll = function(value,type,full){
+                //商品图片
+                var imglist = "",imghtml = "",arr="";
+                    if (!full.goodsimgs) {
+                       imghtml="暂无商品详情图片"
+                    } else {
+                         arr = full.goodsimgs.split(";");
+                        if (arr.length == 1) {
+                            imghtml = '<div style="position: relative;width: 100px;max-height:75px;display: inline-block;border: solid 1px white"><img style="width: 100%;height: 100%" src='+testurl+arr[0]+'>' +
+                                    '</div>';
+                        } else {
+                            for (var j = 0; j < arr.length; j++) {
+                                imghtml += '<div style="position: relative;width: 100px;max-height:75px;display: inline-block;border: solid 1px white"><img style="width: 100%;height: 100%" src='+testurl+arr[j]+'>' +
+                                        '</div>';
+                            }
+                        }
+                    }
+                imglist = imghtml;
+                var remark="";
+                if(!full.remark){
+                    remark="无";
+                }else{
+                    remark = full.remark;
+                }
+                var goodsface= '<img class="img-responsive" src="'+testurl+value+'" style="width: 200px;max-height: 150px;" alt="商品首图暂未上传">';
+                 if(!full.goodsdesc){
+                     full.goodsdesc="无";
+                 }
+                 if(!full.unit){
+                     full.unit="";
+                 }
+                 if(!full.isrecommend||full.isrecommend==0){
+                     full.isrecommend = 0;
+                     recommendtext = "<b>设置爆款</b>"
+                 }else{
+                     recommendtext = "<b style='color: red'>取消爆款</b>"
+                 }
+                 if(!full.groupname){
+                     full.groupname="暂无";
+                 }
+                var _html='<div class="row" style="font-family: 黑体">'+
+                        '<div class="col-lg-3"><p>商品首图'+'<a href="javascript:void(0)" onclick="isRecommend('+full.goodsid+',event,'+full.isrecommend+')" style="margin-left: 20px;text-decoration: underline" class="recommend">'+recommendtext+'</a>'+'</p>'+goodsface+
+                        '</div><div class="col-lg-3">'+
+                        '<p style="color:#705959;"><span>商品名:'+full.goodsname+' </span></p>'+
+                        '<p style="color:#705959;"><span>所属分类:'+full.groupname+' </span></p>'+
+                        '<p><span>描述:'+full.goodsdesc+' </span></p>'+
+                        '<p><span>单位:(<span>'+full.unit+'</span>)</span></p>'+
+                        '<p>售价:<span> '+(full.sellprice)/100+'元 </span><span> 市场价:'+(full.marketprice)/100+'元</span></p>'+
+                        '<p>商品状态:<span>'+defStatusRender(full.status)+'</span></p>'+
+                        '</div>'+
+                        '<div class="col-lg-6"><p>商品图片</p>'+
+                        '<div style="display: inline-block">'+imglist+
+                        '</div></div></div>'+
+                        '<p style="display: inline-block">创建时间:<span>'+Date.DateFormatter(full.createtime)+'</span></p></div>'+
+                        '<p style="display: inline-block;margin-left: 20px">备注说明:<span style="margin-left: 5px">'+remark+'</span></p>';
+                return _html;
+            };
+          function isRecommend(self,event,flag){
+              $.ajax({
+                  url:"/pipes/merchgoods/query",
+                  type:"POST",
+                  dataType:"JSON",
+                  data:{"bean":$.objectToString({goodsid:self})},
+                  error:function(err){
+                      alert("网络原因请求失败，请刷新重试");
+                      return;
+                  },
+                  success:function(res){
+                      console.log(res.rows[0]);
+                      var data = res.rows[0];
+                      if(flag==0){
+                          data.isrecommend = 1;
+                      }else{
+                          data.isrecommend = 0;
+                      }
+                      $.ajax({
+                          url:"/pipes/merchgoods/update",
+                          data:{"bean":$.objectToString(data),"cols":"['isrecommend']"},
+                          dataType:"JSON",
+                          type:"POST",
+                          error:function(err){
+                              alert("网络原因请求失败，请刷新重试");
+                              return;
+                          },
+                          success:function(res){
+                              if(res.retcode===0){
+                                  alert("操作成功");
+                                  mtable.api(true).draw(false);
+                                  $('#table-storeinfo-sheet').dataTable().fnPageChange(0);
+                              }else{
+                                  alert(res.retinfo);
+                                  return;
+                              }
+                          }
+                      })
+                  }
+              });
+              event.stopPropagation();
+          }
+            //商品列表
+            var mtable = $('#table-goods-sheet').dataTable({
+                ajax: {
+                    url: "/pipes/merchgoods/query",
+                    data: function (f) {
+                        f.bean = JSON.stringify({
+                            "storeid": common.getData("storeid"),
+                            "goodsname":$("#filter_goodsname").val().trim(),
+                            "groupid":$("#hiddengroup").val()
+                        });
+                        f.sort = 'createtime';
+                        f.order = 'DESC';
+                        f.length = '6';
+                    }
+                },
+                "aLengthMenu": [[6, 25, 50, -1], ["6条", "25条", "50条", "All"]],
+                columnDefs: [
+                        {
+                            className: 'select-checkbox',
+                            targets: 0
+                        }
+                    ],
+                columns: [
+                    {"data": "", render: $.defrender},
+                    {"data": "goodsface", render: goodsAll}
+                ]
+            });
+            $(".closegoods").click(function(){
+                $("#goodstext").html("");
+            });
+            //商品分类列表
+            var mtable2 = $('#table-goodsgroup-sheet').dataTable({
+                pagingType:"simple",
+                ajax: {
+                    url: "/pipes/merchgoods/querygroup",
+                    dataSrc:"",
+                    data: function (f) {
+                        f.bean=$.objectToString({storeid:storeid}),
+                        f.sort = 'createtime';
+                        f.order = 'DESC';
+                        f.length = '10';
+                    }
+                },
+                columnDefs: [
+                    {
+                        className: 'select-checkbox',
+                        targets: 0
+                    },
+                    {
+                        "targets": [ 2,3,4 ],
+                        "visible": false,
+                        "searchable": false
+                    }
+                ],
+                columns: [
+                    {"data": "", render: $.defrender},
+                    {"data": "groupname", render: $.defrender},
+                    {"data": "storeid", render: storeid},
+                    {"data": "createtime", render: Date.DateFormatter},
+                    {"data": "groupid", render: $.defrender}
+                ]
+            });
+            //根据商品名称查询商品
+            $("#filter-user-qrybtn").click(function(){
+                mtable.api(true).draw(false);
+                $('#table-storeinfo-sheet').dataTable().fnPageChange(0);
+            });
+            //点击新增商品分类
+            $("#button-goodsgroup-create").bind("click",function(){
+                $.ajax({
+                    url:"/pipes/merchgoods/querygroup",
+                    data:{"bean":$.objectToString({storeid:storeid})},
+                    type:"POST",
+                    dataType:"JSON",
+                    success:function(res){
+                        if(res&&res.retcode>0){
+                            alert(res.retinfo);
+                            return;
+                        }else{
+                            //商品分类限制
+                            if(res.length>=9){
+                                alert("商品分类已经超过9条，不能再添加了");
+                            }else{
+                                $("#form-groupment-update").form('reset');
+                                $("#dialog-group-update").modal('show');
+                                $("#groupid").val("");
+                                $("#createtime").val("");
+                            }
+                        }
+                    },
+                    error:function(err){
+                        console.log(err)
+                    }
+                });
+            });
+            //点击修改商品分类
+            $("#button-goodsgroup-update").bind("click",function(){
+                var data = mtable2.api(true).row({selected: true}).data();
+                if (!data || !data.groupid) {
+                    alert("请选择一条记录！");
+                    return;
+                }
+                    $("#form-groupment-update").form('reset');
+                    $("#form-groupment-update").form("load",data);
+                $("#dialog-group-update").modal('show');
+            });
+            //--------------店长新增商品分类提交--------------------------
+            $("#goodsGroup-create").bind("click",function(){
+                $(this).attr("disabled",true);
+                var form=$("#form-groupment-update");
+                var json = form.serializeJson();
+                json.storeid = common.getData('storeid');
+                updategoodsgroup(json);
+            });
+            function updategoodsgroup(json){
+                var data = "";
+                if(!json.createtime){
+                    data={
+                        "bean":$.objectToString(json),
+                        "cols":$.objectToString([])
+                    };
+                }else{
+                    data={
+                        "bean":$.objectToString(json),
+                        "cols":$.objectToString(["groupname","categoryid"])
+                    };
+                }
+                $.ajax({
+                    url:"/pipes/merchgoods/updategroup",
+                    data:data,
+                    dataType:"JSON",
+                    type:"POST",
+                    success:function(data){
+                        $("#goodsGroup-create").removeAttr("disabled");
+                        if(data.retcode===0){
+                            alert("保存成功");
+                            $("#dialog-group-update").modal("hide");
+                          /*  $("#dialog-adminGroup-update").modal('hide');*/
+                            mtable2.api(true).draw(false);
+                            $.ajax({
+                                url:"/pipes/merchgoods/querygroup",
+                                data:{"bean":$.objectToString({storeid:storeid})},
+                                type:"POST",
+                                dataType:"JSON",
+                                success:function(res){
+                                    var _html="";
+                                    for(var i=0;i<res.length;i++){
+                                        _html+= "<option value='"+res[i].groupid+"'>"+res[i].groupname+"</option>";
+                                    }
+                                    $("#groupid_select").html(_html);
+                                },
+                                error:function(err){
+                                    console.log(err)
+                                }
+                            });
+                        }else{
+                            $("#goodsGroup-create").removeAttr("disabled");
+                            alert(data.retinfo);
+                            return;
+                        }
+                    },
+                    error:function(error){
+                        $("#goodsGroup-create").removeAttr("disabled");
+                        console.log(error);
+                        alert("请求失败");
+                        return;
+                    }
+                });
+            }
+            $("#close_goods").on("click",function(){
+                UE.getEditor('editor').destroy();
+                $("#form-goods-update").data('bootstrapValidator').destroy();
+                $('#form-goods-update').data('bootstrapValidator', null);
+                /*$("#mapaddr").val("");
+                $("#mapgnote").val("");*/
+            });
+            //点击新增商品
+            $("#button-goods-create").bind("click", function () {
+                $("#form-goods-update").form('reset');
+                $("#deletespan1").hide();
+                $("[href='#detail']").show();
+                $("[href='#home']").show();
+                $("#formbtn-goods-update").show();
+                $("#dtitle-goods-update").text('新增商品');
+                $("#goodsid").val("");
+                $("#goodsface").val("");
+                $("[href='#home']").tab('show');
+                $('#dialog-goods-update').modal('show');
+                $("#img-goods-img").attr("src","");
+                $("#imgbox").html("");
+                couponsvalidator();
+                createEditor();
+            });
+            function createEditor() {
+                ue = UE.getEditor('editor');
+            }
+            //--------------点击修改商品------------------------------
+            $("#button-goods-update").click(function(){
+                var data = mtable.api(true).row({selected: true}).data();
+                if (!data || !data.goodsid) {
+                    alert("请选择一条记录！");
+                    return;
+                }
+                couponsvalidator();
+                $("#dtitle-goods-update").text('修改商品');
+                $("#deletespan1").hide();
+                $("[href='#detail']").show();
+                $("[href='#home']").show();
+                $("#formbtn-goods-update").show();
+                $("[href='#home']").tab('show');
+                $("#form-goods-update").form('reset');
+                $("#form-goods-update").form('load', data);
+                $("#sellprice").val($("#sellprice").val()/100);
+                $("#marketprice").val($("#marketprice").val()/100);
+                var markcontent=$("#remark").val();
+                markcontent=markcontent.replace(/<br>/g,"");
+                $("#remark").val(markcontent);
+                $('#dialog-goods-update').modal('show');
+                $("#imgbox").html("");
+                var json = {storeid:data.storeid};
+                createEditor();
+                $.ajax({
+                    url: "/pipes/merchstore/query",
+                    data: {"bean": $.objectToString(json)},
+                    type: "POST",
+                    dataType: "JSON",
+                    success: function (res) {
+                        if(res&&res.retcode>0){
+                            alert(res.retinfo);
+                            return;
+                        }else{
+                            var rows = res.rows||[];
+                            var arr= [];
+                            var imghtml="";
+                                $("#img-goods-img").attr("src", testurl+ data.goodsface);
+                                if (!data.goodsimgs) {
+                                    $("#imgbox").html("");
+                                } else {
+                                    arr = data.goodsimgs.split(";");
+                                    imghtml = "";
+                                    if (arr.length == 1) {
+                                        imghtml = '<div style="position: relative;max-width: 280px;max-height:210px;display: inline-block"><img class="detailimg1" style="width: 100%;height: 100%" src='+testurl+arr[0]+'>' +
+                                                '<div class="fa  fa-check-circle-o checkcircle1" style="position: absolute;top: 0;right: 0;color: orange;font-size: 32px;display: none"></div></div>';
+                                    } else {
+                                        for (var i = 0; i < arr.length; i++) {
+                                            imghtml += '<div style="position: relative;max-width: 280px;max-height:210px;display: inline-block"><img class="detailimg1" style="width: 100%;height: 100%" src='+testurl+arr[i]+'>' +
+                                                    '<div class="fa  fa-check-circle-o checkcircle1" style="position: absolute;top: 0;right: 0;color: orange;font-size: 32px;display: none"></div></div>';
+                                        }
+                                    }
+                                }
+                            $("#imgbox").html(imghtml);
+                            if(data.goodsimgs){
+                                var arrimg = data.goodsimgs.split(";");
+                                if(arrimg.length>6){
+                                    $("#imgbox").width("860");
+                                }else{
+                                    $("#imgbox").width("840");
+                                }
+                            }
+                            $.get("/pipes/custgoods/find/"+data.goods36id,function(res){
+                                var res = JSON.parse(res);
+                                if(res.detail){
+                                    var detail =res.detail.replace(/<br>/g,"\n");
+                                    $("#goodstext").html(detail);
+                                }
+                            });
+                        }
+                    },
+                    error:function(err){
+                        console.log(err);
+                    }
+                });
+            });
+            //---------------点击查看商品详情-------------------------------
+            $("#button-goods-detail").click(function(){
+                var data = mtable.api(true).row({selected: true}).data();
+                if (!data || !data.goodsid) {
+                    alert("请选择一条记录！");
+                    return;
+                }
+                $('#dialog-goods-detail').modal('show');
+                $.post("/pipes/custgoods/find/"+data.goods36id,function(res){
+                    res = JSON.parse(res);
+                /*    $("#dtitle-goods-update").text('商品详情');
+                    $("[href='#detailtext']").tab('show');
+                    $("[href='#detail']").hide();
+                    $("[href='#home']").hide();
+                    $("#formbtn-goods-update").hide();*/
+                    if(res.detail){
+                   /*   createEditor();
+                        ue.ready(function() {
+                            //异步回调
+                            UE.getEditor('editor').setContent(res.detail);
+                        });*/
+                      //  console.log(res.detail);
+                        //UE.getEditor('editor').execCommand('insertHtml', res.detail);
+                        //document.getElementById("goodstest").innerHTML(res.detail);
+                        $("#goodstext").html(res.detail);
+                    }else{
+                        $("#goodstext").val("暂无商品详情");
+                    }
+
+                });
+
+            });
+            //--------------新增&&修改商品提交------------------------------
+            $("#formbtn-goods-update").click(function () {
+                    $(this).attr("disabled",true);
+                //console.log(ue.getContent());
+                console.log(UE.getEditor('editor').execCommand( "getlocaldata" ));
+                var form =$("#form-goods-update");
+                var json = form.serializeJson();
+                json.sellprice = parseFloat(json.sellprice*100).toFixed(0);
+                json.marketprice = parseFloat(json.marketprice*100).toFixed(0);
+                //处理商品详情图片
+                var arr = $(".detailimg1");
+                var goodsimgs = "";
+                for(var i=0;i<arr.length;i++){
+                    var imgarr = arr[i].src.split("/");
+                    if(i==arr.length-1){
+                        goodsimgs +=imgarr[imgarr.length-1]
+                    }else{
+                        goodsimgs +=imgarr[imgarr.length-1]+";";
+                    }
+                }
+                json.storeid = common.getData("storeid");
+                json.goodsimgs = goodsimgs;
+                 var content=json.remark;
+                 content=content.replace(/<br>/g,' ');
+                 content=content.replace(/\n/g,'<br>');
+                 json.remark=content;
+                json.detail = json.editorValue;
+             /*   var detail = json.detail;
+                detail=detail.replace(/<br>/g,' ');
+                detail=detail.replace(/\n/g,'<br>');
+                json.detail=detail;*/
+                //-----去json数据中的空格-----------------
+                var json1= {};
+                $.each(json,function(key,value){
+                    if(key=='goodsname'||"detail"){
+                        json1[key] = value;
+                        return true;
+                    }
+                    value = (value + "").replace(/\s/g,'');
+                    json1[key] = value;
+                });
+                json = json1;
+                //---------------------------------
+                var data = "";
+             /*   var str =  getBt(json.detail);
+                if(str/10240>10){
+                    alert("商品详情字段过大，请酌情删减");
+                    rerurn;
+                }*/
+              if(system_merchuser.type==20&&json.goodsid!=""||system_merchuser.type==10&&json.goodsid!=""){
+                    var cols = [];
+                    for(var key in json){
+                        cols.push(key)
+                    }
+                    data = {
+                        "bean":$.objectToString(json),
+                        "cols":$.objectToString(cols)
+                    }
+                }else{
+                    data = {
+                        "bean":$.objectToString(json)
+                    }
+                }
+                $('#form-goods-update').bootstrapValidator('validate');
+                if ($('#form-goods-update').data('bootstrapValidator').isValid()){
+                    $.ajax({
+                        url:"/pipes/merchgoods/update",
+                        data:data,
+                        dataType:"JSON",
+                        type:"POST",
+                        success:function(data){
+                            $("#formbtn-goods-update").removeAttr("disabled");
+                            if(data&&data.retcode>0){
+                                alert(data.retinfo);
+                                return;
+                            }else{
+                                $("#dialog-goods-update").modal('hide');
+                                mtable.api(true).draw(false);
+                                alert("保存成功");
+                                $('#form-goods-update').data('bootstrapValidator', null);
+                            }
+                        },
+                        error:function(error){
+                            $("#formbtn-goods-update").removeAttr("disabled");
+                            console.log(error);
+                            alert("请求失败");
+                            return;
+                        }
+                    })
+                }else{
+                    $("#formbtn-goods-update").removeAttr("disabled");
+                }
+            });
+            //新增商品图片删除
+            $("#imgbox").on('click',".detailimg1",function(){
+                $("#deletespan1").show();
+                $("#imgbox").css("clear","both");
+                $(this).parent().find(".checkcircle1").toggle();
+            });
+            $("#deletespan1").unbind("click").click(function(){
+                var arr=$(".checkcircle1");
+                for(var i=0;i<arr.length;i++){
+                    if(!(arr.eq(i).css("display")=="none")){
+                        arr.eq(i).parent().remove();
+                        imgboxScroll();
+                    }
+                }
+            });
+            //计算字节数的方法
+            function getBt(str){
+                var char = str.replace(/[^\x00-\xff]/g, '**');
+                return char.length;
+            }
+            //点击商品分类进行商品的筛选
+            $("#table-goodsgroup-sheet_wrapper").on('click','td',function(){
+                var data = mtable2.api(true).row({selected: true}).data();
+                if(data&&data.groupid){
+                    $("#hiddengroup").val(data.groupid);
+                    $('#table-goods-sheet').dataTable().fnPageChange(0);
+                    mtable.api(true).draw(false)
+                }
+            });
+            $("#button-group").click(function(){
+                $("#hiddengroup").val("");
+                mtable.api(true).draw(false);
+            });
+            //判断商品图片中是否出现滚动条改变imgbox的宽度
+            function imgboxScroll(){
+
+                $("#imgbox").scrollTop(10);//控制滚动条下移10px
+                if( $("#imgbox").scrollTop()>0 ){
+                    $("#imgbox").width('860');
+                }else{
+                    $("#imgbox").width('840');
+                }
+                $("#imgbox").scrollTop(0);//滚动条返回顶部
+            }
+            //回车键执行搜索功能
+            $('#filter_goodsname').keydown(function(e){
+                if(e.keyCode==13){
+                    $('#filter-user-qrybtn').trigger('click');
+                }
+            });
+            $("#goodsgroup").keydown(function(event){
+                event=document.all?window.event:event;
+                if((event.keyCode || event.which)==13){
+                    $("#goodsGroup-create").trigger("click");
+                }
+            });
+            //验证商品-------------
+            function couponsvalidator() {
+                $('#form-goods-update').bootstrapValidator({
+                    message: 'This value is not valid',
+                    feedbackIcons: {
+                        /*输入框不同状态，显示图片的样式*/
+                        valid: 'glyphicon glyphicon-ok',
+                        invalid: 'glyphicon glyphicon-remove',
+                        validating: 'glyphicon glyphicon-refresh'
+                    },
+                    fields: {
+                        /*验证*/
+                        goodsname: {
+                            /*键名和input name值对应*/
+                            message: 'The quantitle is not valid',
+                            validators: {
+                                notEmpty: {
+                                    /*非空提示*/
+                                    message: '商品名称不能为空'
+                                }
+                            }
+                        }
+                       /* sellprice: {
+                            message: '',
+                            validators: {
+                                regexp: {
+                                    regexp: /^[0-9]+(\.[0-9]{2})?$/,
+                                    message: "商品价格不能是负数哦"
+                                }
+                            }
+                        },
+                        marketprice: {
+                            message: '',
+                            validators: {
+                                regexp: {
+                                    regexp: /^(0|\+?\.\d+)$/,
+                                    message: "市场售价不能是负数哦"
+                                }
+                            }
+                        }*/
+                    }
+                });
+            }
+            //点击复制商品-----------------------------
+            $("#button-goods-copy").click(function(){
+                $("#goodsname_para").empty();
+                var dataarr = mtable.api(true).rows({selected: true}).data();
+                if(dataarr.length==0){
+                    alert("请选择您要复制的商品");
+                    return;
+                }
+                for(var i=0;i<dataarr.length;i++){
+                    $("#goodsname_para").append('<span class="goodsname_span" data-id="'+dataarr[i].goodsid+'">'+dataarr[i].goodsname+'</span>')
+                    console.log(dataarr[i]);
+                }
+                console.log(dataarr);
+                $("#dialog-copy-goods").modal('show');
+                $.ajax({
+                    url:"/pipes/merchstore/query",
+                    data:{"bean":$.objectToString({merchid:system_merchuser.merchid})},
+                    type:"POST",
+                    dataType:"JSON",
+                    success:function(data){
+                        console.log(data.rows);
+                        var arr = data.rows;
+                        var _li='';
+                        for(var i=0;i<arr.length;i++){
+                            _li+='<li><label><input type="checkbox">' +
+                                    '<input type="hidden" class="storeid" value="'+arr[i].store36id+'">'+arr[i].storename+'</label></li>'
+                        }
+                        $("#storeTree").html(_li);
+                    },
+                    error:function(err){
+                        console.log(err);
+                    }
+                });
+            });
+            $("#checkall").click(function(){
+                var isChecked = $(this).prop("checked");
+                $("#storeTree :checkbox").prop("checked", isChecked);
+                var checklength =  $("#storeTree").find('input[type=checkbox]:checked').length;
+                $("#checklength").html('已选择'+checklength+'家门店');
+            });
+            $('#storeTree').on('click','input[type=checkbox]',function(){
+                var checklength =  $("#storeTree").find('input[type=checkbox]:checked').length;
+                var length = $("#storeTree").find('input[type=checkbox]').length;
+                $("#checklength").html('已选择'+checklength+'家门店');
+                if(checklength==length){
+                    console.log("全选");
+                    $("#checkall").prop("checked", true);
+                }else{
+                    $("#checkall").prop("checked", false);
+                }
+            });
+            //点击复制到选择门店
+            $("#copyto_store").click(function(){
+                $(this).attr("disabled",true);
+                var arr = $("#storeTree").find('input[type=checkbox]:checked').next('.storeid');
+                var storeid = [];
+                var nowstoreid = parseInt(common.getData("storeid")).toString(36);
+                console.log(nowstoreid);
+                for(var i=0;i<arr.length;i++){
+                    if(arr.eq(i).val()==nowstoreid){
+                        continue;
+                    }
+                    storeid.push(arr.eq(i).val());
+                }
+                var couponsarr = $(".goodsname_span");
+                var goodsids=[];
+                for(var j=0;j<couponsarr.length;j++){
+                    goodsids.push(couponsarr.eq(j).data('id'));
+                }
+                console.log(goodsids);
+                console.log(storeid);
+                if(storeid.length==0){
+                    alert('您还没有选择门店');
+                    $("#copyto_store").removeAttr('disabled')
+                }else{
+                  $.get('/pipes/merchgoods/copygoods2store?store36ids=['+storeid+"]&goodsids=["+goodsids+"]",function(res){
+                      console.log(res);
+                      res = JSON.parse(res);
+                      if(res.retcode===0){
+                          alert('商品复制成功');
+                          $("#dialog-copy-goods").modal('hide');
+                      }
+                      $("#copyto_store").removeAttr('disabled');
+                  })
+                }
+            });
+            //----------------------下拉加载--------------------------
+            var loading = false;//是否正在加载
+            var current = 1;//默认当前是第一页
+            var select_ajax = true;
+            $("#storeTree").scroll(function () {
+                if (loading) //如果正在请求 直接返回
+                    return;
+                var scrollTop = jQuery(this).scrollTop();
+                var scrollHeight = jQuery('#storeTree').height();
+                var windowHeight = jQuery(this).height();
+                if (scrollTop + windowHeight >= scrollHeight - 100) {
+                    if (select_ajax) {
+                        getMoreData();//select_ajax为false ,表示没有更多了，不能请求ajax
+                    }
+                }
+            });
+            //下拉加载列表
+            function getMoreData() {
+                loading = true;
+                var html = "";
+                current++;
+                jQuery.ajax({
+                    type: "post",
+                    cache: false,
+                    dataType: "JSON",
+                    data: {
+                        "bean":$.objectToString({merchid:system_merchuser.merchid}),
+                        "flipper": "{limit:20,offset:"+(current-1)*20+"}",
+                        "order": "DESC",
+                        "start": current*20,
+                        "length": 20,
+                        "sort": "createtime"
+                    },
+                    url: "/pipes/merchstore/query",
+                    success: function (data) {
+                        var arr = data.rows;
+                        var _li='';
+                        for(var i=0;i<arr.length;i++){
+                            _li+='<li><label><input type="checkbox">' +
+                                    '<input type="hidden" class="storeid" value="'+arr[i].store36id+'">'+arr[i].storename+'</label></li>';
+                        }
+                        $("#storeTree").append(_li);
+                        if (data.total>current*20) {
+                            loading = false; //loding=false 表示下次继续可以请求
+                        } else {
+                            loading = true;
+                            $("#storeTree").append('<li style="text-align: center">没有更多数据了</li>');
+                        }
+                    },
+                    error: function (data) {
+                        alert("数据加载失败");
+                    }
+                });
+            }
+        }
+    }
+</script>

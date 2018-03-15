@@ -1,0 +1,224 @@
+<div class="row" style="margin: 0;padding: 0" id="editStore-title"></div>
+<div class="panel-body">
+    <form id="form-storeinfo-update" class="m-t form-horizontal" role="form">
+        <div class="rows">
+            <div class="panel-box">
+                <div id="storeimgDiv">
+                    <div class="form-group">
+                        <div class="col-lg-12">
+                            <div class="btn btn-success fileinput-button"
+                                 id="storefacebtn" style="margin-bottom: 10px">
+                                <i class="fa fa-fw fa-upload"></i>
+                                <span>门店首图</span>
+                                <input type="file" name="file" class="green_upload_btn">
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-3 col-md-3" id="faceimg">
+                                    <img id="indeximg" class="img-responsive" style="width:300px;max-height:225px;margin-left:30px;border: 1px solid #ddd" src=""/>
+                                </div>
+                                <div class="col-lg-3" id="storeinfo"></div>
+                                <div class="col-lg-3">
+                                    <p><span style="color: red">*&nbsp;</span>注意:门店首图图片大小要在900*675之上</p>
+                                    <p>图片比例为4:3,便于app展示美观</p>
+                                    <p>更换门店首图直接点击门店首图按钮重新上传即可</p>
+                                    <p><span style="color: red">*&nbsp;</span>注意:手机横向拍摄</p>
+                                    <p>点击您不想要的门店图片,再点击删除选中图片文字，即可删除</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12" >
+                                <div class="col-lg-7">
+                                    <div class="btn btn-success fileinput-button" style="z-index:1080">
+                                        <i class="fa fa-fw fa-upload"></i>
+                                        <span>门店图片</span>
+                                        <input type="file" name="file" multiple="multiple" class="green_upload_btn" id="fileUpload">
+                                    </div>
+                                    <input type="button" id="deletespan1" style=" margin-left: 20px;
+                                    background: none;border: none;color: blue;display: none;" value="删除选中图片">
+                                    <div id="imgbox"
+                                         style="width: 100%;max-width: 720px;height:100%;min-height:270px;max-height:540px;overflow-x:hidden;margin-top: 15px;border: solid 1px #ddd">
+                                    </div>
+                                </div>
+                               <div class="col-lg-4">
+                                    <!--<div style="padding-left: 100px;margin-left:50px;display:inline-block;height:344px;width:210px;background: url('boot/img/iphone.png') no-repeat;-webkit-background-size:contain ;background-size: contain;">
+                                    <span style="display: inline-block;position: relative;top: -20px;left: -80px;color: red">门店图片上传后效果示例</span>
+                                    </div>
+                                    <div style="padding-left: 100px;display:inline-block;height:344px;width:210px;background: url('boot/img/iphone.png') no-repeat;-webkit-background-size:contain ;background-size: contain;">
+                                        <span style="display: inline-block;position: relative;top: -20px;left: -80px;color: red">门店首图上传后效果示例</span>
+                                    </div>-->
+                                   <div class="col-lg-6 col-md-6 col-sm-6" style="height:344px;background: url('boot/img/index.png') no-repeat;-webkit-background-size:contain ;"></div>
+                                   <div class="col-lg-6 col-md-6 col-sm-6" style="height:344px;background: url('boot/img/banner.png') no-repeat;-webkit-background-size:contain ;"></div>
+                               </div>
+                        </div>
+                    </div>
+                </div>
+                <button id="formbtn-storeinfo-update" type="button" class="btn btn-theme"
+                style="width: 40%;margin-left: 20%;margin-top: 35px">提 交</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    {
+        $(document).ready(function () {
+            if (system_merchuser.type == 10) {
+                $("#editStore-title").html('<p style="padding: 0;color: #006dcc">' +
+                        '<a  href="javascript:openModule(\'modules/index/indexClick.html\',400);" style="color: #006dcc">商户首页</a>' +
+                        '&gt;&gt;<a href="javascript:openModule(\'modules/store/storeindex.html\',101);" style="color: #006dcc">门店首页</a>' +
+                        '&gt;&gt;<a href="javascript:openModule(\'modules/store/editStore.html\',500);" style="color: #006dcc">编辑图片</a></p>')
+            } else {
+                $("#editStore-title").html('<p style="padding: 0;color: #006dcc">' +
+                        '<a href="javascript:openModule(\'modules/store/storeindex.html\',101);" style="color: #006dcc">门店首页</a>' +
+                        '&gt;&gt;<a href="javascript:openModule(\'modules/store/editStore.html\',500);" style="color: #006dcc">编辑图片</a></p>')
+            }
+
+            $(".pull-left").show();
+            $("#menu").show();
+            $("body").removeClass("widescreen");
+        });
+        if (system_merchuser && system_merchuser.merchuserid) {
+            var storeid = common.getData('storeid') || 0;
+            //设置当前门店的信息及图片
+            $.ajax({
+                url: "/pipes/merchstore/query",
+                data: {"bean": $.objectToString({storeid: storeid})},
+                dataType: "JSON",
+                type: "POST",
+                success: function (res) {
+                    $("#storeinfo").empty();
+                    var rows = res.rows || [];
+                    var data = rows[0];
+                    data.remark = data.remark || "无";
+                    data.storename = data.storename || "无";
+                    data.storetel = data.storetel || "无";
+                    data.storeaddr = data.storeaddr || "无";
+                    data.city = data.city || "无";
+                    update(data);
+                    var _html = ' <p>门店名称: <span>' + data.storename + '</span><span>状态:' + status(data.status) + '</span></p>' +
+                            '<p>热线: <span>' + data.storetel + '</span></p>' +
+                            '<p>门店地址: <span>' + data.storeaddr + '</span></p>' +
+                            '<p>城市: <span>' + data.city + '</span></p>' +
+                            '<p>备注: <span>' + data.remark + '</span></p>';
+                    $("#storeinfo").html(_html);
+                    $("#faceimg").html('<img class="img-responsive" src="/dir/storeface_300/' + data.storeface + '" style="width: 300px;max-height: 225px;" alt="门店首图暂未上传">');
+                    if (!data.storeimgs) {
+                        return
+                    } else if (typeof(data.storeimgs) == "string") {
+                        var arr = data.storeimgs.split(";");
+                        var imghtml = "";
+                        if (arr.length == 1) {
+                            imghtml = '<div style="position: relative;width: 50%;height:50%;display: inline-block"><img class="detailimg1 img-responsive" style="width: 100%;height: 100%" src="/dir/storeimg_720/' + arr[0] + '">' +
+                                    '<div class="fa  fa-check-circle-o checkcircle1" style="position: absolute;top: 0;right: 0;color: orange;font-size: 32px;display: none"></div></div>';
+                        } else {
+                            for (var i = 0; i < arr.length; i++) {
+                                imghtml += '<div style="position: relative;width: 50%;height:50%;display: inline-block"><img class="detailimg1 img-responsive" style="width: 100%;height: 100%" src="/dir/storeimg_720/' + arr[i] + '">' +
+                                        '<div class="fa  fa-check-circle-o checkcircle1" style="position: absolute;top: 0;right: 0;color: orange;font-size: 32px;display: none"></div></div>';
+                            }
+                        }
+                        $("#imgbox").html(imghtml);
+                        //imgboxScroll();
+                    }
+                },
+                error: function (err) {
+                    console.log(err)
+                }
+            });
+            //---------------更改图片信息并提交-----------------------------------
+            function update(data) {
+                var json = data;
+                $('#formbtn-storeinfo-update').bind("click", function (e) {
+                    $(this).attr("disabled",true);
+                    //处理门店banner图片
+                    var arrimg = $(".detailimg1");
+                    var storeimgs = "";
+                    for (var i = 0; i < arrimg.length; i++) {
+                        var imgarr = arrimg[i].src.split("/");
+                        if (i == arrimg.length - 1) {
+                            storeimgs += imgarr[imgarr.length - 1]
+                        } else {
+                            storeimgs += imgarr[imgarr.length - 1] + ";";
+                        }
+                    }
+                    json.storeimgs = storeimgs;
+                    var facearr = $("#faceimg").children()[0].src.split("/");
+                    var storeface = facearr[facearr.length - 1];
+                    json.storeface = storeface;
+                    var cols = ["storeface", "storeimgs"];
+                    var data = {
+                        "bean": $.objectToString(json),
+                        "cols": $.objectToString(cols)
+                    };
+                    $.ajax({
+                        cache: false,
+                        dataType: "json",
+                        type: "POST",
+                        url: '/pipes/merchstore/update',
+                        data: data,
+                        error: function () {//请求失败处理函数
+                            $('#formbtn-storeinfo-update').removeAttr("disabled");
+                            alert('请求失败');
+                        },
+                        success: function (data) {
+                            $('#formbtn-storeinfo-update').removeAttr("disabled");
+                            if (data && data.retcode && data.retcode > 0) {
+                                alert(data.retinfo);
+                            } else {
+                                alert("保存成功");
+                            }
+                        }
+                    });
+                });
+            }
+
+            //-------------上传门店图片到服务器-----------------------
+            //门店首图
+            $('#storefacebtn').fileupload({
+                type: 'POST',
+                url: '/pipes/upload/storeface43',
+                done: function (e, data) {//设置文件上传完毕事件的回调函数
+                    var json = JSON.parse(data.result);
+                    var imghtml = '<img id="indeximg" class="img-responsive" src="/dir/storeface_300/' + json.fileid + '" style="width:300px;max-height:225px;border: 1px solid #ddd"/>';
+                    $("#faceimg").html(imghtml);
+                    $("#storeface").val(json.fileid);
+                }
+            });
+            //门店banner图片
+            $('#fileUpload').fileupload({
+                type: 'POST',
+                url: '/pipes/upload/storeimg43',
+                done: function (e, data) {//设置文件上传完毕事件的回调函数
+                    var json = JSON.parse(data.result);
+                    var imghtml = '<div style="position: relative;width:50%;height:50%;display: inline-block"><img class="detailimg1 img-responsive" style="width: 100%;height: 100%" src="/dir/storeimg_720/' + json.fileid + '">' +
+                            '<div class="fa  fa-check-circle-o checkcircle1" style="position: absolute;top: 0;right: 0;color: orange;font-size: 32px;display: none"></div></div>';
+                    $("#imgbox").append(imghtml);
+                    //imgboxScroll();
+                }
+            });
+            //新增门店图片删除
+            $("#imgbox").on('click', ".detailimg1", function () {
+                $("#deletespan1").show();
+                $("#imgbox").css("clear", "both");
+                $(this).parent().find(".checkcircle1").toggle();
+            });
+            $("#deletespan1").unbind("click").click(function () {
+                var arr = $(".checkcircle1");
+                for (var i = 0; i < arr.length; i++) {
+                    if (!(arr.eq(i).css("display") == "none")) {
+                        arr.eq(i).parent().remove();
+                      //  imgboxScroll();
+                    }
+                }
+            });
+            /* //判断商品图片中是否出现滚动条改变imgbox的宽度
+            function imgboxScroll() {
+           $("#imgbox").scrollTop(10);//控制滚动条下移10px
+            if ($("#imgbox").scrollTop() > 0) {
+                $("#imgbox").width($("#imgbox").width()+20);
+            } else {
+                $("#imgbox").width($("#imgbox").width()-20);
+            }
+            $("#imgbox").scrollTop(0);//滚动条返回顶部
+        }*/
+        }
+    }
+</script>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <!-- http://flicksbootstrap.com/demo/pink-desh/light/index.html  -->
+        <!-- http://fontawesome.io/icons/  -->
+        <title>店呼商家管理平台</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" Chrome="1" />
+        <meta http-equiv=Content-Type content="text/html; charset=utf-8">
+        <meta name="robot" content="all">
+        <meta name="baidu-site-verification" content="6hAbqq4DEi" />
+        <meta name="keywords" content="店呼商家管理平台,店呼平台,专注线下门店,店呼智慧门店,店呼营销平台,让线下生意更轻松" />
+        <meta name="description" content="国内首款为线下门店量身打造的智慧门店系统，为门店提供营销管理工具的营销平台，让线下生意更轻松，互联网+门店首选平台，终身免费！" />
+        <!--HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]-->
+        <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+        <script src="http://apps.bdimg.com/libs/respond.js/1.4.2/respond.min.js"></script>
+      <!--  [endif]-->
+        <script src='/res/js/loader.js'></script>
+        <script src="/res/js/common.js"></script>
+        <script type="text/javascript" charset="utf-8" src="ueditor.config.js"></script>
+        <script type="text/javascript" charset="utf-8" src="ueditor.all.min.js"> </script>
+        <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+        <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+        <script type="text/javascript" charset="utf-8" src="lang/zh-cn/zh-cn.js"></script>
+    </head>
+    <body class="fixed-left widescreen">
+        <div id="wrapper">
+            <!-- top bar -->
+            <div id="topbar" class="topbar"></div>
+            <!-- left menu -->
+            <div class="side-menu left" id="side-menu"></div>
+
+            <div class="content-page  equal-height">
+                <div class="content">
+                    <div id="maincontainer" class="container">
+                        <div class="row">
+                        </div>
+                        <div style="opacity: 0">
+                            国内首款为线下门店量身打造的智慧门店系统，为门店提供营销管理工具的营销平台，
+                            让线下生意更轻松，互联网+门店首选平台，终身免费！</div>
+                    </div><!--content-->               
+                </div><!--content page-->
+            </div><!--end wrapper-->
+        </div>
+        <div id="footer" class="footer" style="display: none"></div>
+        <script src="/res/js/starup.js"></script>
+    </body>
+</html>
+<script>
+    $(document).ready(function(){
+        if(system_merchuser.type==10){
+            $("#menu").prepend(' <li class="first_active" id="merchHome"><a href="javascript:openModule(\'modules/index/indexClick.html\',400);"><i class="fa fa-home"></i>  <span>商户首页</span></a></li>');
+            openModule("modules/index/indexClick.html",400);
+        }else if(system_merchuser.type==20){
+            $("#menu").find('li:eq(2)').hide();
+            common.rmStorage('storeid');
+            common.setData('storeid',system_merchuser.storeid);
+            openModule("modules/store/storeindex.html",101);
+        }else{
+            console.log(system_merchuser.type);
+            return;
+        }
+        $('window').resize();
+        $('*').resize();
+    });
+    //日期格式转换
+    function time(value){
+        var date = new Date(value);
+        var year = date.getFullYear();
+        var month = Number(date.getMonth())+1;
+        var day = date.getDate();
+        if(month<10){
+            month="0"+month;
+        }
+        if(day<10){
+            day="0"+day;
+        }
+        var data= year+"-"+month+"-"+day;
+        return data;
+    }
+    //状态设置
+    function status(value) {
+        if (value === 10) return "<font color=green>正常</font>";
+        if (value === 20) return "<font color=#FF00FF>待审批</font>";
+        if (value === 40) return "冻结";
+        if (value === 50) return "隐藏";
+        if (value === 60) return "关闭";
+        if (value === 70) return "<font color=red>过期</font>";
+        if (value === 80) return "<font color=red>删除</font>";
+        return "<font color=red>未知</font>";
+    }
+    //点击查看更多
+    function moreClick(self){
+        console.log($(self));
+        var newStoreid=$(self).val();
+        console.log(newStoreid);
+        var oldStoreid = common.getData("storeid");
+        if(oldStoreid){
+            common.rmStorage("storeid");
+        }
+            common.setData("storeid",newStoreid);
+        openModule("modules/store/storeindex.html",101);
+    }
+    window.addEventListener("resize", function () {
+        $('document').resize();
+    }, false);
+    $('html').change(function(){
+        $('window').resize();
+    })
+</script>

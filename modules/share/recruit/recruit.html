@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width,user-scalable=0,initial-scale=1.0">
+    <script src="../shareLogin/jquery-1.11.1.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <title>招聘信息</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+        li{
+            list-style: none;
+        }
+        body,html{
+            height: 100%;
+            min-height: 100%!important;
+        }
+        .container,.banner{
+            max-width:1440px;
+            position: relative;
+            min-height: 100%;
+            margin: auto;
+        }
+        div,p,span,h1,h2,h3,h4,h5,h6{
+            font-family: 微软雅黑;
+            font-size: 0.7rem;
+            color: #333;
+            font-weight: bold;
+        }
+        .banner{
+            max-height: 14rem;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+            width: 18.75rem;
+        }
+        .headfooter,.jobdesc{
+            padding: 0.7rem 0.65rem 0.6rem 0.65rem;
+        }
+        .headfooter>p:first-child{
+            font-size: 0.8rem;
+            color: #333;
+            margin-bottom: 0.6rem;
+        }
+        .headfooter img{
+            width:0.7rem;
+            max-height: 0.8rem;
+            padding-right: 0.5rem;
+        }
+        #storeaddr{
+            font-size: 0.65rem;
+            color: #666;
+        }
+        #tel{
+            font-size: 0.5rem;
+            color: #666;
+            padding-top: 0.3rem;
+        }
+        #marketprice span{
+            text-decoration: line-through;
+        }
+        .jobDetail{
+            min-height:3.35rem;
+            padding: 0.65rem;
+            padding-bottom: 0;
+            border-top:solid 1px #d0d0d0;
+        }
+        .jobDetail div:first-child{
+            float: left;
+        }
+        .jobDetail div:last-child{
+            float: right;
+        }
+        #jobname{
+            font-size: 0.8rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        #require{
+            font-size: 0.63rem;
+            color: #333;
+        }
+        #require span{
+            border-right:solid 1px #c9c9c9 ;
+            padding: 0 0.5rem;
+        }
+        #require span:first-child{
+            padding-left:0 ;
+        }
+        #require span:last-child{
+            border:none;
+            padding-right: 0;
+        }
+        #money{
+            line-height: 3.35rem;
+            font-size: 0.8rem;
+            color: #ff5650;
+        }
+        #line{
+            height: 1rem;
+            background: #efeff4;
+            width:100%;
+        }
+        .jobdesc>p{
+            font-size:0.8rem;
+            color: #666;
+        }
+        .footer{
+            position: fixed;
+            height:2.25rem;
+            width:100%;
+            max-width: 750px;
+            background: #fb6d07;
+            bottom: 0;
+        }
+        .footer a{
+            width:100%;
+            max-width: 750px;
+            display: inline-block;
+            height:2.25rem;
+            line-height:2.25rem;
+            text-align: center;
+            font-size: 1rem;
+            text-decoration:blink;
+            color: #ffffff;
+            font-weight: normal;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="banner">
+            <img src="" style="width: 100%;max-height: 100%;vertical-align: middle" onerror="javascript:this.src='http://merch.diancall.com/modules/share/bg_grey.png'" alt="商品图片加载中">
+        </div>
+        <div class="headfooter">
+            <p id="storename">深圳市军昆数码科技有限公司</p>
+            <div id="storeaddr"><img src="icon_dizhi@2x.png"><span>深圳市南山区沙河西路尚美科技大厦403</span></div>
+            <div id="tel"><img src="icon_hujiao@2x.png"><span>13546874987</span></div>
+        </div>
+    </div>
+    <div class="jobDetail">
+        <div>
+            <p id="jobname">数码商店店员</p>
+            <p id="require"></p>
+        </div>
+        <div>
+           <p id="money">￥2000+提成</p>
+        </div>
+    </div>
+    <div id="line"></div>
+    <div class="jobdesc">
+        <p>职位描述</p>
+        <div style="width: 100%;height: 1px;background: #efeff4;margin-top: 0.5rem"></div>
+        <div>
+            <p style="font-size: 0.7rem;color: #888;margin: 0.5rem 0;">任职要求：</p>
+            <p id="jobneed" style="font-size: 0.7rem;color: #888">
+            </p>
+        </div>
+    </div>
+    <div style="background: white;height: 3.2rem;width: 100%;"></div>
+    <div class="footer">
+        <a href="javascript:void(0)" id="openApp" class="openApp">查看更多附近招聘信息</a>
+    </div>
+
+</div>
+</body>
+</html>
+<script type="text/javascript" src="//res.cdn.openinstall.io/openinstall.js"></script>
+<script src="../install.js"></script>
+<script>
+    (function (){
+        var src = window.location.href;
+        var jobid = src.substr(src.indexOf('?jobid='),15).split('=')[1];
+        var installdata = {"pageName":"ZhaopinDetailsPage","data":{"jobId":jobid}};//也可以是js Object
+        console.log(installdata);
+        install(installdata);
+    })();
+</script>
+<script>
+    (function (doc, win) {
+        var sUserAgent = navigator.userAgent.toLowerCase();
+        var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
+        var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
+        var bIsMidp = sUserAgent.match(/midp/i) == "midp";
+        var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4";
+        var bIsUc = sUserAgent.match(/ucweb/i) == "ucweb";
+        var bIsAndroid = sUserAgent.match(/android/i) == "android";
+        var bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
+        var bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
+        //判断是移动端还是PC端
+        if (bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM) {
+            var docEl = doc.documentElement,
+                    resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                    recalc = function () {
+                        var clientWidth = docEl.clientWidth;
+                        if (!clientWidth) return;
+                        docEl.style.fontSize = 20 * (clientWidth / 375) + 'px';
+                    };
+        } else {
+            var container = $(".container");
+            var mc_container = $(".mc_container");
+            container.width(750);
+            container.css("margin","auto");
+            mc_container.width(750);
+            mc_container.css('left','50%');
+            mc_container.css('marginLeft',"-375px");
+            var docEl = doc.documentElement,
+                    resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                    recalc = function () {
+                        var clientWidth = 750;
+                        if (!clientWidth) return;
+                        docEl.style.fontSize = 20 * (clientWidth / 375) + 'px';
+                    };
+        }
+        if (!doc.addEventListener) return;
+        win.addEventListener(resizeEvt, recalc, false);
+        doc.addEventListener('DOMContentLoaded', recalc, false);
+    })(document, window);
+    $(function(){
+      /*  Date.prototype.toLocaleString = function() {
+            return (this.getMonth() + 1) + "月" + this.getDate()+"日";
+        };*/
+        var src = window.location.href;
+        var jobid = src.substr(src.indexOf('?jobid='),15).split('=')[1];
+        //var recruiturl = 'http://192.168.1.128:6001/pipes/share/findjob/'+10000011;
+        //正式环境
+        var recruiturl  = 'http://merch.diancall.com/pipes/share/findjob/'+jobid;
+       /* $(".footer").click(function () {
+            location.href = "http://c.diancall.com/app/cdl/custuser36id:3B2P0H"
+        });*/
+        var jobname = "",salery = "",storename = "",storeface="";
+        $.get(recruiturl,function(res){
+           // console.log(res);
+            res = JSON.parse(res);
+            storename = res.storeInfo.storename;
+            $("#storename").text(storename);
+            $("#storeaddr span").text(res.storeInfo.storeaddr);
+            $("#jobname").text(res.jobname);
+            jobname = res.jobname;
+            if(res.workyear){
+                if(res.workyear==0){
+                    $("#require").append('<span>经验:不限</span>')
+                }else{
+                    $("#require").append('<span>经验:'+res.workyear+'</span>');
+                }
+            }else{
+                $("#require").append('<span>经验:不限</span>');
+            }
+            if(res.recordschool){
+                $("#require").append('<span>学历:'+res.recordschool+'</span>')
+            }
+            if(res.salery==0||!res.salery){
+                $("#money").text('面议');
+            }else{
+                if(res.isdeduct==1){
+                    $("#money").text('￥'+res.salery/100+"+提成");
+                    salery = '￥'+res.salery/100+"+提成";
+                }else{
+                    $("#money").text('￥'+res.salery/100);
+                    salery = '￥'+res.salery/100+"+提成";
+
+                }
+            }
+            $("#tel span").text(res.telno);
+            storeface = 'http://merch.diancall.com/dir/storeface_900/'+res.storeInfo.storeface;
+            $('.banner img').attr('src',storeface);
+            if(res.jobdesc){
+                var arr = res.jobdesc.split('\n');
+                for(var i=0;i<arr.length;i++){
+                    $("#jobneed").append('<p>'+arr[i]+'</p>');
+                }
+            }
+        });
+        //二次分享
+        function randomString() {
+            var $chars = 'ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123456789';
+            var maxPos = $chars.length;
+            var pwd = '';
+            for (i = 0; i < 32; i++) {
+                pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+            }
+            return pwd;
+        }
+        var timestampNum = randomString();
+        var src = window.location.href;
+        src = src.split("#")[0];
+        var getsrc = encodeURIComponent(src);
+        $.get('http://merch.diancall.com/pipes/wechat/getaccesstoken?url='+getsrc+'&noncestr='+timestampNum,function(res){
+            res = JSON.parse(res);
+            //console.log(res);
+            var timestamp = res.timestamp;
+            var signature = res.signature;
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: 'wx58861130a10e525b', // 必填，公众号的唯一标识
+                timestamp: timestamp, // 必填，生成签名的时间戳
+                nonceStr: timestampNum, // 必填，生成签名的随机串
+                signature: signature,// 必填，签名，见附录1
+                jsApiList: ['checkJsApi', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareAppMessage', 'onMenuShareQQ'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+            wx.checkJsApi({
+                jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'onMenuShareQZone'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+                success: function (res) {
+                    // 以键值对的形式返回，可用的api值true，不可用为false
+
+                    // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+                }
+            });
+            wx.ready(function () {
+                var imgUrl =storeface; //图片LOGO注意必须是绝对路径
+                var lineLink = src;   //网站网址，必须是绝对路径
+                var descContent = '【'+storename+'】'+'发布了一个招聘信息，快来看看！'; //分享给朋友或朋友圈时的文字简介
+                var shareTitle = '【'+jobname+'】'+salery;  //分享title
+                var appid = 'wx291eff92df433407'; //apiID，可留空
+                //分享给朋友
+                wx.onMenuShareAppMessage({
+                    title: shareTitle, // 分享标题
+                    desc: descContent, // 分享描述
+                    link: lineLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                    imgUrl: imgUrl, // 分享图标
+                    type: '', // 分享类型,music、video或link，不填默认为link
+                    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                    success: function () {
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () {
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+                //分享到朋友圈
+                wx.onMenuShareTimeline({
+                    title: shareTitle, // 分享标题
+                    link: lineLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                    imgUrl: imgUrl, // 分享图标
+                    success: function () {
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () {
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+                //分享到qq
+                wx.onMenuShareQQ({
+                    title: shareTitle, // 分享标题
+                    link: lineLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                    imgUrl: imgUrl, // 分享图标
+                    success: function () {
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () {
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+                //分享到qq空间
+                wx.onMenuShareQZone({
+                    title: shareTitle, // 分享标题
+                    link: lineLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                    imgUrl: imgUrl, // 分享图标
+                    success: function () {
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () {
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+            });
+        })
+    });
+
+</script>

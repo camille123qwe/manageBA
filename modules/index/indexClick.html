@@ -1,0 +1,446 @@
+<div class="row">
+    <div class="col-lg-6" >
+        <h5>基本信息</h5>
+        <div class="panel-box" style="min-height: 150px">
+            <div class="row">
+                <div class="col-lg-6" >
+                    <div class="col-lg-3">
+                        <img style="width: 64px;height: 64px;" src="boot/img/logo.png" alt="商户图标">
+                    </div>
+                    <div class="col-lg-9" id="merchinfo">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6" >
+        <h5>数据统计</h5>
+        <div class="panel-box" style="min-height: 150px;padding-top: 20px">
+            <div class="row" style="margin: 0 30px;" id="rowsimg">
+                <table class="table-responsive" width="100%">
+                    <tr id="fiveplus">
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <h5>我的门店<span style="font-size: 12px;font-weight: lighter;margin-left: 15px;color: orange">
+        选择门店点击【查看更多】查询更多门店相关信息</span>
+        <button class="btn btn-warning" style="margin-left: 10px;display: none" id="showall">显示全部门店</button></h5>
+    <div class="row" style="font-size: 14px" id="shaixuanrow">
+        <div class="col-lg-6 col-md-6 col-sm-6" id="shaixuan">
+            <p id="showpage" style="color: darkslategrey;font-size: 22px"></p>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <label style="float: right">搜索门店
+                <input type="text" placeholder="门店名" id="storename">
+                <button class="btn btn-default" id="storename_submit">搜索</button>
+            </label>
+        </div>
+    </div>
+</div>
+<div class="row" id="myStore">
+    <h3 style="text-align: center">您还未添加门店</h3>
+</div>
+<div id="pub">
+    <nav class="pull-right my-nav">
+        <ul class="pagination"></ul>
+        <p style="text-align: right;padding-right: 15px;display: none">跳转至 <input type="tel" min="0" style="width: 35px" id="searchpage" > 页<span style="border: solid 1px;margin-left: 10px" id="search"><a href="javascript:void(0)">搜索</a></span></p>
+    </nav>
+</div>
+<div id="dialog-charge" class="modal fade" tabindex="-1"  data-backdrop="static" data-keyboard="false" data-width="900" data-height="80" style="display: none;">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">请联系我们的客服人员为您充值，联系电话：0755-86665265</h4>
+    </div>
+</div>
+<script>
+    {
+        $(document).ready(function(){
+            $(".pull-left").hide();
+            $("#menu").hide();
+            $("body").addClass("widescreen");
+            window.onbeforeunload=function (){
+                if(event.clientX>document.body.clientWidth && event.clientY < 0 || event.altKey){
+                    $('window').resize();
+                }else{
+                    $('window').resize();
+                }
+            }
+        });
+
+        if (system_merchuser && system_merchuser.merchuserid) {
+            //设置基本信息
+            $("#merchinfo").html("");
+            $.get('/pipes/merchfinance/finance',function(data){
+                data = JSON.parse(data);
+                if(data){
+                    if(data.money%1000000==0){
+                        money = data.money/1000000+"万元";
+                    }else if(data.money/1000000<0||data.money<1000000){
+                        money = data.money/100+"元";
+                    }else{
+                        var wan = parseInt(data.money/1000000);
+                        var yuan = (data.money -wan*1000000)/100;
+                        money = wan+"万"+yuan+"元";
+                    }
+
+                }else{
+                    money = 0+"元"
+                }
+                var _html='<p><span>Hi,</span>'+system_merchinfo.merchname+'</p><p><span>状态:</span>'+status(system_merchuser.status)+'</p>'+
+                        '<p><span>账户余额:</span>'+money+'</p>'+
+                        '<button id="charge-button" type="button" class="btn btn-warning" style="width: 100px;border-radius: 10px;">充值</button>';
+                $("#merchinfo").html(_html);
+            });
+            $.get('/pipes/merchfinance/wrapper',function(data){
+                data  = data||[];
+                data = JSON.parse(data);
+                data.costmoney=parseFloat(data.costmoney/100).toFixed(2)||0;
+                data.custusercount=parseInt(data.custusercount)||0;
+                data.msmscount=parseInt(data.msmscount)||0;
+                data.costfluxkbs=parseFloat(data.costfluxkbs/1024).toFixed(0)||0;
+                data.costvoicetimes=parseFloat(data.costvoicetimes/60).toFixed(0)||0;
+                var _html='<td><div style="text-align: center"><img src="boot/img/huafei.png">'+
+                          '<p>总花费</p><p>'+data.costmoney+'元</p></div></td>'+
+                          '<td><div style="text-align: center"><img src="boot/img/member.png">'+
+                          '<p>总会员数</p><p>'+data.custusercount+'人</p></div></td>'+
+                          '<td><div style="text-align:center" ><img src="boot/img/message.png">'+
+                          '<p>营销短信</p><p>'+data.msmscount+'条</p></div></td>'+
+                          '<td><div style="text-align:center" ><img src="boot/img/flowkbs.png">'+
+                          '<p>流量赠送</p><p>'+data.costfluxkbs+'M</p></div></td>'+
+                          '<td><div style="text-align:center"><img src="boot/img/voice.png">'+
+                          '<p>语音赠送</p><p>'+data.costvoicetimes+'分钟</p></div></td>';
+                $("#fiveplus").html(_html);
+            });
+            //设置我的门店
+            var startdata = {
+                status:[10,20]
+            };
+            var flag = true;
+            if(flag){
+                storeajax(startdata);
+                flag = false;
+            }
+
+            function storeajax(data){
+                $.ajax({
+                    url:" /pipes/merchstore/query",
+                    type:"POST",
+                    data:{
+                        "bean":$.objectToString(data),
+                        "flipper":"{limit:6}",
+                        "order":"DESC",
+                        "start":0,
+                        "length":6,
+                        "sort":"createtime"
+                    },
+                    dataType:"JSON",
+                    success:function(res){
+                        if(res&&res.retcode>0){
+                            alert(res.retinfo);
+                        }else{
+                            $("#myStore").html("");
+                            var _html="";
+                            var arr= res.rows||[];
+                            var total = res.total;
+                            if(arr.length==0){
+                                _html="<h1 style='text-align: center'>当前账户下没有门店</h1>";
+                            }else{
+                                //------------门店多余6个进行分页-------------------
+                                if (total > 6) {
+                                    var navfun = new Nav();
+                                    navfun.myAjax(data);
+                                    navfun.createNav();
+                                    navfun.getSinglePageData();
+                                    $("#pub").show();
+                                    $("#pub").find('p').show();
+                                    $("#shaixuanrow").show();
+                                    $("#showpage").html('共'+total+"个门店,本页展示"+arr.length+"个");
+                                }else{
+                                    for(var i=0;i<arr.length;i++){
+                                        _html+=' <div class="col-lg-4"><div class="panel-box" style="padding: 5px">'+
+                                                '<div class="row"><div class="col-lg-6">'+
+                                                '<img class="img-responsive storeImg" src="/dir/storeface_300/'+arr[i].storeface+'" style="max-width: 100%;height: 171px;border: solid 1px darkgrey;" alt="门店图片">'+
+                                                '<p>开通时间:<span>' +time(arr[i].createtime)+ '</span></p></div>' +
+                                                '<div class="col-lg-6"><p class="storeName" style="font-size: 16px;color: dimgrey;font-weight: bold;">'+arr[i].storename+'<small style="font-weight: lighter;font-size: 12px">(状态:'+status(arr[i].status)+')</small></p>' +
+                                                '<p><span style="display: inline-block;width: 100px">总会员数:</span><span style="display: inline-block;width: 50px;text-align: center"> '+arr[i].custusercount+' </span>人</p><p><span style="display: inline-block;width: 100px">已发送营销短信:</span><span style="display: inline-block;width: 50px;text-align: center"> '+arr[i].msmscount+' </span>条</p>' +
+                                                '<p><span style="display: inline-block;width: 100px">已添加商品数量:</span><span style="display: inline-block;width: 50px;text-align: center"> '+arr[i].goodscount+' </span>件</p><p><span style="display: inline-block;width: 100px">已添加优惠券:</span><span style="display: inline-block;width: 50px;text-align: center"> '+arr[i].quancount+'  </span>张</p></div></div>'+
+                                                '<p style="display: inline-block">地址:<span>'+arr[i].storeaddr+'</span></p>'+
+                                                '<button class="indexMore " value="'+arr[i].storeid+'" onclick="moreClick(this)">'+
+                                                '查看更多</button></div> </div>';
+                                    }
+                                    $("#myStore").html(_html);
+                                    $("#pub").hide();
+                                    $("#shaixuanrow").hide();
+                                }
+                            }
+                        }
+                    },
+                    error:function(err){
+                        console.log(err);
+                    }
+                });
+            }
+            function Nav(pageNo, pageSize, startIndex, url) {
+                this.pageNo = pageNo || 1;          // 第几页
+                this.pageSize = pageSize || 6;     // 每页几个数据
+                this.startIndex = startIndex || 1;  // 开始的页数 只有1,11,21等等
+                this.url = '/pipes/merchstore/query'; // 接口地址
+                this.ajaxFlag = true;               // 是否更新分页导航
+                this.direction = "right";           // 触发的是左侧的省略号还是右侧的省略号
+                this.allCount = 0;                  // 总数据条数
+                this.pubData = [];                  // ajax获取的数据，根据具体数据需要调整
+            }
+            Nav.prototype.myAjax = function (beandata) {
+                var _this = this;
+                $.ajax({
+                    url: _this.url,
+                    type: "GET",
+                    data: {
+                        "bean": $.objectToString(beandata),
+                        "flipper": "{limit:6,offset:"+(_this.pageNo-1)*6+"}",
+                        "order": "DESC",
+                        "start": _this.pageNo*6,
+                        "length": 6,
+                        "sort": "createtime"
+                    },
+                    async: false,
+                    success: function (data) {
+                        $("#myStore").empty();
+                        var _html="";
+                        data = JSON.parse(data);
+                        _this.pubData = data.rows;
+                        _this.allCount = data.total;//_this.pubData.totalCount;
+                        if (_this.ajaxFlag) {
+                            _this.createNav();
+                            //------------------
+                            console.log($('.active').children().text());
+                            //---------------------
+                        }
+                        var arr = data.rows;
+                        for(var i=0;i<arr.length;i++){
+                            _html+=' <div class="col-lg-4"><div class="panel-box" style="padding: 5px">'+
+                                    '<div class="row"><div class="col-lg-6">'+
+                                    '<img class="img-responsive storeImg" src="/dir/storeface_300/'+arr[i].storeface+'" style="max-width: 100%;height: 171px;border: solid 1px darkgrey;" alt="门店图片">'+
+                                    '<p>开通时间:<span>' +time(arr[i].createtime)+ '</span></p></div>' +
+                                    '<div class="col-lg-6"><p class="storeName" style="font-size: 16px;color: dimgrey;font-weight: bold;">'+arr[i].storename+'<small style="font-weight: lighter;font-size: 12px">(状态:'+status(arr[i].status)+')</small></p>' +
+                                    '<p><span style="display: inline-block;width: 100px">总会员数:</span><span style="display: inline-block;width: 50px;text-align: center"> '+arr[i].custusercount+' </span>人</p><p><span style="display: inline-block;width: 100px">已发送营销短信:</span><span style="display: inline-block;width: 50px;text-align: center"> '+arr[i].msmscount+' </span>条</p>' +
+                                    '<p><span style="display: inline-block;width: 100px">已添加商品数量:</span><span style="display: inline-block;width: 50px;text-align: center"> '+arr[i].goodscount+' </span>件</p><p><span style="display: inline-block;width: 100px">已添加优惠券:</span><span style="display: inline-block;width: 50px;text-align: center"> '+arr[i].quancount+'  </span>张</p></div></div>'+
+                                    '<p style="display: inline-block">地址:<span>'+arr[i].storeaddr+'</span></p>'+
+                                    '<button class="indexMore " value="'+arr[i].storeid+'" onclick="moreClick(this)">'+
+                                    '查看更多</button></div> </div>';
+                        }
+                        $("#myStore").html(_html);
+                        $("#showpage").html('共'+data.total+"个门店,本页展示"+arr.length+"个");
+
+                    },
+                    error: function (data) {
+                        console.log(data.code);
+                    }
+                });
+            };
+            Nav.prototype.createNav = function () {
+                this.ajaxFlag = false;
+                var myNav = $("#pub .my-nav");          // 这里的$("#pub .my-nav")请根据情况自行修改
+                var activeClass = "active";
+
+                // 是否给数字1active
+                if (this.startIndex === 1 && this.direction === "right") {
+                    activeClass = "active";
+                }else {
+                    activeClass = "";
+                }
+
+                // 创建 《，1
+                myNav.find("ul").empty();
+                myNav.find("ul").append($("<li><a href='javascript:void(0)'>上一页</a></li>"));
+                myNav.find("ul").append($("<li class='"+ activeClass +"'><a href='javascript:void(0)'>1</a></li>"));
+
+                // 是否创建左侧省略号
+                if (this.startIndex !== 1) {
+                    myNav.find("ul").append($("<li><a href='javascript:void(0)'>...</a></li>"));
+                }
+
+                // 循环创建中间部分
+                for (var i = this.startIndex; i <= this.startIndex + 5; i++) {
+
+                    // 跳过第一个和最后一个
+                    if (i === 1 || i >=  Math.ceil( this.allCount / 6)) {
+                        continue;
+                    }
+
+                    var oLi = $("<li><a href='javascript:void(0)'>" + i + "</a></li>");
+
+                    // 向左时最右边的nav添加active，向右时最左边的添加active
+                    if ((this.direction === "left" && i % 6 === 0) || (this.direction === "right" && i % 6 === 1)) {
+                        oLi.addClass("active");
+                    }
+
+                    myNav.find("ul").append(oLi);
+                }
+
+                //判断是否添加右侧省略号
+                if (this.startIndex + 6 < Math.ceil(this.allCount / 6)) {
+                    myNav.find("ul").append($("<li><a href='javascript:void(0)'>...</a></li>"));
+                }
+
+                // 当页面只有一页的时候跳过
+                if (Math.ceil(this.allCount / 6) !== 1) {
+                    myNav.find("ul").append($("<li><a href='javascript:void(0)'>" + Math.ceil(this.allCount / 6) + "</a></li>"));
+                }
+                myNav.find("ul").append($("<li><a href='javascript:void(0)'>下一页</a></li>"));
+            };
+            Nav.prototype.getSinglePageData = function () {
+                var _this = this;
+                /*
+                 * 外层的元素id自行修改
+                 * 点击事件以 activeLiIndex 为核心
+                 */
+                $('.my-nav').on("click", "li", function () {
+                    var beandata = {
+                        status:[10,20],
+                        storename:$("#storename").val().trim()
+                    };
+                    $('html').scrollTop(0);
+                    $('body').scrollTop(0);
+                    var activeLiIndex = $("#pub .my-nav li.active").index();
+                    // 《 与  》两个按钮不会有 active
+                    if ($(this).index() > 0 && $(this).index() < $("#pub .my-nav li").length - 1) {
+                        activeLiIndex = $(this).index();
+                    }
+
+                    // 到最左边和最右边active不变
+                    if ($(this).index() === 0) {
+                        if (activeLiIndex == 1) {
+                            return;
+                        }
+                        activeLiIndex--;
+                    }
+                    if ($(this).index() === $("#pub .my-nav li").length - 1) {
+                        if (activeLiIndex == $("#pub .my-nav li").length - 2) {
+                            return;
+                        }
+                        activeLiIndex++;
+                    }
+
+                    // 《 与 》两个按钮的 disabled属性修改
+                    if (activeLiIndex === 1) {
+                        $("#pub .my-nav li").eq(0).addClass("disabled");
+                    }else {
+                        $("#pub .my-nav li").eq(0).removeClass("disabled");
+                    }
+                    if (activeLiIndex === $("#pub .my-nav li").length - 2) {
+                        $("#pub .my-nav li").eq($("#pub .my-nav li").length - 1).addClass("disabled");
+                    }else {
+                        $("#pub .my-nav li").eq($("#pub .my-nav li").length - 1).removeClass("disabled");
+                    }
+
+                    $("#pub .my-nav li").removeClass("active");
+                    $("#pub .my-nav li").eq(activeLiIndex).addClass("active");
+
+                    // 如果active的按钮是省略号，根据index（）判断左右，然后调用ajax
+                    if ($("#pub .my-nav li.active a").html() === "...") {
+                        _this.ajaxFlag = true;
+                        if ($("#pub .my-nav li.active").index() === 2) {
+                            _this.direction = "left";
+                            var  leftHtml = $("#pub .my-nav li").eq(activeLiIndex + 1).find("a").html();
+                            _this.pageNo = leftHtml - 1;
+                            _this.startIndex = leftHtml - 6;
+                            _this.myAjax(beandata);
+                        }else{
+                            _this.direction = "right";
+                            var rightHtml = $("#pub .my-nav li").eq(activeLiIndex - 1).find("a").html();
+                            _this.pageNo = rightHtml / 1 + 1;
+                            _this.startIndex = rightHtml / 1 + 1;
+                            $("#myStore").html("");
+                            _this.myAjax(beandata);
+                        }
+
+                        return;
+                    }
+
+                    // 如果active的不是省略号，调用ajax，不修改nav导航
+                    _this.pageNo = $("#pub .my-nav li.active a").html() - 0;
+                    _this.myAjax(beandata);
+                });
+            };
+            Nav.prototype.getSearchPage = function(){
+                $('html').scrollTop(0);
+                $('body').scrollTop(0);
+                var page = Number($("#searchpage").val().trim());
+                var _this = this;
+                _this.pageNo = page;
+                if(page<=6){
+                    _this.startIndex = 1;
+                }else{
+                    _this.startIndex = parseInt(page/6)*6+1;
+                    _this.ajaxFlag = true;
+                }
+                _this.myAjax(startdata);
+            };
+            $("#search").click(function(){
+                var navfun = new Nav();
+                navfun.getSearchPage();
+            });
+            //日期格式转换
+            function time(value){
+                var date = new Date(value);
+                var year = date.getFullYear();
+                var month = Number(date.getMonth())+1;
+                var day = date.getDate();
+                if(month<10){
+                    month="0"+month;
+                }
+                if(day<10){
+                    day="0"+day;
+                }
+                var data= year+"-"+month+"-"+day;
+                return data;
+            }
+            //状态设置
+            function status(value) {
+                if (value === 10) return "<font color=green>正常</font>";
+                if (value === 20) return "<font color=#FF00FF>待审批</font>";
+                if (value === 40) return "冻结";
+                if (value === 50) return "隐藏";
+                if (value === 60) return "关闭";
+                if (value === 70) return "<font color=red>过期</font>";
+                if (value === 80) return "<font color=red>删除</font>";
+                return "<font color=red>未知</font>";
+            }
+            //点击查看更多
+            function moreClick(self){
+                var newStoreid=$(self).val();
+                var oldStoreid = common.getData("storeid");
+                if(oldStoreid){
+                    common.rmStorage("storeid");
+                }
+                    common.setData("storeid",newStoreid);
+                $(window).scrollTop(0);
+                openModule("modules/store/storeindex.html",101);
+            }
+            $("#merchinfo").on('click','#charge-button',function(){
+                $("#dialog-charge").modal('show');
+            });
+            //--------点击搜索按钮筛选门店
+            $("#storename_submit").click(function(){
+                var data ={
+                    status:[10,20],
+                    storename:$("#storename").val().trim()
+                };
+                $("#showall").show();
+               storeajax(data);
+            });
+            $("#showall").click(function(){
+                storeajax(startdata);
+                $("#storename").val("");
+                $(this).hide();
+            });
+        }
+    }
+</script>

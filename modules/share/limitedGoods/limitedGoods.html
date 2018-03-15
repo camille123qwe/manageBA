@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width,user-scalable=0,initial-scale=1.0">
+   <!-- <link type="text/css" href="../sharegoods/goods.css" rel="stylesheet">-->
+    <script src="../shareLogin/jquery-1.11.1.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <title>限时优惠</title>
+   <style>
+       *{
+           margin:0;
+           padding:0;
+           font-family: '微软雅黑';
+       }
+       li{
+           list-style: none;
+       }
+       body,html{
+           height: 100%;
+           min-height: 100%!important;
+       }
+       .container,.banner{
+           max-width:1440px;
+           position: relative;
+           min-height: 100%;
+           margin: auto;
+       }
+       div,p,span,h1,h2,h3,h4,h5,h6{
+           font-family: 微软雅黑;
+           font-size: 0.7rem;
+           color: #333;
+           font-weight: bold;
+       }
+       .banner{
+           height: 14rem;
+           background-repeat: no-repeat;
+           background-position: center;
+           background-size: cover;
+           display: table-cell;
+           vertical-align: middle;
+           text-align: center;
+         /*  border-top: 1px solid #cac0c0;
+           border-bottom: 1px solid #cac0c0;*/
+           width: 18.75rem;
+       }
+       .headfooter{
+           padding: 9px 0 9px 13px;
+       }
+       .headfooter h1{
+           font-size: 0.85rem;
+           margin-bottom: 0.4rem;
+       }
+       .headfooter h1>span{
+           padding-left: 1rem;
+           font-size: 1rem;
+           color: #ff5650;
+       }
+
+       .headfooter h2>span{
+           padding-left: 0.5rem;
+           color: #666;
+       }
+       #marketprice span{
+           text-decoration: line-through;
+       }
+       #process{
+           width:7.5rem;
+           height: 0.5rem;
+           font-size: 0.45rem;
+           line-height: 0.45rem;
+           border: solid 1px #c9c9c9;
+           text-align: center;
+           margin-top: 0.3rem;
+           background: #ffe8d7;
+           clear: both;
+           float: left;
+           position: relative;
+       }
+       .coupon_btn{
+           width:3.65rem;
+           height: 1.35rem;
+           background: #fb6d07;
+           color: #fff;
+           font-size: 0.6rem;
+           border:solid 1px #fb6d07;
+           border-radius: 0.35rem;
+           cursor: pointer;
+           text-align: center;
+           line-height: 1.35rem;
+           margin-top: -0.5rem;
+           margin-right: 1rem;
+           float: right;
+       }
+       #process div{
+           width:1rem;
+           float: left;
+           height: 0.5rem;
+           background: #fb6d07;
+           position: absolute;
+       }
+       .timeDetail{
+           height:1.65rem;
+           line-height: 1.65rem;
+           padding: 0 0.7rem;
+           border:solid 1px #d0d0d0;
+       }
+       .timeDetail p:first-child{
+           float: left;
+       }
+       .timeDetail p:last-child{
+           float: right;
+       }
+       .goodsDetail{
+          /* text-indent: 2em;*/
+           margin-top: 1rem;
+           padding: 0 1rem;
+       }
+     /*  .goodsDetail p{
+           margin: 0 1.4rem;
+           text-align: justify;
+           font-size: 0.7rem;
+           color: #888;
+           padding:0.5rem;
+       }*/
+       .footer{
+           position: fixed;
+           height:2rem;
+           width:100%;
+           max-width: 750px;
+           background: #fb6d07;
+           bottom: 0;
+       }
+       .footer a{
+           width:100%;
+           max-width: 750px;
+           display: inline-block;
+           height:2rem;
+           line-height:2rem;
+           text-align: center;
+           font-size: 1rem;
+           font-weight: normal;
+           text-decoration:blink;
+           color: #ffffff;
+       }
+       .goodsTitle{
+           height:1.95rem;
+           line-height: 1.95rem;
+           padding-left: 13px;
+           font-size: 0.85rem;
+           color: #666;
+           background: #f2f2f2;
+           border-top:solid 1px #c9c9c9;
+       }
+   </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="banner">
+            <img src="" style="width: 100%;max-height: 100%;vertical-align: middle" alt="商品图片加载中">
+            <!--onerror="javascript:this.src='http://merch.diancall.com/modules/share/bg_grey.png'"-->
+        </div>
+        <div class="headfooter">
+            <h1></h1>
+            <div style="height:2rem">
+                <h2 style="float: left;padding-right: 1rem;" id="marketprice">
+                    限时秒杀<span style="text-decoration: none;color: #fb6d07;"></span><span></span></h2>
+                <div id="process"><div></div></div><p style="float: left;margin-left:1rem" id="percent"></p>
+                <div class="coupon_btn openApp">抢券</div>
+            </div>
+        </div>
+    </div>
+    <div class="timeDetail">
+        <p><span></span></p>
+        <P><span></span></P>
+    </div>
+    <div class="goods">
+        <div class="goodsTitle">
+            产品详情
+        </div>
+        <div class="goodsDetail">
+            <div>
+                <p></p>
+            </div>
+        </div>
+    </div>
+    <div style="background: white;height: 3.2rem;width: 100%;"></div>
+    <div class="footer">
+        <a href="javascript:void(0)" id="openApp" class="openApp">去抢购</a>
+    </div>
+</div>
+</body>
+</html>
+
+<script type="text/javascript" src="//res.cdn.openinstall.io/openinstall.js"></script>
+<script src="../install.js"></script>
+<script>
+    (function (){
+        var src = window.location.href;
+        var storeid = src.substr(src.indexOf('?StoreId='),17).split('=')[1];
+        var rushId = src.substr(src.indexOf('?RushId='),21).split('=')[1];
+        var installdata = {"pageName":"xianShiShopPage","data":{"storeId":storeid,"rushId":rushId}};//也可以是js Object
+        console.log(installdata);
+        install(installdata);
+    })();
+</script>
+<script>
+    (function (doc, win) {
+        var sUserAgent = navigator.userAgent.toLowerCase();
+        var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
+        var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
+        var bIsMidp = sUserAgent.match(/midp/i) == "midp";
+        var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4";
+        var bIsUc = sUserAgent.match(/ucweb/i) == "ucweb";
+        var bIsAndroid = sUserAgent.match(/android/i) == "android";
+        var bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
+        var bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
+        //判断是移动端还是PC端
+        if (bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM) {
+            var docEl = doc.documentElement,
+                    resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                    recalc = function () {
+                        var clientWidth = docEl.clientWidth;
+                        if (!clientWidth) return;
+                        docEl.style.fontSize = 20 * (clientWidth / 375) + 'px';
+                    };
+        } else {
+            var container = $(".container");
+            var mc_container = $(".mc_container");
+            container.width(750);
+            container.css("margin","auto");
+            mc_container.width(750);
+            mc_container.css('left','50%');
+            mc_container.css('marginLeft',"-375px");
+            var docEl = doc.documentElement,
+                    resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                    recalc = function () {
+                        var clientWidth = 750;
+                        if (!clientWidth) return;
+                        docEl.style.fontSize = 20 * (clientWidth / 375) + 'px';
+                    };
+        }
+        if (!doc.addEventListener) return;
+        win.addEventListener(resizeEvt, recalc, false);
+        doc.addEventListener('DOMContentLoaded', recalc, false);
+    })(document, window);
+    $(function(){
+        $.ajaxSettings.async = false;
+        Date.prototype.toLocaleString = function() {
+            return (this.getMonth() + 1) + "月" + this.getDate()+"日";
+        };
+        var src = window.location.href;
+        var rushID = src.substr(src.indexOf('?RushId='),21).split('=')[1];
+        //var rushurl = 'http://192.168.1.128:6001/pipes/share/findgoodsrush/'+1499395594131;
+        //正式环境
+        var rushurl  = 'http://merch.diancall.com/pipes/share/findgoodsrush/'+rushID;
+        var share_goodsname = "";
+        var share_goodsface = "";
+        $.get(rushurl,function(res){
+            localStorage.clear();
+            res = JSON.parse(res);
+            //商品名，价格
+            $(".headfooter h1").text(res.goodsname);
+            share_goodsname = res.goodsname;
+            $("#marketprice span:first-child").text("￥"+res.sellprice/100);
+            $("#marketprice span:last-child").text("￥"+res.marketprice/100);
+            //--抢购数量
+            var process = ((res.releasequality - res.retquality)/res.releasequality).toFixed(2);
+            if(process>=1){
+                $(".coupon_btn").text('已抢光').css('backgroundColor','grey').css('borderColor','grey');
+                $('#process div').css('backgroundColor','grey');
+            }
+            $("#percent").text("已抢"+parseInt(process*100)+"%");
+            var width = (process*7.5).toFixed(2)+'rem';
+            $("#process div").width(width);
+            //--时间
+            var now = new Date().getTime();
+            if(res.rushstarttime>now){
+                $(".timeDetail p:first-child").html("活动即将开始");
+                $(".coupon_btn,#percent,#process").hide();
+            }else{
+                var daycount = Math.ceil((res.rushendtime - now)/1000/3600/24);
+                if(daycount<=0){
+                    $(".timeDetail p:first-child").html("抢购时间已结束");
+                    $(".coupon_btn,#percent,#process").hide();
+                }else{
+                    $(".timeDetail p:first-child").html("抢券剩余时间<span>"+daycount+"</span>天");
+                }
+            }
+            var nowdate= new Date(res.validstarttime).toLocaleString()+"至"+ new Date(res.validendtime).toLocaleString();
+            $(".timeDetail p:last-child").html("取货时间："+nowdate);
+            $(".banner img").attr('src','/pipes/img/goods_900/'+res.goodsface);
+            share_goodsface ='http://merch.diancall.com/pipes/img/goods_900/'+res.goodsface;
+            if(res.goodsimgs){
+                $(".banner").empty();
+                var imgarr = res.goodsimgs.split(';');
+                for(var i=0;i<imgarr.length;i++){
+                    $('.banner').append('<div style="width: 18.75rem;height: 14rem;"><img style="max-width: 100%;max-height: 100%;" src="http://merch.diancall.com/pipes/img/goods_900/'+imgarr[i]+'"></div>')
+                }
+            }
+            $(".goodsDetail").html(res.goodsdesc||"暂无商品详情");
+            localStorage.setItem("goodsname",share_goodsname);
+            localStorage.setItem("goodsface",share_goodsface);
+        });
+        /*       $(".footer").click(function () {
+         location.href = "http://c.diancall.com/app/cdl/custuser36id:3B2P0H";
+         });
+         $(".coupon_btn").click(function(){
+         location.href = "http://c.diancall.com/app/cdl/custuser36id:3B2P0H";
+         });*/
+        $.ajaxSettings.async = true;
+        function randomString() {
+            var $chars = 'ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123456789';
+            var maxPos = $chars.length;
+            var pwd = '';
+            for (i = 0; i < 32; i++) {
+                pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+            }
+            return pwd;
+        }
+        var timestampNum = randomString();
+        var src = window.location.href;
+        src = src.split("#")[0];
+        var getsrc = encodeURIComponent(src);
+        $.get('http://merch.diancall.com/pipes/wechat/getaccesstoken?url='+getsrc+'&noncestr='+timestampNum,function(res){
+            res = JSON.parse(res);
+            //console.log(res);
+            var timestamp = res.timestamp;
+            var signature = res.signature;
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: 'wx58861130a10e525b', // 必填，公众号的唯一标识
+                timestamp: timestamp, // 必填，生成签名的时间戳
+                nonceStr: timestampNum, // 必填，生成签名的随机串
+                signature: signature,// 必填，签名，见附录1
+                jsApiList: ['checkJsApi', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareAppMessage', 'onMenuShareQQ'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+            wx.checkJsApi({
+                jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'onMenuShareQZone'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+                success: function (res) {
+                    // 以键值对的形式返回，可用的api值true，不可用为false
+
+                    // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+                }
+            });
+            wx.ready(function () {
+                var imgUrl = localStorage.getItem("goodsface");  //图片LOGO注意必须是绝对路径
+                var lineLink = src;   //网站网址，必须是绝对路径
+                var descContent = '数量有限，先到先得，快来看看！'; //分享给朋友或朋友圈时的文字简介
+                var shareTitle = '【限时底价抢购】'+localStorage.getItem("goodsname");  //分享title
+                var appid = 'wx291eff92df433407'; //apiID，可留空
+                //分享给朋友
+                wx.onMenuShareAppMessage({
+                    title: shareTitle, // 分享标题
+                    desc: descContent, // 分享描述
+                    link: lineLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                    imgUrl: imgUrl, // 分享图标
+                    type: '', // 分享类型,music、video或link，不填默认为link
+                    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                    success: function () {
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () {
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+                //分享到朋友圈
+                wx.onMenuShareTimeline({
+                    title: shareTitle, // 分享标题
+                    link: lineLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                    imgUrl: imgUrl, // 分享图标
+                    success: function () {
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () {
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+                //分享到qq
+                wx.onMenuShareQQ({
+                    title: shareTitle, // 分享标题
+                    link: lineLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                    imgUrl: imgUrl, // 分享图标
+                    success: function () {
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () {
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+                //分享到qq空间
+                wx.onMenuShareQZone({
+                    title: shareTitle, // 分享标题
+                    link: lineLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                    imgUrl: imgUrl, // 分享图标
+                    success: function () {
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () {
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+            });
+        })
+    });
+</script>

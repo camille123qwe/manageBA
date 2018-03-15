@@ -1,0 +1,538 @@
+<div class="row">
+    <p style="padding: 15px 0 0 15px;color: #006dcc" id="memberCharge-title">
+        <a  href="javascript:openModule('modules/index/indexClick.html',400);" style="color: #006dcc">商户首页</a>
+        &gt;&gt;<a href="javascript:openModule('modules/store/storeindex.html',101);" style="color: #006dcc">门店首页</a>
+        &gt;&gt;<a href="javascript:openModule('modules/member/memberCharge.html',402);" style="color: #006dcc">会员管理</a>
+        <span style="color:#114da9;margin-left: 20px">当前门店:<span id="nowStorename"></span></span>
+    </p>
+</div>
+<div class="row">
+    <div class="col-lg-4">
+        <div class="panel-box">
+            <div class="table-responsive" >
+                <div class="page-title" style="margin-top:10px;">
+                    <ul class="filter_ul" style="margin: 0;padding: 0">
+                        <li><a id="button-merchmark-create" href="javascript:void(0);"><i class="fa fa-plus"></i>添加标签</a></li>
+                        <li><a id="button-merchmark-update" href="javascript:void(0);"><i class="fa fa-edit"></i>更改标签</a></li>
+                        <li><a id="allmark" href="javascript:void(0);">全部会员</a></li>
+                    </ul>
+                </div>
+                <table id="table-mark-sheet" class="table table-hover" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>标签名称</th>
+                        <th>标签ID</th>
+                        <th>状态</th>
+                        <th>创建日期</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="panel-box">
+            <div class="table-responsive">
+                <div class="page-title" style="margin-top:10px;">
+                    <ul class="filter_ul" style="margin: 0;padding: 0">
+                        <li><a id="button-custmark-create" href="javascript:void(0);"><i class="fa fa-plus"></i>新增用户标签</a></li>
+                        <li><a id="button-custname-create" href="javascript:void(0);"><i class="fa fa-plus"></i>添加用户昵称备注</a></li>
+                    </ul>
+                </div>
+                <table id="table-cust-sheet" class="table table-hover" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>门店ID</th>
+                            <th>会员ID</th>
+                            <th>备注昵称</th>
+                            <th>会员网名</th>
+                            <th>推送类型</th>
+                            <th>电话号码</th>
+                            <th>标签集合</th>
+                            <th>关注时间</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dialog-merchmark-update" class="modal fade" tabindex="-1"  data-backdrop="static" data-keyboard="false" data-width="500" data-height="200" style="display: none;">
+    <div class="modal-header">
+        <button type="button" class="close" id="quanClose" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 id="dtitle-quan-update" class="modal-title">新增标签<span style="font-size: 12px;font-weight: 100">(注意:标签不能超过20个)</span></h4>
+    </div>
+    <div class="modal-body">
+        <form id="form-merchmark-update" class="m-t form-horizontal" enctype="multipart/form-data" role="form">
+            <input name="createtime" type="hidden">
+            <input name="markid" id="markid" type="hidden">
+            <input id="hiddenmarkids" value="0" type="hidden">
+            <div class="form-group">
+                <label class="col-lg-3 control-label" >状 态</label>
+                <div class="col-lg-8" >
+                    <select name="status" class="form-control" required=""   data-bv-trigger="blur"  data-bv-notempty-message="状态不能为空">
+                        <option value="10" style="color:green;">正常</option>
+                        <option value="20" style="color:#FF00FF;">待审批</option>
+                      <!--  <option value="30">隐藏</option>
+                        <option value="40">下架</option>
+                        <option value="70" style="color:red;">过期</option>-->
+                        <option value="80" style="color:red;">删除</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label" >标签名称</label>
+                <div class="col-lg-8">
+                    <input class="form-control" name="markname" id="markgroup">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-5 col-lg-offset-3">
+                    <button id="formbtn-merchmark-update" type="button" class="btn btn-theme btn-lg btn-block ">提 交</button><br>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="dialog-custmark-update" class="modal fade" tabindex="-1"  data-backdrop="static" data-keyboard="false" data-width="500" data-height="200" style="display: none;">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 id="dtitle-custmark-update" class="modal-title">选择用户标签&nbsp;&nbsp;<span style="font-size: 12px;font-weight: 100">(注意:用户标签可以选择多个)</span></h4>
+    </div>
+    <div class="modal-body">
+        <form id="form-custmark-create" class="m-t form-horizontal" enctype="multipart/form-data" role="form">
+            <div class="form-group">
+                <div class="col-lg-12" id="markname">
+
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-5 col-lg-offset-3" style="margin-top: 30px">
+                    <button id="formbtn-custmark-create" type="button" class="btn btn-theme btn-lg btn-block ">提 交</button><br>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="dialog-nickname-update" class="modal fade" tabindex="-1"  data-backdrop="static" data-keyboard="false" data-width="500" data-height="300" style="display: none;">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">设置会员昵称</h4>
+    </div>
+    <div class="modal-body">
+        <form id="form-nickname-create" class="m-t form-horizontal" enctype="multipart/form-data" role="form">
+            <div class="form-group">
+               <label class="col-lg-3 control-label">当前会员名</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="custname" readonly>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">添加昵称备注</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="nickname">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-5 col-lg-offset-3" style="margin-top: 30px">
+                    <button id="nickname-create" type="button" class="btn btn-theme btn-lg btn-block ">提 交</button><br>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    {
+        if (system_merchuser && system_merchuser.merchuserid) {
+            $(document).ready(function(){
+                if(system_merchuser.type==10){
+                    $("#memberCharge-title").html('<a  href="javascript:openModule(\'modules/index/indexClick.html\',400);" style="color: #006dcc">商户首页</a>'+
+                            '&gt;&gt;<a href="javascript:openModule(\'modules/store/storeindex.html\',101);" style="color: #006dcc">门店首页</a>'+
+                            '&gt;&gt;<a href="javascript:openModule(\'modules/member/memberCharge.html\',402);" style="color: #006dcc">会员管理</a>')
+                }else{
+                    $("#memberCharge-title").html('<a href="javascript:openModule(\'modules/store/storeindex.html\',101);" style="color: #006dcc">门店首页</a>'+
+                            '&gt;&gt;<a href="javascript:openModule(\'modules/member/memberCharge.html\',402);" style="color: #006dcc">会员管理</a>')
+                }
+                $("#table-mark-sheet").after('<p><span style="color: red;">*</span>点击任意一行标签即可看到所属标签的会员</p>' +
+                        '<p><span style="color: red;">*</span>点击全部会员即可看到全部会员</p>'
+                );
+                $("#allmark").css('cursor','pointer');
+                $(".pull-left").show();
+                $("#menu").show();
+                $("body").removeClass("widescreen");
+            });
+            //标签列表
+            var storeid=common.getData('storeid');
+            if(!storeid){
+                storeid = 0;
+            }
+            var storename=common.getData('storename');
+            $("#nowStorename").text(storename);
+          /*  $.ajax({
+                cache: false,
+                dataType: "json",
+                type: "POST",
+                data:{
+                    "bean":$.objectToString({storeid:storeid})
+                },
+                url: '/pipes/merchstore/query',
+                error: function () {//请求失败处理函数
+                    alert('请求失败');
+                },
+                success: function (data) {
+                    if(data&&data.retcode>0){
+                        alert(data.retinfo);
+                    }else{
+                        $("#storeid_select").find('option').remove();
+                        var content = '';
+                        for (var i = 0; i < data.rows.length; i++) {
+                            content = content + '<option value="' + data.rows[i].storeid + '">' + data.rows[i].storename + '</option>';
+                        }
+                        $('#nowStorename').text(data.rows[0].storename);
+                    }
+                }
+            });*/
+            var mtable = $('#table-mark-sheet').dataTable({
+                iDisplayLength: 10,
+                aLengthMenu: [10],
+                ajax: {
+                    url: "/pipes/merchmark/query",
+                    data: function (f) {
+                        f.bean = JSON.stringify({
+                            storeid:storeid
+                        });
+                        f.sort = 'createtime';
+                        f.order = 'DESC';
+                        f.length = '10';
+                    }
+                },
+                columnDefs: [
+                    {
+                        className: 'select-checkbox',
+                        targets: 0
+                    },
+                    {
+                        targets: 2,
+                        visible: false
+                    }
+                ],
+                columns: [
+                    {"data": "", render: $.defrender},
+                    {"data": "markname", render: $.defrender},
+                    {"data": "markid", render: $.defrender},
+                    {"data": "status", render: defStatusRender},
+                    {"data": "createtime", render: Date.DateFormatter}
+                ]
+            });
+            //查询排序
+            $("#filter-user-qrybtn").click(function(){
+                mtable.api(true).draw(false);
+                $('#table-storeinfo-sheet').dataTable().fnPageChange(0);
+            });
+            //点击新增用户标签
+            $("#button-merchmark-create").bind("click", function () {
+                $("#form-merchmark-update").form('reset');
+                $("#markid").val("");
+                markidvalidator();
+                $('#dialog-merchmark-update').modal('show');
+            });
+            //--------------点击修改用户标签------------------------------
+            $("#button-merchmark-update").click(function(){
+                var data = mtable.api(true).row({selected: true}).data();
+                if (!data || !data.markid) {
+                    alert("请选择一条记录！");
+                    return;
+                }
+                $("#form-merchmark-update").form('reset');
+                markidvalidator();
+                $("#form-merchmark-update").form('load', data);
+                $('#dialog-merchmark-update').modal('show');
+            });
+            //--------------新增&&修改标签提交------------------------------
+            $("#formbtn-merchmark-update").click(function () {
+                $(this).attr("disabled",true);
+                var form =$("#form-merchmark-update");
+                var json = form.serializeJson();
+                var markidval="";
+                json.merchid = system_merchuser.merchid;
+                if(json.markid!=""){
+                    update(json,json.markid);
+                }else{
+                    $.ajax({
+                        url: "/pipes/merchmark/query",
+                        data: {"bean":"{merchid:0}"},
+                        type: "POST",
+                        dataType: "JSON",
+                        success: function (res) {
+                            if(res&&res.retcode>0){
+                                $("#formbtn-merchmark-update").removeAttr("disabled");
+                                alert(res.retinfo);
+                                return;
+                            }else{
+                                var rows = res.rows||[];
+                                var i = rows.length - 1;
+                                if (i >= 0&&i<19) {
+                                    var arr = rows[i].markid.split(".");
+                                    var groupid3 = Number(arr[1]) + 1;
+                                    markidval = arr[0] + "." + groupid3;
+                                } else if(i>=19) {
+                                    alert("客户标签不能超过20条");
+                                    return;
+                                }else{
+                                    var store36id = parseInt(json.merchid, 10).toString(36);
+                                    markidval = store36id + ".101";
+                                }
+                                update(json,markidval);
+                            }
+
+                        },
+                        error: function (err) {
+                            $("#formbtn-merchmark-update").removeAttr("disabled");
+                            console.log(err);
+                            alert("请求失败");
+                            return;
+                        }
+                    });
+                }
+                function update(json,markidval) {
+                    var json = json;
+                    json.markid = markidval;
+                    var data = "";
+                    var cols = [];
+                    if(json.createtime==""){
+                        data = {"bean":$.objectToString(json)}
+                    }else{
+                        for(key in json){
+                            if(key=="createtime"||key=="merchid"||key=="markid"){
+                                continue
+                            }
+                            cols.push(key)
+                        }
+                        data = {
+                            "bean":$.objectToString(json),
+                            "cols":$.objectToString(cols)
+                        }
+                    }
+                    $('#form-merchmark-update').bootstrapValidator('validate');
+                    if ($('#form-merchmark-update').data('bootstrapValidator').isValid()) {
+                        $.ajax({
+                            url: "/pipes/merchmark/update",
+                            data: data,
+                            dataType: "JSON",
+                            type: "POST",
+                            success: function (data) {
+                                $("#formbtn-merchmark-update").removeAttr("disabled");
+                                if (data && data.retcode > 0) {
+                                    alert(data.retinfo);
+                                    return;
+                                } else {
+                                    $("#dialog-merchmark-update").modal('hide');
+                                    mtable.api(true).draw(false);
+                                    $('#form-merchmark-update').data('bootstrapValidator', null);
+                                    alert("保存成功");
+                                }
+                            },
+                            error: function (error) {
+                                $("#formbtn-merchmark-update").removeAttr("disabled");
+                                console.log(error);
+                                alert("请求失败");
+                                return;
+                            }
+                        });
+                    }
+                }
+            });
+            //-------关闭按钮摧毁验证-----------------------------
+            $("#quanClose").on("click",function(){
+                $("#form-merchmark-update").data('bootstrapValidator').destroy();
+                $('#form-merchmark-update').data('bootstrapValidator', null);
+            });
+            /*-----------------会员列表--------------------------------------*/
+            //标签列表
+            custuser36id = function(value){
+                return parseInt(value,10).toString(36)
+            };
+            store36id = function(value){
+                return parseInt(value,10).toString(36)
+            };
+            var mtable2 = $('#table-cust-sheet').dataTable({
+                iDisplayLength: 10,
+                aLengthMenu: [10],
+                ajax: {
+                    url: "/pipes/merchcust/querycusts",
+                    data: function (f) {
+                        f.bean = JSON.stringify({
+                            storeid:storeid,
+                            markids:$("#hiddenmarkids").val()==0?[""]:[$("#hiddenmarkids").val()]
+                        });
+                        f.sort = 'followtime';
+                        f.order = 'DESC';
+                        f.length = '10';
+                    }
+                },
+                columnDefs: [
+                    {
+                        className: 'select-checkbox',
+                        targets: 0
+                    }
+                ],
+                columns: [
+                    {"data": "", render: $.defrender},
+                    {"data": "storeid", render: store36id},
+                    {"data": "custuserid", render: custuser36id},
+                    {"data": "nickname", render: $.defrender},
+                    {"data": "custusername", render: $.defrender},
+                    {"data": "pushtype", render: function(value){
+                        if(value==10){
+                            return "允许推送";
+                        }else{
+                            return "屏蔽推送";
+                        }
+                    }},
+                    {"data": "custmobilex", render:  $.defrender},
+                    {"data": "marks", render:  $.defrender},
+                    {"data": "followtime", render: Date.DateFormatter}
+                ]
+            });
+            //点击新增用户标签
+            $("#button-custmark-create").click(function(){
+                var data = mtable2.api(true).row({selected: true}).data();
+                if (!data || !data.storeid) {
+                    alert("请选择一条记录！");
+                    return;
+                }
+                $.ajax({
+                    url: "/pipes/merchmark/query",
+                    data:{"bean":$.objectToString({storeid:data.storeid})},
+                    type:"post",
+                    dataType:"JSON",
+                    success:function(res){
+                        var _html="";
+                        var rows = res.rows||[];
+                        var arr= data.marks;
+                        var selectmarkname ="";
+                        if(arr.length==0){
+                            for(var i=0;i<rows.length;i++){
+                                _html += '<label class="col-lg-3"><input name="markid" class="markid" value="'+rows[i].markid+'" type="hidden"><input type="checkbox" class="markname">'+rows[i].markname+'</label>';
+                            }
+                        }else{
+                            for(var i=0;i<rows.length;i++){
+                                for(var j=0;j<arr.length;j++){
+                                    if(arr[j]==rows[i].markname){
+                                        selectmarkname = '<input type="checkbox" class="markname" checked="checked">'+rows[i].markname+'</label>';
+                                        break;
+                                    }else{
+                                        selectmarkname = '<input type="checkbox" class="markname">'+rows[i].markname+'</label>';
+                                    }
+                                }
+                                _html+=' <label class="col-lg-3">' +
+                                        '<input name="markid" class="markid" value="'+rows[i].markid+'" type="hidden">' +selectmarkname;
+                            }
+                        }
+                        $("#dialog-custmark-update").modal('show');
+                        $("#markname").html(_html);
+                    },
+                    error:function(err){
+                        console.log(err)
+                    }
+                });
+            });
+            //点击提交新增用户标签
+            $("#formbtn-custmark-create").click(function(){
+                $(this).attr("disabled",true);
+                var data = mtable2.api(true).row({selected: true}).data();
+                var store36id=tx(data.storeid);
+                var custuser36id=tx(data.custuserid);
+                var arr= $("#dialog-custmark-update").find(".markname");
+                var marksname=[];
+                for(var i=0;i<arr.length;i++){
+                    if(arr.eq(i).is(":checked")){
+                        marksname.push(arr.eq(i).prev().val());
+                    }
+                }
+                $.post('/pipes/merchcust/updatemark/custuser36id:'+custuser36id+'/store36id:'+store36id+'?markids='+"["+marksname+"]",function(res){
+                    res = JSON.parse(res);
+                    $("#formbtn-custmark-create").removeAttr("disabled");
+                    if(res.retcode===0){
+                        $("#dialog-custmark-update").modal('hide');
+                        mtable2.api(true).draw(false);
+                    }
+                });
+            });
+            //点击添加昵称按钮
+            $("#button-custname-create").click(function(){
+                var data = mtable2.api(true).row({selected: true}).data();
+                if (!data || !data.storeid) {
+                    alert("请选择一条记录！");
+                    return;
+                }
+                $('#dialog-nickname-update').modal('show');
+                $("#custname").val(data.custusername);
+                $("#nickname").val(data.nickname||"");
+            });
+            //点击提交添加昵称
+            $("#nickname-create").click(function(){
+                var data = mtable2.api(true).row({selected: true}).data();
+                var store36id=tx(data.storeid);
+                var custuser36id=tx(data.custuserid);
+                var nickname = $("#nickname").val();
+                $.post('/pipes/merchcust/updatenickname/custuser36id:'+custuser36id+'/store36id:'+store36id+'?nickname="'+nickname+'"',function(res){
+                    $('#dialog-nickname-update').modal('hide');
+                    mtable2.api(true).draw(false);
+                })
+            });
+            //36进制转换方法
+            function tx(value){
+                return parseInt(value,10).toString(36)
+            }
+            //点击标签进行会员的筛选
+            $("#table-mark-sheet").on('click','td',function(){
+                var cols=[];
+                var data = mtable.api(true).row({selected: true}).data();
+                if(data&&data.markid){
+                    cols.push(data.markid);
+                    $("#hiddenmarkids").val(cols);
+                    mtable2.api(true).draw(false)
+                }
+            });
+            $("#allmark").click(function(){
+                $("#hiddenmarkids").val("");
+                mtable2.api(true).draw(false);
+            });
+            //标签验证
+            function markidvalidator() {
+            $('#form-merchmark-update').bootstrapValidator({
+                message: 'This value is not valid',
+                feedbackIcons: {/*输入框不同状态，显示图片的样式*/
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {/*验证*/
+                    markname: {/*键名和input name值对应*/
+                        message: 'The markname is not valid',
+                        validators: {
+                            notEmpty: {/*非空提示*/
+                                message: '标签名称不能为空'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        //绑定回车键事件
+            $("#markgroup").keydown(function(event){
+                event=document.all?window.event:event;
+                if((event.keyCode || event.which)==13){
+                    $("#formbtn-merchmark-update").trigger("click");
+                }
+            });
+        }
+    }
+</script>

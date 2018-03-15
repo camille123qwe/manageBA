@@ -1,0 +1,647 @@
+<div class="form-group">
+    <div class="col-lg-4 col-md-4 col-sm-4">
+        <div class="page-title">
+            <a id="addParent" href="javascript:void(0);" onclick="return false;"><i class="fa fa-plus"></i>新增职位</a>
+            <a id="updateParent" href="javascript:void(0);" onclick="return false;"><i class="fa fa-pencil-square-o"></i>修改职位</a>
+        </div>
+        <div class="panel-box">
+            <!--ztree树形栏目-->
+            <p style="font-size: 12px">
+                (右键可添加附属子职位/给职位添加管理权限)
+            </p>
+            <div id="tree" style="font-size: 16px">
+                <ul id="goodsTree" class="ztree" style="min-width: 220px;min-height: 360px;max-height: 550px">
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8 col-md-8 col-sm-8">
+        <div class="page-title">
+            <a id="button-merchUser-create" href="javascript:void(0);"><i class="fa fa-plus"></i>新增商户员工</a>
+            <a id="button-merchUser-update" href="javascript:void(0);"><i class="fa fa-pencil-square-o"></i>修改商户员工</a>
+        </div>
+        <div class="panel-box">
+            <div class="table-responsive">
+            <table id="table-merchUser-sheet" class="table table-hover" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>员工昵称</th>
+                    <th>员工账号</th>
+                    <th>状态</th>
+                    <th>手机号码</th>
+                    <th>备注</th>
+                    <th>创建时间</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        </div>
+    </div>
+</div>
+<div id="dialog-merchUser-update" class="modal fade" tabindex="-1" data-width="800" data-backdrop="static" data-keyboard="false" style="display: none;">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="recordclose">×</button>
+        <h4 id="dtitle-merchUser-update" class="modal-title">新增员工</h4>
+    </div>
+    <div class="modal-body">
+        <form id="form-merchUser-update" class="m-t form-horizontal" role="form">
+            <input  name="createtime" type="hidden" id="createtime">
+            <input name="merchid" type="hidden" id="merchid">
+            <input name="storeid" type="hidden" id="storeid">
+            <div class="table-responsive">
+                <table  cellspacing="0" width="100%">
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label class="col-lg-3 col-md-3 col-sm-3 control-label"><span style="color: red;">*&nbsp;</span>员工账号</label>
+                                <div class="col-lg-8 col-md-8 col-sm-8">
+                                    <input name="account" class="form-control" placeholder="由字母数字构成，长度5-16">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-3 col-md-3 col-sm-3 control-label"><span style="color: red;">*&nbsp;</span>所属职位</label>
+                                <div class="col-lg-8 col-md-8 col-sm-8">
+                                    <select name="merchroleid" class="form-control" id="merchuserRoleid"></select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-3 col-md-3 col-sm-3 control-label"><span style="color: red;">*&nbsp;</span>员工昵称</label>
+                                <div class="col-lg-8 col-md-8 col-sm-8"><input name="username" type="tel" class="form-control"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group" id="password">
+                                <label class="col-lg-3 col-md-3 col-sm-3 control-label"><span style="color: red;">*&nbsp;</span>密码</label>
+                                <div class="col-lg-8 col-md-8 col-sm-8"><input name="password" type="tel" class="form-control"></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-3 col-md-3 col-sm-3 control-label"><span style="color: red;">*&nbsp;</span>状态</label>
+                                <div class="col-lg-8 col-md-8 col-sm-8">
+                                    <select name="status" class="form-control">
+                                        <option value="10">正常</option>
+                                        <option value="20">待审批</option>
+                                        <option value="80">删除</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-3 col-md-3 col-sm-3 control-label"><span style="color: red;">*&nbsp;</span>手机号码</label>
+                                <div class="col-lg-8 col-md-8 col-sm-8"><input name="mobile" class="form-control"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label class="col-lg-3 col-md-3 col-sm-3 control-label">备注说明</label>
+                                <div class="col-lg-8 col-md-8 col-sm-8"><input  name="remark" class="form-control"></div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <br>
+                <button id="formbtn-merchUser-update" type="button" class="btn btn-theme btn-lg btn-block ">提 交</button><br>
+            </div>
+        </form>
+    </div>
+</div>
+<!--右键菜单-->
+<div id="treeMenu" style=" padding:8px; width: 150px;height: 80px; border:solid 1px cadetblue;background: white;position: absolute;color: black;display:none">
+    <ul id="treeMenuUl" style="height: 25px; line-height: 25px;font-size: 16px; margin: 0;padding: 0;">
+        <li style="list-style: none" onmouseover="style='background:#eee5a4;list-style:none'" onmouseleave="style='background:none;list-style:none'" value="1">添加职位</li>
+        <!--<li style="list-style: none" onmouseover="style='background:#eee5a4;list-style:none'" onmouseleave="style='background:none;list-style:none'" value="3">删除</li>-->
+        <li style="list-style: none" onmouseover="style='background:#eee5a4;list-style:none'" onmouseleave="style='background:none;list-style:none'" value="4">设置权限</li>
+    </ul>
+</div>
+<div id="dialog-role-update" class="modal fade" tabindex="-1"  data-backdrop="static" data-keyboard="false" data-width="500" data-height="200" style="display: none;">
+    <div class="modal-header">
+        <button type="button" class="close" id="quanClose" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 id="dtitle-role-update" class="modal-title">新增职位</h4>
+    </div>
+    <div class="modal-body">
+        <form id="form-role-update" class="m-t form-horizontal" enctype="multipart/form-data" role="form">
+            <input name="createtime" type="hidden">
+            <input name="merchroleid" id="merchroleid" type="hidden">
+            <input name="p_roleid" id="p_roleid" type="hidden">
+            <input name="rolelevel" id="rolelevel" type="hidden">
+            <div class="form-group">
+                <label class="col-lg-3 control-label" >状 态</label>
+                <div class="col-lg-8" >
+                    <select name="status" class="form-control" required=""   data-bv-trigger="blur"  data-bv-notempty-message="状态不能为空">
+                        <option value="10" style="color:green;">正常</option>
+                        <option value="20" style="color:#FF00FF;">待审批</option>
+                        <option value="80" style="color:red;">删除</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label" >职位名称</label>
+                <div class="col-lg-8">
+                    <input class="form-control" name="rolename" id="markgroup">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-5 col-lg-offset-3">
+                    <button id="formbtn-role-update" type="button" class="btn btn-theme btn-lg btn-block ">提 交</button><br>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="dialog-merchpermission" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">分配权限</h4>
+    </div>
+    <div class="modal-body">
+        <p>勾选您想要给 <span id="rolename" style="color: red;"></span> 设置的权限</p>
+        <ul class="ztree" id="pmTree" style="border: none;background: none;height: 450px">
+
+        </ul>
+    </div>
+    <div class="modal-footer">
+        <button id="formbtn-pmtree-update" type="button" class="btn btn-theme btn-lg btn-block">提 交</button>
+    </div>
+</div>
+<script>
+    chaxun();
+    var node="";
+    var roleHtml="";
+    var optionNode="";
+    function chaxun() {
+        $.ajax({
+            url:"/pipes/b2buser/role/query",
+            data:{"bean":"{}"},
+            type:"POST",
+            dataType:"JSON",
+            success:function(data){
+                var zNodes = data.rows;
+                roleHtml = data.rows;
+                zTreeInit(settings,zNodes);
+            },
+            error:function(err){
+                console.log(err);
+            }
+        });
+    }
+    var settings = {
+        data : {
+            key:{
+                name:"rolename"
+            },
+            simpleData : {
+                enable : true,
+                isSimpleData : false, //数据是否采用简单 Array 格式，默认false
+                treeNodeKey : "merchroleid", //在isSimpleData格式下，当前节点id属性
+                treeNodeParentKey : "p_roleid", //在isSimpleData格式下，当前节点的父节点id属性
+                showLine : true, //是否显示节点间的连线
+                rootPId : 0,
+                idKey:"merchroleid",
+                pIdKey:"p_roleid",
+                expandFlag :true
+                //不设置rootId，则树栏目的pId则为null
+            }
+        },
+        callback : {
+            onRightClick : zTreeOnRightClick,
+            beforeClick: zTreeOnclick
+        }
+    };
+    function zTreeInit(settings,zNodes){
+        $.fn.zTree.init($("#goodsTree"),settings,zNodes);
+        var treeObj = $.fn.zTree.getZTreeObj("goodsTree");
+        treeObj.expandAll(true);
+        initMenu();
+    }
+    //右击鼠标事件
+    function zTreeOnRightClick(event,treeId,treeNode){
+        event.preventDefault();//屏蔽系统右键事件
+        if(treeNode!=null){
+            var _top=event.clientY;
+            var _left=event.clientX;
+            node=treeNode;
+            $("#treeMenu").show().css({top:_top,left:_left});
+        }
+    }
+    //单机鼠标左键事件
+    function zTreeOnclick(treeId, treeNode, clickFlag) {
+        optionNode = treeNode;
+    }
+    $("#updateParent").click(function(){
+        if(optionNode.merchroleid){
+            if(optionNode.merchroleid==48){
+                alert("管理员职位不可修改");
+                return;
+            }
+            if(optionNode.merchroleid==49){
+                alert("临时角色职位不可修改");
+                return;
+            }
+            $("#form-role-update").form('load',optionNode);
+            $("#dtitle-role-update").text("修改职位");
+            $("#dialog-role-update").modal('show');
+        }else{
+            alert("请单击你想要修改的职位名称");
+        }
+    });
+    $("#addParent").click(function(){
+        $("#form-role-update").form('reset');
+        formRest();
+        $("#dtitle-role-update").text("新增职位");
+        $("#dialog-role-update").modal('show');
+    });
+    function formRest(){
+        $("#createtime").val("");
+        $("#rolelevel").val("");
+        $("#merchroleid").val("");
+        $("#p_roleid").val("");
+    }
+    //点击其他地方菜单消失
+    $(document).click(function(){
+        $("#treeMenu").hide();
+    });
+    //初始化编辑菜单
+    function initMenu(){
+        var menuUl=$("#treeMenuUl");
+        var menuLi=menuUl.find("li");
+        for(var v = 0; v<menuLi.length; v++){
+            menuLi.eq(v).unbind("click").click(function(){
+                menuLiClick(this);
+            });
+        }
+    }
+    //判断所选择的编辑项
+    function menuLiClick(self){
+        if(self.value == "1"){
+            var Level = Number(node.level)+1;
+            $("#form-role-update").form('reset');
+            formRest();
+            $("#dtitle-role-update").text("新增职位");
+            $("#p_roleid").val(node.merchroleid);
+            $("#rolelevel").val(Level);
+            $("#dialog-role-update").modal('show');
+        }else if(self.value== "4"){
+            pmChaxun(node.merchroleid);
+            $("#dialog-merchpermission").modal('show');
+        }
+    }
+    //提交新增职位
+    $("#formbtn-role-update").click(function(){
+        var form=$("#form-role-update");
+        var json = form.serializeJson();
+        var data = "";
+        var cols = [];
+        if(!json.merchroleid){
+            data = {
+                "bean":$.objectToString(json),
+                "merchuserids":$.objectToString([])
+            }
+        }else{
+            for(key in json){
+                cols.push(key)
+            }
+            data = {
+                "bean":$.objectToString(json),
+                "merchuserids":$.objectToString([]),
+                "cols":$.objectToString(cols)
+            }
+        }
+        $.ajax({
+            url:'/pipes/b2buser/role/update',
+            type:'JSON',
+            data:data,
+            error:function(err){
+                console.log(err);
+            },
+            success:function(res){
+                if (data && data.retcode && data.retcode > 0)
+                {
+                    alert(data.retinfo);
+                } else {
+                    alert("操作成功");
+                    $("#dialog-role-update").modal('hide');
+                    chaxun();
+                }
+            }
+        })
+    });
+    //查询权限树
+    function pmChaxun(id){
+        $("#rolename").text(node.rolename);
+        var pmSettings={
+            data : {
+                simpleData : {
+                    enable : true,
+                    isSimpleData : false, //数据是否采用简单 Array 格式，默认false
+                    treeNodeKey : "merchpermissionid", //在isSimpleData格式下，当前节点id属性
+                    treeNodeParentKey : "p_permissionid", //在isSimpleData格式下，当前节点的父节点id属性
+                    showLine : true, //是否显示节点间的连线
+                    rootPId : 0,
+                    idKey:"merchpermissionid",
+                    pIdKey:"p_permissionid",
+                    expandFlag :true
+                    //不设置rootId，则树栏目的pId则为null
+                }
+            },
+            callback : {
+                beforeClick: zTreeOnclick
+            },
+            check:{
+                enable: true,
+                chkStyle: "checkbox",
+                chkboxType: { "Y": "ps", "N": "ps" }
+            }
+
+        };
+        $.ajax({
+            url:"/pipes/b2buser/permission/querylist/"+id,
+            type:"POST",
+            dataTypr:"JSON",
+            data:{},
+            error:function(err){
+                console.log(err);
+            },
+            success:function (res) {
+                res = JSON.parse(res);
+                var pmNodes = res.result;
+                $.fn.zTree.init($("#pmTree"),pmSettings,pmNodes);
+                var treeObj = $.fn.zTree.getZTreeObj("pmTree");
+                treeObj.expandAll(true);
+                var node = treeObj.getNodesByParam("roleHave", 1);
+                for(var i=0;i<node.length;i++){
+                    treeObj.checkNode(node[i]);
+                }
+            }
+        });
+
+        $("#formbtn-pmtree-update").click(function(){
+            var treeObj = $.fn.zTree.getZTreeObj("pmTree");
+            var nodes = treeObj.getCheckedNodes(true);
+            var merchpermissionids = [];
+            var merchroleid = id;
+            for(var i=0;i<nodes.length;i++){
+                merchpermissionids.push(nodes[i].merchpermissionid);
+            }
+            var  data = {
+                merchroleid:merchroleid,
+                merchpermissionids:$.objectToString(merchpermissionids)
+            };
+            $.ajax({
+                url:"/pipes/b2buser/permission/update",
+                data:data,
+                type:"POST",
+                dataType:"JSON",
+                error:function(err){
+                    console.log(err);
+                },
+                success:function (res) {
+                    if(res.retcode==0){
+                        alert("设置权限操作成功");
+                        $("#dialog-merchpermission").modal('hide');
+                    }
+                }
+            })
+        });
+    }
+</script>
+<script>
+    {
+
+        $(".form-group").css('marginRight',0);
+        function roleChaxun(){
+            $.ajax({
+                url:"/pipes/b2buser/role/query",
+                data:{"bean":"{}"},
+                type:"POST",
+                dataType:"JSON",
+                success:function(data){
+                    var arr = data.rows;
+                    var _html = "";
+                    for(var i=0;i<arr.length;i++){
+                        _html+='<option value="'+arr[i].merchroleid+'">'+arr[i].rolename+'</option>'
+                    }
+                    $("#merchuserRoleid").html(_html);
+                    $("#merchid").val(system_merchuser.merchid);
+                    $("#storeid").val(localStorage.getItem('storeid'));
+                },
+                error:function(err){
+                    console.log(err);
+                }
+            });
+
+        }
+        //-------------------------点击新增员工信息-----------------------------
+        $('#button-merchUser-create').bind("click", function () {
+            $('#dtitle-merchUser-update').html("新增员工");
+            $("#form-merchUser-update").form('reset');
+            roleChaxun();
+            $('#dialog-merchUser-update').modal('show');
+            $("#password").show();
+            $("#merchuserid").val("");
+            merchUserValidator();
+        });
+        var mtable = $('#table-merchUser-sheet').dataTable({
+            ajax: {
+                url: "/pipes/merchuser/queryall",
+                dataSrc:"data",
+                data: function (f) {
+                    f.bean = JSON.stringify({});
+                    f.sort = 'createtime';
+                    f.order = 'DESC';
+                }
+            },
+            columnDefs: [
+                {
+                    className: 'select-checkbox',
+                    targets: 0
+                }
+            ],
+            columns: [
+                {"data": " ", render: $.defrender},
+                {"data":"username",render:$.defrender},
+                {"data": "account", render: $.defrender},
+                {"data": "status", render: defStatusRender},
+                {"data": "mobile", render: $.defrender},
+                 {"data": "remark", render: $.defrender},
+                {"data": "createtime", render: Date.DateFormatter}
+            ]
+        });
+        //-------------------------点击修改员工信息-----------------------------------------------------
+        $('#button-merchUser-update').bind("click", function () {
+            var data = mtable.api(true).row({selected: true}).data();
+            if (!data || !data.merchid) {
+                alert("请选择一条记录！");
+                return;
+            }
+            $('#dtitle-merchUser-update').html("修改员工");
+            $("#form-merchUser-update").form('reset');
+            roleChaxun();
+            $("#form-merchUser-update").form('load', data);
+            $("#password").hide();
+            merchUserValidator();
+            $('#dialog-merchUser-update').modal('show');
+        });
+        //-------------------------管理员重置员工密码--------------------------------------------------
+        $("#button-password-reset").bind("click", function () {
+            var data = mtable.api(true).row({selected: true}).data();
+            if (!data || !data.merchid) {
+                alert("请选择一条记录！");
+                return;
+            }
+            $('#dtitle-merchUser-update').html("员工密码重置");
+            $("#form-merchUser-update").form('reset');
+            $("#form-merchUser-update").form('load', data);
+            if (data.type == "10") {
+                $("select[name='type']").html('<option value="10">管理员</option>');
+            }
+            $("#password").show();
+            $("#password").find("input").val("");
+            var storename = $("#nowStorename").text();
+            $("#storeid").html('<option value="' + data.storeid + '">' + storename + '</option>');
+            merchUserValidator();
+            $('#dialog-merchUser-update').modal('show');
+        });
+        //-------------------------点击提交按钮新增员工记录--------------------------------------------
+        $("#formbtn-merchUser-update").on("click", function () {
+            $(this).attr("disabled", true);
+            var form = $("#form-merchUser-update");
+            var json = form.serializeJson();
+            if (json.password.length < 32) {
+                json.password = $.md5(json.password);
+            }
+            $('#form-merchUser-update').bootstrapValidator('validate');
+            if (json.type == 10) {
+                json.admin = true;
+            }
+            //-----去json数据中的空格-----------------
+            var json1 = {};
+            $.each(json, function (key, value) {
+                value = (value + "").replace(/\s/g, '');
+                json1[key] = value;
+            });
+            json = json1;
+
+            var merchroleid = json.merchroleid;
+            delete json.merchroleid;
+            var data = "";
+            if (json.merchuserid) {
+                var cols = [];
+                for (var i in json) {
+                    if (json.password.length > 32) {
+                        if (i != 'password') {
+                            cols.push(i);
+                        }
+                    } else {
+                        cols.push(i);
+                    }
+                }
+                data = {
+                    "bean": $.objectToString(json),
+                    "merchroleid":merchroleid,
+                    "cols": $.objectToString(cols)
+                }
+            } else {
+                data = {
+                    "merchroleid":merchroleid,
+                    "bean": $.objectToString(json)
+                }
+            }
+            if ($('#form-merchUser-update').data('bootstrapValidator').isValid()) {
+                $.ajax({
+                    cache: false,
+                    dataType: "json",
+                    type: "POST",
+                    url: '/pipes/b2buser/manage/update',
+                    data: data,
+                    error: function () {//请求失败处理函数
+                        $("#formbtn-merchUser-update").removeAttr("disabled");
+                        alert('请求失败');
+                    },
+                    success: function (data) {
+                        $("#formbtn-merchUser-update").removeAttr("disabled");
+                        if (data && data.retcode && data.retcode > 0) {
+                            alert(data.retinfo);
+                        } else {
+                            alert("保存成功");
+                            $('#form-merchUser-update').data('bootstrapValidator').destroy();
+                            $('#form-merchUser-update').data('bootstrapValidator', null);
+                            $("#dialog-merchUser-update").modal('hide');
+                            mtable.api(true).draw(false);
+                        }
+                    }
+                });
+            } else {
+                $("#formbtn-merchUser-update").removeAttr("disabled");
+                alert("验证失败，请按要求填写信息")
+            }
+        });
+        $("#recordclose").on("click", function () {
+            $('#form-merchUser-update').data('bootstrapValidator').destroy();
+            $('#form-merchUser-update').data('bootstrapValidator', null);
+        });
+        //---------------表单验证----------------------------------------------
+        function merchUserValidator() {
+            $("#form-merchUser-update").bootstrapValidator({
+                message: 'This value is not valid',
+                feedbackIcons: {
+                    /*输入框不同状态，显示图片的样式*/
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    account: {
+                        message: 'The billno is not valid',
+                        validators: {
+                            notEmpty: {
+                                /*非空提示*/
+                                message: '员工账号不能为空'
+                            },
+                            regexp: {
+                                /* 只需加此键值对 */
+                                regexp: /^[a-zA-Z][\d\w@.]{4,36}$/,
+                                message: '员工帐号必须以字母开头，5-36位长度,不能包含汉字和特殊符号'
+                            }
+                        }
+                    },
+                    password: {
+                        message: 'The password is not valid',
+                        validators: {
+                            notEmpty: {
+                                message: '密码不能为空'
+                            },
+                            regexp: {
+                                regexp: /^\w{6,20}$/,
+                                message: '密码只能由字母数字下划线组成，长度为6-20位'
+                            }
+                        }
+                    },
+                    username: {
+                        message: 'The username is not valid',
+                        validators: {
+                            notEmpty: {
+                                message: '员工昵称不能为空'
+                            }
+                        }
+                    },
+                    mobile: {
+                        message: 'The mobile is not valid',
+                        validators: {
+                            notEmpty: {
+                                message: '手机号码不能为空'
+                            },
+                            regexp: {
+                                regexp: /^1\d{10}$/,
+                                message: '请输入正确的手机号码'
+                            }
+                        }
+                    }
+                }
+            })
+        }
+    }
+</script>

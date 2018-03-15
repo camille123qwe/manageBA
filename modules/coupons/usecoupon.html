@@ -1,0 +1,376 @@
+<div class="row">
+    <span style="padding: 15px 0 0 15px;;color: #006dcc" id="usecoupons-title">
+
+    </span>
+    <span style="color:#114da9;margin-left: 20px">当前门店:<span id="nowStorename"></span></span>
+</div>
+<div class="page-title">
+    <a id="button-usecoupon-create" href="javascript:void(0);"><i class="fa fa-plus"></i>使用优惠券</a>
+ <!--   <a id="button-usecoupon-update" href="javascript:void(0);"><i class="fa fa-pencil-square-o"></i>查看优惠信息</a>-->
+
+</div>
+<div class="panel-box">
+    <div class="page-title">
+        <form class="filter-search" >
+            <div style="display: inline-block;margin: 0 50px 0 0;">
+                <label >选择导购：</label>
+                <select id="filter_saleuserid" name="saleuserid" style="width:200px;">
+                    <option value="0">全部导购</option>
+                </select>
+            </div>
+            <i id="filter-merchUser-qrybtn" class="fa fa-search" style="position: static;"></i>
+        </form>
+    </div>
+    <div class="table-responsive">
+        <table id="table-usequan-sheet" class="table table-hover" cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <th>优惠券标题</th>
+                <th>消费金额</th>
+                <th>导购</th>
+                <th>用户识别码</th>
+                <th>状态</th>
+                <th>使用时间</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+<div id="dialog-merchUser-update" class="modal fade" tabindex="-1" data-width="550" data-backdrop="static" data-keyboard="false" style="display: none;">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="recordclose">×</button>
+        <h4 id="dtitle-merchUser-update" class="modal-title">修改企业</h4>
+    </div>
+    <div class="modal-body">
+        <form id="form-usequan-update" class="m-t form-horizontal" role="form">
+            <input name="merchid" type="hidden">
+            <input  name="createtime" type="hidden">
+            <input name="quanuseid" type="hidden">
+            <div class="form-group">
+                <label class="col-lg-3 control-label">当前门店</label>
+                <div class="col-lg-9">
+                    <select name="storeid" id="storeid" class="form-control">
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label"><span style="color: red;">*&nbsp;</span>选择导购</label>
+                <div class="col-lg-9">
+                    <select name="saleuserid" id="saleuser" class="form-control">
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label"><span style="color: red;">*&nbsp;</span>用户编码</label>
+                <div class="col-lg-9"><input name="custuserid" class="form-control"></div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label"><span style="color: red;">*&nbsp;</span>消费金额</label>
+                <div class="col-lg-9"><input name="money" type="number" class="form-control"></div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label"><span style="color: red;">*&nbsp;</span>选择优惠券</label>
+                <div class="col-lg-9">
+                    <select name="quanid" id="coupontitle" class="form-control">
+
+                    </select>
+                </div>
+            </div>
+            <br>
+            <button id="formbtn-merchUser-update" type="button" class="btn btn-theme btn-lg btn-block ">提 交</button><br>
+        </form>
+    </div>
+</div>
+<div id="mc" class="modal fade" tabindex="-1" data-width="550" data-backdrop="static" data-keyboard="false" style="display: none;">
+    <div class="modal-header">
+        <h4 class="modal-title">当前门店下暂无优惠券可以使用，请先前往优惠管理添加</h4>
+        <button type="button" id="goCoupon" class="btn btn-primary" style="margin-top: 20px;float: right;margin-right: 20px;">确定</button>
+    </div>
+</div>
+<script>
+    {
+        $(document).ready(function(){
+            if(system_merchuser.type==10){
+                $("#usecoupons-title").html('<a  href="javascript:openModule(\'modules/index/indexClick.html\',400);" style="color: #006dcc">商户首页</a>'+
+                        '&gt;&gt;<a href="javascript:openModule(\'modules/store/storeindex.html\',101);" style="color: #006dcc">门店首页</a>' +
+                        '&gt;&gt;<a href="javascript:openModule(\'modules/coupons/usecoupon.html\',404);" style="color: #006dcc">使用优惠券</a>')
+            }else{
+                $("#usecoupons-title").html('<a href="javascript:openModule(\'modules/store/storeindex.html\',101);" style="color: #006dcc">门店首页</a>' +
+                        '&gt;&gt;<a href="javascript:openModule(\'modules/coupons/usecoupon.html\',404);" style="color: #006dcc">使用优惠券</a>')
+            }
+            $(".pull-left").show();
+            $("#menu").show();
+            $("body").removeClass("widescreen");
+        });
+        if (system_merchuser && system_merchuser.merchuserid) {
+            var storeid = common.getData('storeid');
+            if (!storeid) {
+                storeid = '0'
+            }
+            var storename=common.getData('storename');
+            $("#nowStorename").text(storename);
+                //获取当前门店下得导购员列表
+                $.ajax({
+                    url: "/pipes/merchsaler/query",
+                    data: {"bean": $.objectToString({storeid: storeid})},
+                    type: "POST",
+                    dataType: "JSON",
+                    success: function (res) {
+                        if (res && res.retcode > 0) {
+                            alert(res.retinfo);
+                        } else {
+                            var arr = res.rows || [];
+                            saleusearr=arr;
+                            var _html = "";
+                            for (var i = 0; i < arr.length; i++) {
+                                _html += '<option value="' + arr[i].saleuserid + '">' + arr[i].username + '</option>';
+                            }
+                            $("#filter_saleuserid").append(_html);
+                            $("#saleuser").html(_html);
+                            if(arr==[]||_html==""){
+                                $("#saleuser").html('<option>请前往导购管理先添加导购</option>');
+                            }
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+                //获取当前门店名称
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    data: {
+                        "bean": $.objectToString({storeid: common.getData('storeid')})
+                    },
+                    url: '/pipes/merchstore/query',
+                    error: function () {//请求失败处理函数
+                        alert('请求失败');
+                    },
+                    success: function (data) {
+                        if (data && data.retcode > 0) {
+                            alert(data.retinfo);
+                        } else {
+                            $('#filter_merch').find('option').remove();
+                            $("#storeid").find('option').remove();
+                            var content = '';
+                            var headcontent = '<option value="0">不限制门店</option>';
+                            var rows = data.rows || [];
+                            for (var i = 0; i < rows.length; i++) {
+                                content = content + '<option value="' + rows[i].storeid + '">' + rows[i].storename + '</option>';
+                                /*$("#nowStorename").text(rows[i].storename);*/
+                            }
+                            $('#storeid').html(content);
+                        }
+                    }
+                });
+                //获取当前门店下优惠券列表
+                var json = {
+                    storeid: common.getData('storeid'),
+                    status: 10
+                };
+                $.ajax({
+                    url: "/pipes/merchquan/query",
+                    type: "POST",
+                    dataType: "JSON",
+                    data: {"bean": $.objectToString(json)},
+                    success: function (res) {
+                        if (res && res.retcode > 0) {
+                            alert(re.retinfo);
+                        } else {
+                            var arr = res || [];
+                            if (arr.length == 0) {
+                                $("#mc").modal('show');
+                                $("#coupontitle").html('<option>当前没有优惠券可以选择</option>');
+                            } else {
+                                var _html = "";
+                                for (var i = 0; i < arr.length; i++) {
+                                    _html += '<option value="' + arr[i].quanid + '">' + arr[i].quantitle + '</option>';
+                                }
+                                $("#coupontitle").html(_html);
+                            }
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            $("#form-usequan-update").find('.form-group').css("marginRight", "0");
+            //--------------获取消费过的优惠券-------------------------------------
+            var mtable = $('#table-usequan-sheet').dataTable({
+                ajax: {
+                    url: "/pipes/merchquan/usequery",
+                    dataSrc:"data",
+                    data: function (f) {
+                        f.bean = JSON.stringify({
+                            storeid:storeid,
+                            saleuserid:$("#filter_saleuserid").val()
+                        });
+                        f.sort = 'createtime';
+                        f.order = 'DESC';
+                    }
+                },
+                "aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                columns: [
+                    {"data":"quantitle",render:$.defrender},
+                    {"data":"money",render:function(value){
+                        return value/100+"元";
+                    }},
+                    {"data":"saleuserid",render:function(value){
+                        if(saleusearr){
+                            for(var i=0;i<saleusearr.length;i++){
+                                if(value==saleusearr[i].saleuserid){
+                                    return saleusearr[i].username
+                                }
+                            }
+                        }else{
+                            return value;
+                        }
+                    }},
+                    {"data":"custuserid",render:function(value,type,full){
+                        var str = value.toString(36);
+                        return str;
+                    }},
+                    {"data":"usestate",render:function(value,type,full){
+                        if(value==10){
+                            return "优惠执行完成";
+                        }else if(value==20){
+                            return "未执行优惠，请稍后";
+                        }else if(value==30){
+                            return "执行异常"+full.usedesc;
+                        }
+                    }},
+                    {"data": "createtime", render: Date.DateFormatter}
+                ]
+            });
+            //根据导购搜索优惠券使用信息
+            $("#filter-merchUser-qrybtn").click(function(){
+                $('#table-usequan-sheet').dataTable().fnPageChange(0);
+                mtable.api(true).draw(false);
+            });
+            //-------------------------点击使用优惠券----------------------------
+            $('#button-usecoupon-create').bind("click", function () {
+                $('#dtitle-merchUser-update').html("使用优惠券");
+                $("#form-usequan-update").form('reset');
+                $('#dialog-merchUser-update').modal('show');
+                merchUserValidator();
+            });
+            //-------------------------点击提交按钮使用优惠券--------------------------------------------
+            $("#formbtn-merchUser-update").on("click", function(){
+            $(this).attr("disabled",true);
+            var form=$(" #form-usequan-update");
+            var json = form.serializeJson();
+            json.quantitle=$("#coupontitle").find("option:selected").text();
+            json.merchid = system_merchuser.merchid;
+            json.money = json.money*100;
+            json.custuserid =parseInt(json.custuserid,36);
+            $('#form-usequan-update').bootstrapValidator('validate');
+            //-----去json数据中的空格-----------------
+            var json1= {};
+            $.each(json, function(key, value){
+                value = (value + "").replace(/\s/g,'');
+                json1[key] = value;
+            });
+            var data  = {"bean":$.objectToString(json1)};
+            if( $('#form-usequan-update').data('bootstrapValidator').isValid()){
+                $.ajax({
+                    cache: false,
+                    dataType: "json",
+                    type: "POST",
+                    url: '/pipes/merchquan/usequan',
+                    data: data,
+                    error: function () {//请求失败处理函数
+                        $("#formbtn-merchUser-update").removeAttr("disabled");
+                        alert('请求失败');
+                    },
+                    success: function (data) {
+                        $("#formbtn-merchUser-update").removeAttr("disabled");
+                        if (data && data.retcode && data.retcode > 0)
+                        {
+                            alert(data.retinfo);
+                            mtable.api(true).draw(false);
+                        } else {
+                            alert("保存成功");
+                            $('#form-usequan-update').data('bootstrapValidator').destroy();
+                            $('#form-usequan-update').data('bootstrapValidator', null);
+                            $("#dialog-merchUser-update").modal('hide');
+                            mtable.api(true).draw(false);
+                        }
+                    }
+                });
+            }else{
+                $("#formbtn-merchUser-update").removeAttr("disabled");
+                alert("验证失败，请按要求填写信息");
+            }
+        });
+            $("#recordclose").on("click",function(){
+            $('#form-usequan-update').data('bootstrapValidator').destroy();
+            $('#form-usequan-update').data('bootstrapValidator', null);
+        });
+            //---------------表单验证----------------------------------------------
+            function merchUserValidator(){
+             $("#form-usequan-update").bootstrapValidator({
+                message: 'This value is not valid',
+                feedbackIcons: {/*输入框不同状态，显示图片的样式*/
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields:{
+                    account:{
+                        message: 'The billno is not valid',
+                        validators: {
+                            notEmpty: {/*非空提示*/
+                                message: '员工账号不能为空'
+                            },
+                            regexp: {
+                                /* 只需加此键值对 */
+                                regexp: /^[\d\w,：@.]+$/, message: '员工帐号不能包含汉字'
+                            }
+                        }
+                    },
+                    password:{
+                        message: 'The password is not valid'
+                        ,
+                        validators: {
+                            notEmpty: {
+                                message: '密码不能为空'
+                            },
+                            regexp: {
+                                regexp:/^\w{6,20}$/,
+                                message: '密码只能由字母数字下划线组成，长度为6-20位'
+                            }
+                        }
+                    },
+                    username:{
+                        message: 'The username is not valid',
+                        validators: {
+                            notEmpty: {
+                                message: '员工昵称不能为空'
+                            }
+                        }
+                    },
+                    mobile:{
+                        message: 'The mobile is not valid'
+                        ,
+                        validators:{
+                            notEmpty: {
+                                message: '手机号码不能为空'
+                            },
+                            regexp: {
+                                regexp:/^1\d{10}$/,
+                                message: '请输入正确的手机号码'
+                            }
+                        }
+                    }
+                }
+            });
+            }
+            $("#goCoupon").click(function(){
+                openModule('modules/coupons/coupons.html',401);
+                $("#mc").modal('hide');
+            });
+        }
+    }
+</script>

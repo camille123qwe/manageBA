@@ -1,0 +1,168 @@
+*{
+    margin:0;
+    padding:0;
+}
+html,body{
+    width:100%;
+   /* height: 100%;*/
+}
+body{
+    margin-bottom: 88px;
+}
+#container{
+    background: white;
+}
+#banner{
+    width: 18.75rem;
+    height: 19.5rem;
+    background: url("bg_banner@2x.png") no-repeat;
+    background-position: center;
+    background-size: cover;
+    margin:auto;
+    position: relative;
+}
+#content{
+    width:14.95rem;
+    margin:auto;
+    height:10.75rem;
+    padding-top: 0.7rem;
+}
+#tel,#yzm,#picyzm{
+    width:100%;
+    height:2.05rem;
+    border:solid 1px #e5e5e5;
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+}
+#tel span,#yzm span,#picyzm span{
+    display: inline-block;
+    padding: 0.55rem 0 0 0.5rem;
+    font-size: 0.8rem;
+    color: #666666;
+}
+#tel input{
+    width: 10rem;
+    height: 1.4rem;
+    border: none;
+    display: inline-block;
+    font-size: 0.8rem;
+    outline: none;
+    color: #666666;
+}
+#yzm input,#picyzm input{
+    width: 5rem;
+    height: 1.4rem;
+    border: none;
+    display: inline-block;
+    font-size: 0.8rem;
+    outline: none;
+    color: #666666;
+}
+#picyzm div{
+    display: table-cell;
+    text-align: center;
+    width: 5.5rem;
+    float: right;
+    height: 1.85rem;
+    padding-top: 0.25rem;
+    vertical-align: middle;
+
+}
+#yzimg{
+    font-size: 10px;
+    margin:0 auto;
+    display: block;
+    vertical-align: middle;
+    width: 3.5rem;
+    height: 1.5rem;
+    line-height: 1.5rem;
+
+}
+#shuaxin{
+    float: right;
+    width: 1.2rem;
+    height: 1.2rem;
+    padding-top: 0.2rem;
+}
+.button{
+    display: inline-block;
+    width: 4.5rem;
+    float: right;
+    font-size: 0.75rem;
+    color: #ffffff;
+    background: #f17a00;
+    height:1.85rem;
+    margin: 0.1rem;
+    text-align: center;
+    line-height: 1.85rem;
+    border-radius: 0.5rem;
+    border:none;
+    outline: none;
+}
+#submit{
+    width: 100%;
+    height:2.5rem;
+    background: #f17a00;
+    border-radius: 10px;
+    text-align: center;
+    line-height: 2.5rem;
+    font-size: 0.8rem;
+    color: #ffffff;
+    font-weight: bold;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+.grey{
+    background: grey;
+    font-size: 0.6rem;
+    width:4.5rem;
+}
+.error,.error2,.error3{
+    font-size: 0.6rem;
+    color: red;
+    margin-top: -0.5rem;
+    margin-bottom: 0.5rem;
+    display: none;
+}
+#coupon{
+    width:12.5rem;
+    height:6.25rem;
+    position: absolute;
+    top:6.4rem;
+    left:3.25rem;
+    color: #ffffff;
+    text-align: center;
+}
+#couponfooter{
+    width:11rem;
+    height:2.2rem;
+    position: absolute;
+    left:3.9rem;
+    top:14rem;
+    color: #ffffff;
+    margin-top: 0.5rem;
+}
+#coupon h1{
+    font-size: 1.5rem;
+    text-align: center;
+}
+#coupon h2{
+    font-size: 0.8rem;
+    text-align: center;
+}
+#couponfooter h2{
+    font-size: 0.9rem;
+    text-align: center;
+}
+.button,#submit{
+    cursor:pointer;
+}
+#coupon p{
+    font-weight: bold;
+    height: 2rem;
+    line-height: 4rem;
+}
+.nocoupon{
+    height: 6.25rem;
+    line-height: 6.25rem;
+}

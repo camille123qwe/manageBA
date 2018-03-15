@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width,user-scalable=0,initial-scale=1.0">
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <title></title>
+    <style>
+        *{
+            margin:0;
+            padding: 0;
+            font-family: 微软雅黑;
+        }
+        html,body{
+            width: 100%;
+            height:100%;
+            overflow-x: hidden;
+        }
+        #header{
+            width:100%;
+            height: 18.7rem;
+            background: url("bg_H5zengsong@2x.png") no-repeat;
+            background-size: contain;
+            position: relative;
+        }
+        #message{
+            width: 15.75rem;
+            height: 7rem;
+            margin: auto;
+            position: absolute;
+            top: 4rem;
+            left: 1.5rem;
+            text-align: center;
+            color: #ffffff;
+            font-size: 0.8rem;
+        }
+        #message>p:first-child{
+            font-size: 1rem;
+        }
+        #content{
+            width:14.95rem;
+            margin:auto;
+            height:10.75rem;
+            padding-top: 0.7rem;
+        }
+        #tel,#yzm,#picyzm{
+            width:100%;
+            height:2.05rem;
+            border:solid 1px #e5e5e5;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+        }
+        #tel span,#yzm span,#picyzm span{
+            display: inline-block;
+            padding: 0.55rem 0 0 0.5rem;
+            font-size: 0.8rem;
+            color: #666666;
+        }
+        #tel input{
+            width: 10rem;
+            height: 1.4rem;
+            border: none;
+            display: inline-block;
+            font-size: 0.8rem;
+            outline: none;
+            color: #666666;
+        }
+        #yzm input,#picyzm input{
+            width: 4.5rem;
+            height: 1.4rem;
+            border: none;
+            display: inline-block;
+            font-size: 0.8rem;
+            outline: none;
+            color: #666666;
+        }
+        .button{
+            display: inline-block;
+            width: 4.5rem;
+            float: right;
+            font-size: 0.75rem;
+            color: #ffffff;
+            background: #fd6335;
+            height:1.85rem;
+            margin: 0.1rem;
+            text-align: center;
+            line-height: 1.85rem;
+            border-radius: 0.5rem;
+            border:none;
+            outline: none;
+        }
+        #submit{
+            width: 100%;
+            height:2.5rem;
+            background: #fd6335;
+            border-radius: 10px;
+            text-align: center;
+            line-height: 2.5rem;
+            font-size: 0.8rem;
+            color: #ffffff;
+            font-weight: bold;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+        .grey{
+            background: grey;
+            font-size: 0.6rem;
+            width:4.5rem;
+        }
+        .error,.error2,.error3{
+            font-size: 0.6rem;
+            color: red;
+            margin-top: -0.5rem;
+            margin-bottom: 0.5rem;
+            display: none;
+        }
+        /*#coupon{
+            width:12.5rem;
+            height:6.25rem;
+            position: absolute;
+            top:6.4rem;
+            left:3.25rem;
+            color: #ffffff;
+        }
+        #couponfooter{
+            width:11rem;
+            height:2.2rem;
+            position: absolute;
+            left:3.9rem;
+            top:14rem;
+            color: #ffffff;
+            margin-top: 0.5rem;
+        }*/
+        #coupon h1{
+            font-size: 1.5rem;
+            text-align: center;
+        }
+        #coupon h2{
+            font-size: 0.8rem;
+            text-align: center;
+        }
+        #couponfooter h2{
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        .button,#submit{
+            cursor:pointer;
+        }
+   /*     .nocoupon{
+            height: 6.25rem;
+            line-height: 6.25rem;
+        }*/
+        ol{
+            width: 7.75rem;
+            margin: auto;
+            text-align: left;
+            line-height: 1.4rem;
+            position: absolute;
+            left: 2.8rem;
+        }
+        #messagefooter{
+            position: absolute;
+            bottom: 2rem;
+            width: 12.75rem;
+            left: 3rem;
+            text-align: center;
+            color: white;
+            font-size: 0.8rem;
+        }
+        .openApp{
+            font-size: 16px;
+            text-align: center;
+        }
+        #picyzm div{
+            display: table-cell;
+            text-align: center;
+            width: 5.5rem;
+            float: right;
+            height: 1.85rem;
+            padding-top: 0.25rem;
+            vertical-align: middle;
+
+        }
+        #yzimg{
+            font-size: 10px;
+            margin:0 auto;
+            display: block;
+            vertical-align: middle;
+            width: 3.5rem;
+            height: 1.5rem;
+            line-height: 1.5rem;
+
+        }
+        #shuaxin{
+            float: right;
+            width: 1.2rem;
+            height: 1.2rem;
+            padding-top: 0.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="header">
+            <div id="message">
+                <span class="storename"></span>
+                <p>分享赠送活动</p>
+                <p style="margin: 0.7rem 0 0.5rem 0;">只需三步</p>
+                <div style="width: 10.5rem;padding-left: 4rem;text-align: left;">
+                    <p>1.下载店呼并登陆</p>
+                    <p>2.分享门店:<p class="storename"></p></p>
+                    <p>3.好友登陆或注册</p>
+                </div>
+            </div>
+            <div id="messagefooter">
+                <p id="shareCoupon"></p>
+            </div>
+        </div>
+        <div id="content">
+            <div id="tel">
+                <span>手机号码 : </span>
+                <input type="tel" maxlength="11" id="telinput">
+            </div>
+            <div class="error">
+                *手机号码格式错误,请重新输入
+            </div>
+            <div id="picyzm">
+                <span>验证码 : </span>
+                <input type="tel" maxlength="4" id="picyzminput">
+                <div>
+                    <img id="shuaxin" src="../shuaxin.png">
+                    <img id="yzimg" src="" alt="点击刷新" style="float: right">
+                </div>
+            </div>
+            <div class="error3">
+                *验证码错误，请重新输入
+            </div>
+            <div id="yzm">
+                <span>短信验证码 : </span>
+                <input type="tel" maxlength="6" id="yzminput">
+                <button class="button">获取验证码</button>
+            </div>
+            <div class="error2">
+                *验证码无效，请重新获取
+            </div>
+            <div id="submit">新用户注册</div>
+            <div class="openApp"><a href="javascript:void(0)" style="color: orangered">店呼会员直接打开APP</a></div>
+        </div>
+    </div>
+</body>
+</html>
+<script src="../shareLogin/jquery-1.11.1.js"></script>
+<script type="text/javascript" src="//res.cdn.openinstall.io/openinstall.js"></script>
+<script src="../install.js"></script>
+<script>
+    (function(){
+        var src = window.location.href;
+        var storeidstr = src.substr(src.indexOf('?StoreId='), 14);
+        var store36id = storeidstr.split("=")[1];
+        var storeid = parseInt(store36id,36);
+        var installdata = {"pageName":"ShopDetailsPage","data":{"storeId":storeid}};//也可以是js Object
+        console.log(installdata);
+        install(installdata);
+    })();
+</script>
+<script type="text/javascript" src="http://pv.sohu.com/cityjson" charset="gb2312"></script>
+<script>
+    (function (doc, win) {
+        var sUserAgent = navigator.userAgent.toLowerCase();
+        var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
+        var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
+        var bIsMidp = sUserAgent.match(/midp/i) == "midp";
+        var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4";
+        var bIsUc = sUserAgent.match(/ucweb/i) == "ucweb";
+        var bIsAndroid = sUserAgent.match(/android/i) == "android";
+        var bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
+        var bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
+        //判断是移动端还是PC端
+        if (bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM) {
+            var docEl = doc.documentElement,
+                    resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                    recalc = function () {
+                        var clientWidth = docEl.clientWidth;
+                        if (!clientWidth) return;
+                        docEl.style.fontSize = 20 * (clientWidth / 375) + 'px';
+                    };
+        } else {
+            $("#header").width(750);
+            $("#header").css('margin','auto');
+            $("body").css('background','#fdf7e9');
+            $(".container").width(750);
+            $(".container").css('margin','auto');
+            $(".container").css('background','#ffffff').css("paddingBottom",'0.5rem');
+            $("#submit").css("marginTop","1.5rem").css("marginBottom","1.5rem");
+            var docEl = doc.documentElement,
+                    resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                    recalc = function () {
+                        var clientWidth = 750;
+                        if (!clientWidth) return;
+                        docEl.style.fontSize = 20 * (clientWidth / 375) + 'px';
+                    };
+        }
+        if (!doc.addEventListener) return;
+        win.addEventListener(resizeEvt, recalc, false);
+        doc.addEventListener('DOMContentLoaded', recalc, false);
+    })(document, window);
+    var src= window.location.href;/*+"?StoreId=evu4n"+"?CouponId=1njcnl"+"?ShareId=evu4w-0j3ppykzn";*/
+    var storeidstr = src.substr(src.indexOf('?StoreId='), 14);
+    var store36id = storeidstr.split("=")[1];
+   /* var couponstr = src.substr(src.indexOf('?CouponId='), 16);
+    var couponid = couponstr.split("=")[1];*/
+    var sharestr = src.substr(src.indexOf('?ShareId='), 24);
+    var shareid = sharestr.split("=")[1];
+    var storeurl = 'http://merch.diancall.com/pipes/share/findstoreinfo/' + store36id;
+    var shareurl = 'http://merch.diancall.com/pipes/merchshare/findshareaward/'+shareid;
+    $.get(storeurl, function (res) {
+        res = JSON.parse(res);
+        $(".storename").text(res.storename);
+        document.title = res.storename;
+        if(localStorage.getItem('storename')){
+            localStorage.removeItem('storename');
+            localStorage.setItem('storename',res.storename);
+        }else{
+            localStorage.setItem('storename',res.storename);
+        }
+    });
+    $.get(shareurl,function (res) {
+        res = JSON.parse(res);
+        res = res.result;
+        var voicetimes = res.voicetimes/60;
+        var cashvalue = res.cashvalue;
+        var giftname = res.giftname;
+        var pkgtitle = "";
+        if(cashvalue){
+            cashvalue = cashvalue/100+"元代金券";
+        }else{
+            cashvalue ="";
+        }
+        if(res.fluxPackage){
+            if(res.fluxPackage.pkgtitle){
+                pkgtitle = res.fluxPackage.pkgtitle
+            }
+        }
+        if(voicetimes){
+            voicetimes = voicetimes+"分钟通话"
+        }else{
+            voicetimes = "";
+        }
+        if(!giftname){
+            giftname="";
+        }
+        $("#shareCoupon").text("就可以获得"+pkgtitle+" "+voicetimes+" "+cashvalue+" "+giftname)
+    });
+    $("#telinput").on('input',function(){
+        var reg = /^1(3|4|5|7|8)\d{9}$/;
+        var tel = $("#telinput").val();
+        if(tel.length==11){
+            if(reg.test(tel)){
+                $(".error").hide();
+            }else{
+                $(".error").show();
+            }
+        }
+    });
+    //获取验证码图片
+    $("#yzimg").attr("src","http://merch.diancall.com/pipes/validcode/get/"+returnCitySN['cip']);
+    //点击刷新验证码图片
+    $("#shuaxin,#yzimg").click(function(){
+        $(".error3").hide();
+        var timestamp = new Date().getTime();
+        var src = "http://merch.diancall.com/pipes/validcode/get/"+returnCitySN['cip'];
+        $("#yzimg").attr("src",src+"?"+timestamp);
+        $("#picyzminput").val("");
+    });
+    //点击获取验证码
+    $(".button").click(function(){
+        $(".error,.error2,.error3").hide();
+        var reg = /^1(3|4|5|7|8)\d{9}$/;
+        var tel = $("#telinput").val();
+        var yzmreg = /^\d{4}$/;
+        var picyzm = $("#picyzminput").val();
+        if(reg.test(tel)){
+            if(!yzmreg.test(picyzm)){
+                $(".error3").show();
+                return;
+            }
+            $.get("http://merch.diancall.com/pipes/custuser/smscodepost/mobile:"+tel+"/validcode:"+picyzm+"/ip:"+returnCitySN['cip'],function(res){
+                res = JSON.parse(res);
+                console.log(res.retcode);
+                if(res.retcode!=0){
+                    $(".error3").show();
+                    return;
+                }else{
+                    $(".error").hide();
+                    $(".button").attr('disabled',true);
+                    $(".button").addClass('grey');
+                    var clock = '';
+                    var nums = 60;
+                    var btn = $(".button");
+                    btn.html(nums+'秒');
+                    clock = setInterval(doLoop, 1000); //一秒执行一次
+                    function doLoop()
+                    {
+                        nums--;
+                        if(nums > 0){
+                            btn.html(nums+'秒');
+                        }else{
+                            clearInterval(clock); //清除js定时器
+                            btn.removeAttr('disabled');
+                            btn.removeClass('grey');
+                            btn.html('获取验证码');
+                            nums = 60; //重置时间
+                        }
+                    }
+                }
+            });
+
+        }else{
+            $(".error").show();
+        }
+    });
+    //注册
+    $("#submit").click(function(){
+        var tel = $("#telinput").val().trim();
+        var yzm = $("#yzminput").val().trim();
+        var reg = /^1(3|4|5|7|8)\d{9}$/;
+        if(!reg.test(tel)){
+            $(".error").show();
+            return;
+        }
+        var reg2 = /^\d{6}$/;
+        if(!reg2.test(yzm)){
+            $(".error2").text("*请输入六位验证码");
+            $(".error2").show();
+            return;
+        }
+        var data = {
+            mobile:tel,
+            vercode:yzm
+        };
+        $.ajax({
+            url:"http://merch.diancall.com/pipes/custuser/smscodelogin",
+            type:"POST",
+            dataType:"JSON",
+            data:{"bean":JSON.stringify(data)},
+            error:function (err) {
+                console.log(err);
+            },
+            success:function(res){
+                if(res.retcode===0){
+                    location.href="http://c.diancall.com/app/cdl/custuser36id:3B2P0H";
+                }else if(res.retcode===30020026){
+                    $(".error2").text("*验证码无效，请重新获取");
+                    $('.error2').show();
+                }else{
+                    $(".error2").text(res.retinfo);
+                    $('.error2').show();
+                }
+            }
+        })
+    });
+
+    //-------------------weixinjiekup--------------------
+    var src = window.location.href;
+    function randomString() {
+        var $chars = 'ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123456789';
+        var maxPos = $chars.length;
+        var pwd = '';
+        for (i = 0; i < 32; i++) {
+            pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+        }
+        return pwd;
+    }
+    var timestampNum = randomString();
+    src = src.split("#")[0];
+    var getsrc = encodeURIComponent(src);
+    $.get('http://merch.diancall.com/pipes/wechat/getaccesstoken?url='+getsrc+'&noncestr='+timestampNum,function(res){
+        res = JSON.parse(res);
+        //console.log(res);
+        var timestamp = res.timestamp;
+        var signature = res.signature;
+        wx.config({
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: 'wx58861130a10e525b', // 必填，公众号的唯一标识
+            timestamp: timestamp, // 必填，生成签名的时间戳
+            nonceStr: timestampNum, // 必填，生成签名的随机串
+            signature: signature,// 必填，签名，见附录1
+            jsApiList: ['checkJsApi', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareAppMessage', 'onMenuShareQQ'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        });
+        wx.checkJsApi({
+            jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'onMenuShareQZone'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+            success: function (res) {
+                // 以键值对的形式返回，可用的api值true，不可用为false
+
+                // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+            }
+        });
+        wx.ready(function () {
+            var imgUrl = 'http://merch.diancall.com/modules/share/dianhu.png';
+            var lineLink = src;   //网站网址，必须是绝对路径
+            var descContent = '用店呼成为vip'; //分享给朋友或朋友圈时的文字简介
+            var shareTitle = '用店呼成为vip';  //分享title
+            var appid = 'wx291eff92df433407'; //apiID，可留空
+            //分享给朋友
+            wx.onMenuShareAppMessage({
+                title: shareTitle, // 分享标题
+                desc: descContent, // 分享描述
+                link: lineLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                imgUrl: imgUrl, // 分享图标
+                type: '', // 分享类型,music、video或link，不填默认为link
+                dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+            //分享到朋友圈
+            wx.onMenuShareTimeline({
+                title: shareTitle, // 分享标题
+                link: lineLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                imgUrl: imgUrl, // 分享图标
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+            //分享到qq
+            wx.onMenuShareQQ({
+                title: shareTitle, // 分享标题
+                link: lineLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                imgUrl: imgUrl, // 分享图标
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+            //分享到qq空间
+            wx.onMenuShareQZone({
+                title: shareTitle, // 分享标题
+                link: lineLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                imgUrl: imgUrl, // 分享图标
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+        });
+    })
+
+</script>
+
